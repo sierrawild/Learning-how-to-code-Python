@@ -1,4 +1,5 @@
+import random
 
-print(len(1))
+offset = random.sample(range(-15, 15), 5)
 
-
+print(offset)

@@ -1,4 +1,5 @@
 import pygame
+import clouds
 
 # pygame setup
 pygame.init()
@@ -8,11 +9,11 @@ screen = pygame.display.set_mode((1800, 900))
 pygame.display.set_caption("Max's Plane")
 clock = pygame.time.Clock()
 delta_time = 0
-moveSpeed = 100
+moveSpeed = 500
 
 # player setup
 
-plane = pygame.image.load("PyGame/files/Max plain.png").convert() # load image
+plane = pygame.image.load("Maxis_Plane/files/Max plain.png").convert() # load image
 plane.set_colorkey((255, 255, 255)) # ignore white color of the background
 scale_by = 2.2
 plane = pygame.transform.scale(plane, (plane.get_width() / scale_by,
@@ -26,6 +27,9 @@ player_pos = pygame.Vector2(plane_rec.center)
 tilt_angle = 0
 target_tilt = 0
 tilt_speed = 4
+
+# cloud
+cloud = clouds.Cloud(500, 500, 50)
 
 
 # Game loop
@@ -52,17 +56,32 @@ while running:
     if keys[pygame.K_a] or keys[pygame.K_LEFT]:
         player_pos.x -= moveSpeed * delta_time 
     
+    # Tilting and drawing the plane
     tilt_angle += (target_tilt - tilt_angle) * tilt_speed * delta_time
-    plane = pygame.transform.rotate(plane_original, tilt_angle) # rotation up and down
-    plane_rec = plane.get_rect(center=player_pos)
+    rotated_plane = pygame.transform.rotate(plane_original, tilt_angle) # rotation up and down
     
-    screen.blit(plane, plane_rec)
+    # Clamping to the screen
+    plane_width = rotated_plane.get_width()
+    plane_heigh = rotated_plane.get_height()
+    
+    player_pos.x = max(plane_width/2, min(screen.get_width() - plane_width/2, player_pos.x))
+    player_pos.y = max(plane_heigh/3, min(screen.get_height() - plane_heigh/3, player_pos.y))
+    
+    # build plane rectangle 
+    plane_rec = rotated_plane.get_rect(center=player_pos)
+    
+    
+    # clouds
+    cloud.draw(screen)
+
+    screen.blit(rotated_plane, plane_rec)
     
     # tilt_angle = 0 # centers plane and by taking it out of key if statements, plane can be tilted while using other keys
     
     pygame.display.flip()
-    delta_time = clock.tick(60) 
-    delta_time = max(0.001, min(0.1, delta_time))
+    delta_time = clock.tick(60) / 1000
+    delta_time = min(delta_time, 0.05)
+    
     
     
 pygame.quit()
