@@ -29,7 +29,7 @@ target_tilt = 0
 tilt_speed = 4
 
 # cloud
-cloud = clouds.Cloud(500, 500, 50)
+cloud = clouds.Cloud(2000, 500, 50)
 
 
 # Game loop
