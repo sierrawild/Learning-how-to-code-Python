@@ -9,8 +9,15 @@ screen = pygame.display.set_mode((1800, 900))
 pygame.display.set_caption("Max's Plane")
 clock = pygame.time.Clock()
 delta_time = 0
-moveSpeed = 500
 
+# CONSTANTS
+MOVE_SPEED = 500
+TILT_PLANE_BY = 20
+
+TILT_SPEED = 25
+
+tilt_angle = 0
+target_tilt = 0
 # player setup
 
 plane = pygame.image.load("Maxis_Plane/files/Max plain.png").convert() # load image
@@ -24,9 +31,6 @@ plane_original = plane
 plane_rec = plane.get_rect(center=screen.get_rect().center)
 player_pos = pygame.Vector2(plane_rec.center)
 
-tilt_angle = 0
-target_tilt = 0
-tilt_speed = 4
 
 # cloud
 cloud = clouds.Cloud(2000, 500, 50)
@@ -44,28 +48,28 @@ while running:
     
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w] or keys[pygame.K_UP]:
-        player_pos.y -= moveSpeed * delta_time
-        target_tilt = 15
+        player_pos.y -= MOVE_SPEED * delta_time
+        target_tilt = TILT_PLANE_BY
     elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
-        player_pos.y += moveSpeed * delta_time
-        target_tilt = -15
+        player_pos.y += MOVE_SPEED * delta_time
+        target_tilt = -TILT_PLANE_BY
     else:
         target_tilt = 0
     if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-        player_pos.x += moveSpeed * delta_time
+        player_pos.x += MOVE_SPEED * delta_time
     if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-        player_pos.x -= moveSpeed * delta_time 
+        player_pos.x -= MOVE_SPEED * delta_time 
     
     # Tilting and drawing the plane
-    tilt_angle += (target_tilt - tilt_angle) * tilt_speed * delta_time
+    tilt_angle += (target_tilt - tilt_angle) * TILT_SPEED * delta_time
     rotated_plane = pygame.transform.rotate(plane_original, tilt_angle) # rotation up and down
     
     # Clamping to the screen
     plane_width = rotated_plane.get_width()
-    plane_heigh = rotated_plane.get_height()
+    plane_height = rotated_plane.get_height()
     
     player_pos.x = max(plane_width/2, min(screen.get_width() - plane_width/2, player_pos.x))
-    player_pos.y = max(plane_heigh/3, min(screen.get_height() - plane_heigh/3, player_pos.y))
+    player_pos.y = max(plane_height/3, min(screen.get_height() - plane_height/3, player_pos.y))
     
     # build plane rectangle 
     plane_rec = rotated_plane.get_rect(center=player_pos)
