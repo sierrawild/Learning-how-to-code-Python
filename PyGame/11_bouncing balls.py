@@ -6,7 +6,7 @@ screen = pygame.display.set_mode((1280, 1080))
 clock = pygame.time.Clock()
 
 speed = 10
-radius = 50
+radius = 30
 
 
 pos1 = pygame.Vector2(100,100)
