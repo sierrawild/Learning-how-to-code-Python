@@ -1,11 +1,13 @@
 import pygame
 import clouds
 import random
+import os
 from coin import CoinStreak
 from bird import ObstacleManager
 from sound_manager import SoundManager
 
 # pygame setup
+pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 pygame.joystick.init()
 
@@ -18,7 +20,8 @@ if pygame.joystick.get_count() > 0:
 else:
     print("No controller detected, using keyboard only")
 
-screen = pygame.display.set_mode((1800, 900))
+screen = pygame.display.set_mode((0, 0))
+WIDTH, HEIGHT = screen.get_size()
 pygame.display.set_caption("Max's Plane")
 clock = pygame.time.Clock()
 delta_time = 0
@@ -37,7 +40,9 @@ tilt_angle = 0
 target_tilt = 0
 
 # player setup
-plane = pygame.image.load("Maxis_Plane/files/Max plain.png").convert()
+BASE_DIR = os.path.dirname(__file__)
+# plane = pygame.image.load("Maxis_Plane/files/max_plane_drawing.png").convert()
+plane = pygame.image.load(os.path.join(BASE_DIR, "files/max_plane_drawing.png"))
 plane.set_colorkey((255, 255, 255))
 scale_by = 2.2
 plane = pygame.transform.scale(plane, (plane.get_width() / scale_by,
@@ -463,4 +468,3 @@ while running:
     delta_time = clock.tick(60) / 1000
     delta_time = min(delta_time, 0.05)
 
-pygame.quit()

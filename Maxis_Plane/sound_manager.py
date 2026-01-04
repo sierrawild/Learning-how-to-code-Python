@@ -3,10 +3,13 @@ import os
 
 class SoundManager:
     def __init__(self):
-        pygame.mixer.init()
+        # pygame.mixer.init()
         
         # Sound folder path
-        self.sound_folder = "sounds"
+        # self.sound_folder = "sounds"
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        self.sound_folder = os.path.join(BASE_DIR, "sounds")
+
         
         # Load sound effects
         self.sounds = {}
