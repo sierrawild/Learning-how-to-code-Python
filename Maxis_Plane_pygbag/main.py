@@ -41,8 +41,7 @@ target_tilt = 0
 
 # player setup
 BASE_DIR = os.path.dirname(__file__)
-# plane = pygame.image.load("Maxis_Plane/files/max_plane_drawing.png").convert()
-plane = pygame.image.load(os.path.join(BASE_DIR, "files/max_plane_drawing.png"))
+plane = pygame.image.load(os.path.join(BASE_DIR, "files", "max_plane_drawing.png")).convert_alpha()
 plane.set_colorkey((255, 255, 255))
 scale_by = 2.2
 plane = pygame.transform.scale(plane, (plane.get_width() / scale_by,
@@ -58,7 +57,7 @@ cloud_manager = clouds.CloudManager(1800, 900, num_clouds=8)
 
 # Create sound manager
 sound_manager = SoundManager()
-sound_manager.play_music()  # Start background music
+
 
 # Track key presses
 up_pressed = False
@@ -131,6 +130,7 @@ while running:
             # Handle keyboard key press events
             if event.type == pygame.KEYDOWN:
                 if (event.key == pygame.K_w or event.key == pygame.K_UP) and not up_pressed:
+                    sound_manager.play_music()  # Start background music
                     up_pressed = True
                     if current_lane > 0:
                         current_lane -= 1
