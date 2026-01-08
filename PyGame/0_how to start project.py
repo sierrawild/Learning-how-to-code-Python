@@ -5,8 +5,8 @@ import pygame
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
-running = True
 
+running = True
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
