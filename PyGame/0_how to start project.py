@@ -18,6 +18,7 @@ while running:
     screen.fill("#AEF1AA")
 
     # RENDER YOUR GAME HERE
+    pygame.draw.circle(screen, "red", (640, 360), 50)
 
     # flip() the display to put your work on screen
     pygame.display.flip()
