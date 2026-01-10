@@ -11,7 +11,7 @@ screen.fill("#AEF1AA")
 
 x = -20 
 y = 0
-x1, y1 = 400, 200
+x1 = 200
 
 while running:
     # poll for events
@@ -31,10 +31,11 @@ while running:
     pygame.draw.circle(screen, "#F8753E", (x,y), 30)
     
     
+    x1 += 1
+    y1 = int(-0.001*x**2 + x + 100)
     pygame.draw.circle(screen, "#3EF2F8", (x1,y1), 30)
     pygame.draw.circle(screen, "#688CD5", (x1,y1), 20)
     pygame.draw.circle(screen, "#735CE8", (x1,y1), 10)
-    x1 += 1
 
     # flip() the display to put your work on screen
     pygame.display.flip()
