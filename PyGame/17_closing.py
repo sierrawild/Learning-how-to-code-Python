@@ -39,8 +39,4 @@ while running:
     
     clock.tick(60)
 
-if tryingToQuit < 6:
-    screen2 = pygame.display.set_mode((width/2, height)) 
-    # pygame.quit()
-else:
-    pygame.quit()
+pygame.quit()
