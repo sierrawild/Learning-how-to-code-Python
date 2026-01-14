@@ -7,20 +7,23 @@ HEIGHT = 720
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 clock = pygame.time.Clock()
-tryingToQuit = 0
 
 running = True
 while running:
+    # quitting
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_ESCAPE]:
+        running = False
     
     
     
     screen.fill("#FFDBDB")
-    
-    for i in range(0,WIDTH + 30, 30):
-        for j in range(0,HEIGHT + 30, 30):
+    spacing = 22
+    for i in range(0,WIDTH , spacing):
+        for j in range(0,HEIGHT, spacing):
             color = "#6ED5CC"
             if i > WIDTH / 2 and j > HEIGHT / 2:
                 color = "#7281C2"
@@ -30,14 +33,10 @@ while running:
                 color = "#C2BF72"
                 
             pygame.draw.rect(screen, color, (i, j, 20, 20))
-            # pygame.draw.circle(screen, "white", (j,i), 5)
     
     
     pygame.display.flip()
     
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_ESCAPE]:
-        running = False
         
     clock.tick(60)
 
