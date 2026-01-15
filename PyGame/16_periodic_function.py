@@ -2,14 +2,15 @@
 
 import pygame
 import math
+import os
 
 # Initialize Pygame
 pygame.init()
 
 # Screen dimensions
-screenMultiplication = 60
-WIDTH = 9 * screenMultiplication
-HEIGHT = 16 * screenMultiplication
+screenMultiplication = 70
+WIDTH = 16 * screenMultiplication
+HEIGHT = 9 * screenMultiplication
 FPS = 60
 NUM_FRAMES = 60
 GRID_SIZE = 50
@@ -26,6 +27,16 @@ pygame.display.set_caption("Loop from periodic function and offset")
 clock = pygame.time.Clock()
 frame_count = 1
 
+# File handling
+SAVE = True
+if SAVE:
+    pathDir = r"D:\Python\Periodic_function"
+    os.makedirs(pathDir, exist_ok=True)
+    fileList = os.listdir(pathDir)
+    fileDir = os.path.join(pathDir, str(len(fileList)))
+    os.makedirs(fileDir, exist_ok=False)
+    
+    saved = False
 
 # functions
 
@@ -41,7 +52,7 @@ def offset(x,y):
     center_x, center_y = WIDTH/2, HEIGHT/2
     distance = math.sqrt((x - center_x) ** 2 + (y - center_y) ** 2)
     # TODO Play with the offset to get different effects 
-    return 0.01 * distance
+    return 0.05 * distance
 
 # Main game loop
 running = True
@@ -53,7 +64,7 @@ while running:
             running = False
     
     time = (frame_count - 1) / NUM_FRAMES
-    screen.fill(WHITE)
+    screen.fill(BLACK)
     
     for i in range(GRID_SIZE):
         for j in range(GRID_SIZE):
@@ -62,16 +73,26 @@ while running:
             
             size = periodic_function(time - offset(x, y))
             
-            pygame.draw.aacircle(screen, BLACK, (int(x), int(y)), int(size*0.6))
-            
-            
-    frame_count += 1
+            pygame.draw.aacircle(screen, WHITE, (int(x), int(y)), int(size*0.7))
+            pygame.draw.rect(screen, WHITE, (int(x), int(y), int(size), int(size)))
     
-    if frame_count > NUM_FRAMES:
-        frame_count = 1            
+            
+    
     
     
     pygame.display.flip()
+    
+    if SAVE:
+        if frame_count <= NUM_FRAMES and saved == False:
+            filename = str(frame_count) + ".png"
+            savePath = os.path.join(fileDir, filename)
+            pygame.image.save(screen, savePath, )
+        if frame_count >= NUM_FRAMES:
+            saved = True
+            
+    frame_count += 1
+    if frame_count > NUM_FRAMES:
+        frame_count = 1            
     clock.tick(FPS)
 
 pygame.quit()
