@@ -34,7 +34,7 @@ while running:
     if time == 60 * 6:
         time = 0
         
-    print(f"{color=}\n{int(time/60)} \n\n {time=}")
+    # print(f"{color=}\n{int(time/60)} \n\n {time=}")
         
     clock.tick(60)
     
