@@ -40,7 +40,7 @@ def draw_sqr(rec_size, screen, color, x, y):
     pygame.draw.rect(screen, color, (x, y, rec_size, rec_size))
     
 def draw_dot(size, surface, color, x, y):
-    pygame.draw.circle(surface, )
+    pygame.draw.circle(surface, color, (x,y), size)
 
 running = True
 while running:
@@ -52,17 +52,18 @@ while running:
     color = square_color[int(color_time/60)]
     for j in range(int(height/ spacing)):
         for i in range(int(width/spacing)):
+            data = offset[j][i]
+            
+            # calculate floating offset using sine waves
+            offset_x =  math.sin(move_time * data["speed_x"] + data["phase_x"]) * data["amplitude"]
+            offset_y =  math.cos(move_time * data["speed_y"] + data["phase_y"]) * data["amplitude"]
+            
+            x = spacing * i + offset_x
+            y = spacing * j + offset_y
             if i % 2 == 0 and j % 2 == 0 or i % 2 != 0 and j % 2 != 0:
                 
-                data = offset[j][i]
-                
-                # calculate floating offset using sine waves
-                offset_x =  math.sin(move_time * data["speed_x"] + data["phase_x"]) * data["amplitude"]
-                offset_y =  math.cos(move_time * data["speed_y"] + data["phase_y"]) * data["amplitude"]
-                
-                x = spacing * i + offset_x
-                y = spacing * j + offset_y
-                draw_sqr(rec_size, screen, color, x, y)
+                # draw_sqr(rec_size, screen, color, x, y)
+                draw_dot(rec_size/2, screen, color, x, y)
             
     pygame.display.flip()
 
