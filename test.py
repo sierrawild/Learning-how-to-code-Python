@@ -65,3 +65,5 @@ def draw_visual_1(frame_idx):
     cv2.circle(img, (cx, cy), core_r + 6, (180, 160, 240), 2, cv2.LINE_AA)
 
     return img
+
+# research
