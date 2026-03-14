@@ -9,7 +9,7 @@ xx, yy = 150, 250
 
 for i in range(1000):
     forward(random.randint(2,100))
-    right(90)
+    right(90*3)
     
     x,y = pos()
     
@@ -26,10 +26,6 @@ for i in range(1000):
         setheading(90)
         forward(random.randint(50,100))
         
-    
-    
-print(f"{x=} {y=}")
-
     
 
 exitonclick()
