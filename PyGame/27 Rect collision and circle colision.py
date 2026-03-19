@@ -1,4 +1,5 @@
 import pygame, math, random
+# https://www.youtube.com/watch?v=BHr9jxKithk&t=305s
 
 pygame.init()
 
@@ -14,8 +15,10 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 clock = pygame.time.Clock()
 
-# objects in game
 
+
+
+# objects in game
 rect_1 = pygame.Rect(100,100, SIZE, SIZE)
 obstacles = []
 for _ in range(20):
@@ -59,9 +62,13 @@ while running:
     
     # rectangles 
     color = "#93FF4A"
-    for obstacle in obstacles:
-        if rect_1.colliderect(obstacle):
+    # for obstacle in obstacles:
+    #     if rect_1.colliderect(obstacle):
+    #         color = "#FF60D7"
+    
+    if rect_1.collidelist(obstacles) >= 0:
             color = "#FF60D7"
+            print(rect_1.collidelist(obstacles))
     
     pos = pygame.mouse.get_pos()
     rect_1.center = pos
@@ -72,8 +79,19 @@ while running:
     
     
     # player made of circles
-    pygame.draw.circle(screen, "#E24A4A", (player_x, player_y), SIZE, int(SIZE/2), True, False, True, False)
-    pygame.draw.circle(screen, "#E24A4A", (player_x, player_y), SIZE*.8, int(SIZE/3), False, True, False, True)
+    
+    # Player circle collision — check distance from player centre to each obstacle
+    player_color = "#E24A4A"
+    for obstacle in obstacles:
+        closest_x = max(obstacle.left, min(player_x, obstacle.right))
+        closest_y = max(obstacle.top, min(player_y, obstacle.bottom))
+        dist = math.sqrt((player_x - closest_x)**2 + (player_y - closest_y)**2)
+        if dist < SIZE: # size is the circle radius
+            player_color = "#F2B21B"
+            break
+    
+    pygame.draw.circle(screen, player_color, (int(player_x), int(player_y)), SIZE, int(SIZE/2), True, False, True, False)
+    pygame.draw.circle(screen, player_color, (int(player_x), int(player_y)), SIZE*.8, int(SIZE/3), False, True, False, True)
 
     
     pygame.display.flip()
