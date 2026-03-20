@@ -18,6 +18,8 @@ SCREEN_WIDTH, SCREEN_HEIGHT = screen.get_size()
 fractal_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 fractal_surface.fill(COLOR_THEME_DEFAULT["bg"])
 
+
+
 clock = pygame.time.Clock()
 
 
@@ -46,6 +48,7 @@ SIDES = 8
 RATIO = 0.7
 RADIUS = min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.4
 dots_per_frame = 100 # how many dots are being drawn per frame
+saved_speed = dots_per_frame
 corners = main_polygon(SIDES, RADIUS, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 current_pos = random.choice(corners)
 dot_color = random_color()
@@ -56,27 +59,26 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
-    # key input 
-    key = pygame.key.get_pressed()
-    if key[pygame.K_ESCAPE]: running = False # exit by pressing ESCAPE
-    elif key[pygame.K_UP]: 
-        SIDES = min(100, SIDES + 1)
-        corners = main_polygon(SIDES, RADIUS, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-    elif key[pygame.K_DOWN]: 
-        SIDES = max(3, SIDES - 1)
-        corners = main_polygon(SIDES, RADIUS, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-    elif key[pygame.K_RIGHT]:
-        dots_per_frame += 10
-    elif key[pygame.K_LEFT]:
-        dots_per_frame = max(1, dots_per_frame - 10)
-    # pausing unpausing the drawing 
-    if event.type == pygame.KEYDOWN:
-        if event.type == pygame.K_SPACE and dots_per_frame !=0: 
-            saved_speed = dots_per_frame
-            dots_per_frame = 0
-        elif event.type == pygame.K_SPACE and dots_per_frame == 0:
-            dots_per_frame = saved_speed
+        # key input 
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE: running = False # exit by pressing ESCAPE
+            elif event.key == pygame.K_UP: 
+                SIDES = min(100, SIDES + 1)
+                corners = main_polygon(SIDES, RADIUS, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+            elif event.key == pygame.K_DOWN: 
+                SIDES = max(3, SIDES - 1)
+                corners = main_polygon(SIDES, RADIUS, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+            elif event.key == pygame.K_RIGHT:
+                dots_per_frame += 10
+            elif event.key == pygame.K_LEFT:
+                dots_per_frame = max(1, dots_per_frame - 10)
+            
+            # pausing unpausing the drawing 
+            elif event.key == pygame.K_SPACE and dots_per_frame !=0: 
+                saved_speed = dots_per_frame
+                dots_per_frame = 0
+            elif event.key == pygame.K_SPACE and dots_per_frame == 0:
+                dots_per_frame = saved_speed
     # TODO Continiue adding shortcuts
     # TODO Simple UI showing variables
     # TODO colorsys for better colors. Maybe implement different colors 
@@ -91,6 +93,9 @@ while running:
     
     screen.blit(fractal_surface, (0,0))
     pygame.draw.polygon(screen, COLOR_THEME_DEFAULT["3"], corners, 1)
+    
+    
+    
     pygame.display.flip()
     clock.tick(60)
 
