@@ -70,6 +70,13 @@ while running:
         dots_per_frame += 10
     elif key[pygame.K_LEFT]:
         dots_per_frame = max(1, dots_per_frame - 10)
+    # pausing unpausing the drawing 
+    if event.type == pygame.KEYDOWN:
+        if event.type == pygame.K_SPACE and dots_per_frame !=0: 
+            saved_speed = dots_per_frame
+            dots_per_frame = 0
+        elif event.type == pygame.K_SPACE and dots_per_frame == 0:
+            dots_per_frame = saved_speed
     # TODO Continiue adding shortcuts
     # TODO Simple UI showing variables
     # TODO colorsys for better colors. Maybe implement different colors 
