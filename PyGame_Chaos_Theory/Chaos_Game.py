@@ -92,7 +92,7 @@ while running:
         pygame.draw.circle(fractal_surface, dot_color, target, 1)
     
     screen.blit(fractal_surface, (0,0))
-    pygame.draw.polygon(screen, COLOR_THEME_DEFAULT["3"], corners, 1)
+    pygame.draw.polygon(screen, COLOR_THEME_DEFAULT["3"], corners, 5)
     
     
     
