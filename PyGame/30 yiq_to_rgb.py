@@ -33,9 +33,9 @@ while running:
             i = (x+xx)/16
             q = xx / 8
             
-            # y = 0
-            # i = 0.5
-            # q = 0.5
+            y = 0
+            i = 0.5
+            q = 0.5
             
             rgb = colorsys.yiq_to_rgb(y,i,q)
             color = tuple(int(c * 255) for c in rgb)
