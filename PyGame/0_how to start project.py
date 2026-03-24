@@ -13,6 +13,10 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        # Close the window by pressing ESCAPE
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("#AEF1AA")
