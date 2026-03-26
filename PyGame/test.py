@@ -1,5 +1,5 @@
 # Example file showing a basic pygame "game loop"
-import pygame
+import pygame, random
 
 # pygame setup
 pygame.init()
@@ -9,7 +9,7 @@ clock = pygame.time.Clock()
 # check available fonts
 # print(pygame.font.get_fonts())
 
-print(pygame.font.match_font("rage"))
+print(random.random())
 
 
 running = True
