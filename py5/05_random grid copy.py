@@ -1,0 +1,25 @@
+import py5, random
+
+bg = '#000000'
+def settings():
+    py5.size(1000,1000)
+    # py5.full_screen()
+    
+def setup():
+    py5.rect_mode(py5.CENTER)
+    py5.background(bg)
+    py5.frame_rate((7))
+    py5.no_stroke()
+    
+def draw():
+    py5.translate(50,50)
+    py5.background(bg)
+    
+    for i in range(10):
+        for j in range(10):
+            rect_size = random.randint(110,200)
+            offset = random.randrange(90,110)
+            py5.circle(i*offset,j*offset,rect_size)
+    
+    
+py5.run_sketch()
