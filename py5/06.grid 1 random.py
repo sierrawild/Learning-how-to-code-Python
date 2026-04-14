@@ -15,7 +15,6 @@ def settings():
     
 def setup():
     py5.frame_rate((60))
-    py5.background(monochrome_palette[0])
     py5.stroke_weight(5)
     # py5.no_stroke()
 
@@ -24,14 +23,16 @@ def setup():
     spacing = py5.width / grid_size
     size = 80
     random_square = [py5.random_int(0,grid_size-1), py5.random_int(0,grid_size-1)]
-    print(random_square)
     
 
 def draw():
+    global random_square
     py5.fill(monochrome_palette[1])
     py5.stroke(monochrome_palette[2])
 
+    
     py5.translate(50,50)
+    py5.background(monochrome_palette[0])
     for j in range(grid_size):
         for i in range(grid_size):
             if j == random_square[0] and i == random_square[1]:
@@ -41,6 +42,8 @@ def draw():
                 py5.fill(monochrome_palette[1])
                 py5.rect(j*spacing,i*spacing, size, size, 20)
                 
+    if py5.frame_count % (60 * 1) == 0:
+        random_square = [py5.random_int(0,grid_size-1), py5.random_int(0,grid_size-1)]
             
     
 py5.run_sketch()

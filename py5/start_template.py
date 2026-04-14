@@ -14,14 +14,16 @@ def setup():
     py5.stroke("#FF4D4D")
     py5.stroke_weight(5)
     
-    # Variables
-    global x, y, size
-    x = 1
-    y = 2
-    size = 100
     
 def draw():
     pass
     
+
     
+# Variables
+global x, y, size
+x = 1
+y = 2
+size = 100
+
 py5.run_sketch()
