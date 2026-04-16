@@ -6,14 +6,14 @@ def settings():
     
 def setup():
     py5.frame_rate((60))
-    # py5.no_fill()
-    # py5.no_stroke()
     
     py5.background('#000000')
     py5.fill('#ffffff')
     py5.stroke("#FF4D4D")
     py5.stroke_weight(5)
     
+    # py5.no_fill()
+    # py5.no_stroke()
     
 def draw():
     pass
