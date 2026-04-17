@@ -86,6 +86,20 @@ def mouse_wheel(e):
         brushsize = 45
     py5.redraw()
     
+def key_pressed():
+    global brushcolor, paintmode
+    paintmode = 'select'
+    print(py5.key)
+    # color swatch shortcuts
+    if str(py5.key).isdigit():
+        k = int(py5.key) - 1
+        if k < len(swatches):
+            brushcolor = swatches[k]
+            py5.redraw()
+    if str(py5.key) == "c":
+        py5.background("#2990AD")
+        py5.redraw()
+    
 
     
 # Variables
