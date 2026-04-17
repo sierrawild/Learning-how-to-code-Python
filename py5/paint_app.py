@@ -20,9 +20,12 @@ def setup():
     py5.no_loop()
     
 def draw():
-    global painting
+    global painting, paintmode
     
     print(py5.frame_count)
+    
+    if py5.mouse_x < palette:
+        paintmode = 'select'
     
     if paintmode == "free":
         if painting:
@@ -45,6 +48,13 @@ def draw():
         sy= int(i/2) * palette/2
         py5.fill(swatch)
         py5.square(sx,sy, palette/2)
+        
+    # brush preview
+    py5.fill(brushcolor)
+    if brushshape == py5.ROUND:
+        py5.circle(palette/2, 123, brushsize)
+        # py5.circle(py5.mouse_x, py5.mouse_y, brushsize)
+    paintmode = 'free'
 
             
 def mouse_pressed():
@@ -64,6 +74,17 @@ def mouse_released():
     if py5.mouse_button == py5.LEFT:
         painting = False
         py5.no_loop()
+        
+def mouse_wheel(e):
+    # resize the brush
+    global brushsize, paintmode
+    paintmode = 'select'
+    brushsize += e.get_count()
+    if brushsize < 3:
+        brushsize = 3
+    if brushsize > 45:
+        brushsize = 45
+    py5.redraw()
     
 
     
