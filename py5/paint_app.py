@@ -55,6 +55,13 @@ def draw():
         py5.circle(palette/2, 123, brushsize)
         # py5.circle(py5.mouse_x, py5.mouse_y, brushsize)
     paintmode = 'free'
+    
+    # clear button
+    py5.fill('#ffffff')
+    py5.text('CLEAR', 10, py5.height-12)
+  
+    
+    ### end of draw() ###
 
             
 def mouse_pressed():
@@ -62,7 +69,6 @@ def mouse_pressed():
     # start painting
     if py5.mouse_button == py5.LEFT:
         py5.loop()
-        # painting = True
         
     # swatch select
     if py5.mouse_button == py5.LEFT and py5.mouse_x < palette and py5.mouse_y < 90:
@@ -96,11 +102,15 @@ def key_pressed():
         if k < len(swatches):
             brushcolor = swatches[k]
             py5.redraw()
+    print(str(py5.key) == "c")
     if str(py5.key) == "c":
         py5.background("#2990AD")
-        py5.redraw()
     
-
+def mouse_clicked():
+    if py5.mouse_x < palette and py5.mouse_y > py5.height - 30:
+        print("clear")
+        py5.background("#2990AD")
+        py5.redraw()
     
 # Variables
 global swatches, brushcolor, brushshape, brushsize, painting, paintmode, palette
