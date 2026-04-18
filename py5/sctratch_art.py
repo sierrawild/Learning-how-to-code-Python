@@ -1,7 +1,8 @@
 import py5
 
 def settings():
-    py5.size(1500,1000)
+    # py5.size(1500,1000)
+    py5.full_screen()
     
 def setup():
     py5.frame_rate(120)
