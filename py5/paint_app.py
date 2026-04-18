@@ -38,31 +38,44 @@ def draw():
         elif py5.frame_count > 1:
             painting = True
             
-    # black panel
-    py5.no_stroke()
-    py5.fill('#000000')
-    py5.rect(0,0,palette, py5.height)
-    # color swatches
-    for i, swatch in enumerate(swatches):
-        sx= int(i%2) * palette/2
-        sy= int(i/2) * palette/2
-        py5.fill(swatch)
-        py5.square(sx,sy, palette/2)
-        
-    # brush preview
+   
+    black_panel()
+    color_swatches()
+    brush_preview()
+    clear_button()
+    
+
+    paintmode = 'free'
+    
+
+    
+    ### end of draw() ###
+    
+def brush_preview():
     py5.fill(brushcolor)
     if brushshape == py5.ROUND:
         py5.circle(palette/2, 123, brushsize)
         # py5.circle(py5.mouse_x, py5.mouse_y, brushsize)
-    paintmode = 'free'
     
-    # clear button
-    py5.fill('#ffffff')
-    py5.text('CLEAR', 10, py5.height-12)
-  
-    
-    ### end of draw() ###
 
+def color_swatches():
+    # color swatches
+    for i, swatch in enumerate(swatches):
+        sx= int(i%2) * palette/2
+        sy= (i//2) * palette/2
+        py5.fill(swatch)
+        py5.square(sx,sy, palette/2)
+        
+        
+def black_panel():
+    # black panel
+    py5.no_stroke()
+    py5.fill('#000000')
+    py5.rect(0,0,palette, py5.height)
+
+def clear_button():
+    py5.fill('#ffffff')
+    py5.text('CLEAR', 10, py5.height-12)      
             
 def mouse_pressed():
     global painting
@@ -107,11 +120,20 @@ def key_pressed():
         py5.background("#2990AD")
     
 def mouse_clicked():
+    clear_screen()
+    
+    
+def clear_screen():
     if py5.mouse_x < palette and py5.mouse_y > py5.height - 30:
         print("clear")
         py5.background("#2990AD")
         py5.redraw()
+        black_panel()
+        color_swatches()
+        brush_preview()
+        clear_button()
     
+
 # Variables
 global swatches, brushcolor, brushshape, brushsize, painting, paintmode, palette
 swatches = ['#FF0000', '#FF9900', '#FFFF00', 
