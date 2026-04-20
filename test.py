@@ -1,3 +1,3 @@
-x = 1
+x = "a2123"
 
-print(x == True)
+print(x[:2])
