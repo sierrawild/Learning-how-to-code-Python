@@ -25,3 +25,4 @@ elif result >= 99:
     print('F')
 else:
     print(f'{result}%')
+    
