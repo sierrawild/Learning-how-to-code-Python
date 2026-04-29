@@ -10,18 +10,18 @@ def main():
     score = 0
     wrong_answer = "EEE"
     
-    for i in problems:
+    for i in range(0,19,2):
         lives = 3
         answer = -1
-        correct_answer = i[0] + i[1]
+        correct_answer = problems[i] + problems[i+1]
         
         # getting the answer
         while True:
             if lives <= 0:
-                print(f'{i[0]} + {i[1]} = {correct_answer}')
+                print(f'{problems[i]} + {problems[i+1]} = {correct_answer}')
                 break
             try:
-                answer = int(input(f'{i[0]} + {i[1]} = '))
+                answer = int(input(f'{problems[i]} + {problems[i+1]} = '))
             except ValueError:
                 lives -= 1
                 print(wrong_answer)
@@ -60,8 +60,8 @@ def generate_integer(level):
         x_lvl, y_lvl = 100, 999
         
     problems = []
-    for _ in range(10):
-        problems.append((random.randrange(x_lvl,y_lvl), random.randrange(x_lvl,y_lvl)))
+    for _ in range(20):
+        problems.append(random.randrange(x_lvl,y_lvl))
 
     return problems
 
