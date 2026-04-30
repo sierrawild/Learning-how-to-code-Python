@@ -3,18 +3,18 @@ import random
 
 def main():
     lvl = get_level()
-    
+
     problems = generate_integer(lvl)
 
-    
+
     score = 0
     wrong_answer = "EEE"
-    
+
     for i in range(0,19,2):
         lives = 3
         answer = -1
         correct_answer = problems[i] + problems[i+1]
-        
+
         # getting the answer
         while True:
             if lives <= 0:
@@ -26,19 +26,20 @@ def main():
                 lives -= 1
                 print(wrong_answer)
                 continue
-            
+
             # checking the answer
             if answer == correct_answer:
                 score += 1
                 break
-            elif answer != correct_answer:
+            else:
                 lives -= 1
+                print(wrong_answer)
                 continue
     print(f'Score: {score}')
-        
-        
-    
-    
+
+
+
+
 
 def get_level():
     while True:
@@ -49,7 +50,7 @@ def get_level():
             return lvl
         except ValueError:
             continue
-    
+
 
 def generate_integer(level):
     if level == 1:
@@ -58,10 +59,10 @@ def generate_integer(level):
         x_lvl, y_lvl = 10, 99
     if level == 3:
         x_lvl, y_lvl = 100, 999
-        
+
     problems = []
     for _ in range(20):
-        problems.append(random.randrange(x_lvl,y_lvl))
+        problems.append(random.randrange(x_lvl,y_lvl + 1))
 
     return problems
 
