@@ -1,0 +1,59 @@
+import py5, palette
+
+W, H = 1000, 1000
+p = palette.INK
+
+def settings():
+    py5.size(W,H)
+    # py5.full_screen()
+    
+def setup():
+    py5.frame_rate((120))
+    
+    py5.background(*p['bg'])
+    py5.stroke(*p['colors'][0])
+    py5.fill(*p['colors'][1])
+    py5.stroke_weight(5)
+    
+    # py5.no_fill()
+    # py5.no_stroke()
+    
+def draw():
+    global theta
+    # flip y axis and center the origin
+    py5.scale(1,-1)
+    py5.translate(W/2,H/2-H)
+    
+    
+    # py5.background(*p['bg'])
+    # transparent bg for traces
+    py5.fill(*p['bg'],4)
+    py5.rect(-W,-H, 2*W,2*H)
+    py5.no_fill()
+    
+    
+    
+    
+    theta += py5.TAU / (py5.get_frame_rate() * period)
+    
+    
+    x, y = lissajousPoint(theta,400, 300, 3, 5)
+    
+    py5.circle(x,y,10)
+    
+    
+    
+    
+def lissajousPoint(t,A,B,a,b):
+    x = py5.cos(t * a) * A    
+    y = py5.sin(t * b) * B    
+    return x,y
+    
+
+    
+# Variables
+global theta, period
+theta = 0
+period = 3
+
+py5.run_sketch()

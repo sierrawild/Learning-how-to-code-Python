@@ -1,3 +1,5 @@
+# https://piterpasma.nl/articles/rotating
+
 import py5, palette
 
 W, H = 1000, 1000
@@ -15,20 +17,21 @@ def setup():
     py5.fill(*p['colors'][1])
     py5.stroke_weight(5)
     
-    # py5.no_fill()
+    py5.no_fill()
     # py5.no_stroke()
     
 def draw():
-    global x, y, size
     py5.background(*p['bg'])
     
     
+def vec2(x,y):
+    return{"x":x, "y":y}
 
+def vec2_add(a,b):
+    return vec2(a['x'] + b['x'], a['y'] + b['y'])
     
 # Variables
 
-x = 1
-y = 2
-size = 100
+
 
 py5.run_sketch()

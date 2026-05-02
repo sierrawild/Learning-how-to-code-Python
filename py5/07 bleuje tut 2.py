@@ -1,4 +1,6 @@
 import py5, palette
+#https://bleuje.com/tutorial2/
+
 W = 1000
 H = 1000
 
