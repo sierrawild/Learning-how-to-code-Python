@@ -1,3 +1,0 @@
-Idea for a train game for Max
-
-Just a side scrolled where train travels through different trains. Reaches stops and collets point to upgrade the train 

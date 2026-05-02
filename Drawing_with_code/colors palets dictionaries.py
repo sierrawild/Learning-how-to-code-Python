@@ -1,6 +1,3 @@
-import turtle
-import random
-
 # 🎨 Color Palettes
 
 pastel = [
