@@ -1,6 +1,6 @@
 import py5, palette
 
-W, H = 1000, 1000
+W, H = 1500, 1500
 p = palette.INK
 
 def settings():

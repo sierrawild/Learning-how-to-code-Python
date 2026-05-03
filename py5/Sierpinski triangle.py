@@ -1,4 +1,4 @@
-import py5, palette
+import py5, palette, image_save_for_py5
 
 # Variables
 
@@ -45,6 +45,7 @@ def draw():
         draw_dot()
     
     
+    image_save_for_py5.save_img(1)
     
     py5.pop_matrix()
 
@@ -85,7 +86,7 @@ def chaos_step(current_pos, corners, ratio):
     new_y = current_pos[1] + (target[1] - current_pos[1]) * ratio
     return {'new_point': (new_x,new_y), 'target': target}
 
-
+ 
 
 corners = main_polygon(SIDES, RADIUS) 
 current_pos = py5.random_choice(corners)
