@@ -45,13 +45,13 @@ def draw():
         draw_dot()
     
     
-    image_save_for_py5.save_img(1)
+    # image_save_for_py5.save_img(1)
     
     py5.pop_matrix()
 
 def draw_dot():
     global current_pos
-    new_point = chaos_step(current_pos, corners, RATIO)
+    new_point = lerp(current_pos, corners, RATIO)
     current_pos = new_point['new_point']
     
     # manage colors
@@ -80,7 +80,7 @@ def draw_main_polygon():
     py5.end_shape(py5.CLOSE)
     
     
-def chaos_step(current_pos, corners, ratio):
+def lerp(current_pos, corners, ratio):
     target = py5.random_choice(corners)
     new_x = current_pos[0] + (target[0] - current_pos[0]) * ratio
     new_y = current_pos[1] + (target[1] - current_pos[1]) * ratio
