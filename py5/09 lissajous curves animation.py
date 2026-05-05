@@ -1,6 +1,7 @@
 import py5, palette
+from image_save_for_py5 import save_img
 
-W, H = 1000, 1000
+W, H = 1080, 1920
 p = palette.INK
 
 def settings():
@@ -8,7 +9,7 @@ def settings():
     # py5.full_screen()
     
 def setup():
-    py5.frame_rate((120))
+    py5.frame_rate(120)
     
     py5.background(*p['bg'])
     py5.stroke(*p['colors'][0])
@@ -41,7 +42,10 @@ def draw():
     
     py5.circle(x,y,10)
     
+    # save_img(1,60*10)
     
+    if py5.frame_count % 60 == 0:
+        print(f'FPS: {py5.get_frame_rate():.1f}')
     
     
 def lissajousPoint(t,A,B,a,b):

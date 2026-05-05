@@ -2,7 +2,7 @@ import py5, palette, image_save_for_py5
 
 # Variables
 
-W, H = 1000, 1000
+W, H = 1080, 1920
 SIDES = 3
 RATIO = 0.5
 ''' Perfect ratios according to wikipedia
@@ -14,7 +14,8 @@ Octagon     8   0.707
 '''
 
 RADIUS = W * 0.47
-p = palette.random_palette()
+# p = palette.random_palette()
+p = palette.NEON_NIGHTS
 
 def settings():
     py5.size(W,H)
@@ -26,7 +27,7 @@ def setup():
     py5.background(*p['bg'])
     py5.stroke(*p['colors'][0])
     py5.fill(*p['colors'][1])
-    py5.stroke_weight(5)
+    py5.stroke_weight(1)
     
     
     py5.no_fill()
@@ -38,14 +39,14 @@ def draw():
     
     py5.push_matrix()
     py5.translate(W/2, H/2)
-    py5.rotate(py5.frame_count * 0.001)
+    py5.rotate(py5.frame_count * 0.004) # rotation speed
     # draw_main_polygon()
     
-    for _ in range(1000):
+    for _ in range(2000):
         draw_dot()
     
     
-    # image_save_for_py5.save_img(1)
+    image_save_for_py5.save_img(1, 30*16,12*30+1)
     
     py5.pop_matrix()
 
