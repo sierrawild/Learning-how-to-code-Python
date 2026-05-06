@@ -35,14 +35,14 @@ def draw():
     
     
     
-    theta += py5.TAU / (py5.get_frame_rate() * period)
+    theta += py5.TAU / (120 * period)
     
     
     x, y = lissajousPoint(theta,400, 300, 3, 5)
     
     py5.circle(x,y,10)
     
-    # save_img(1,60*10)
+    save_img(1,60*10)
     
     if py5.frame_count % 60 == 0:
         print(f'FPS: {py5.get_frame_rate():.1f}')
