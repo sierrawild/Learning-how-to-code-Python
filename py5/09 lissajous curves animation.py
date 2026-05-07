@@ -25,26 +25,21 @@ def draw():
     py5.scale(1,-1)
     py5.translate(W/2,H/2-H)
     
-    
     # py5.background(*p['bg'])
     # transparent bg for traces
     py5.fill(*p['bg'],4)
     py5.rect(-W,-H, 2*W,2*H)
     py5.no_fill()
     
-    
-    
-    
     theta += py5.TAU / (120 * period)
     
-    
-    x, y = lissajousPoint(theta,400, 300, 3, 5)
+    x, y = lissajousPoint(theta,400, 300, 5, 3)
     
     py5.circle(x,y,10)
     
-    save_img(1,60*10)
+    save_img(1,120 * period)
     
-    if py5.frame_count % 60 == 0:
+    if py5.frame_count % 60*3 == 0:
         print(f'FPS: {py5.get_frame_rate():.1f}')
     
     
@@ -52,8 +47,6 @@ def lissajousPoint(t,A,B,a,b):
     x = py5.cos(t * a) * A    
     y = py5.sin(t * b) * B    
     return x,y
-    
-
     
 # Variables
 global theta, period
