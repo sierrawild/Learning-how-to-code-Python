@@ -1,6 +1,6 @@
 import py5, palette
 
-W, H = 1500, 1500
+W, H = 540, 960
 p = palette.INK
 
 def settings():
@@ -19,7 +19,6 @@ def setup():
     # py5.no_stroke()
     
 def draw():
-    global spam
     # flip y axis and center the origin
     py5.scale(1,-1)
     py5.push_matrix()
@@ -39,15 +38,22 @@ def draw():
     
     
     py5.begin_shape()
-    period = 1000
+    
     for i in range(period):
         theta = py5.TAU * (i/period)
-        x, y = lissajousPoint(theta,400, 300, a, b)
+        ham = 0.2
+        # A = (W*ham)+80 * py5.sin(theta * 0.5)
+        # B = (H*ham)+80 * py5.cos(theta * 0.4 + 1.4)
+        
+        
+        x, y = lissajousPoint(theta,W*ham, H*ham, a, b)
         py5.vertex(x,y)
+        
+        
+        
     py5.end_shape()
     py5.pop_matrix()
     
-    spam += 0.01
     
     
     
@@ -59,7 +65,7 @@ def lissajousPoint(t,A,B,a,b):
 
     
 # Variables
-# global spam
-spam = 1
+
+period = 1000
 
 py5.run_sketch()

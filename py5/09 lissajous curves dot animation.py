@@ -37,7 +37,7 @@ def draw():
     
     py5.circle(x,y,10)
     
-    save_img(1,120 * period)
+    # save_img(1,120 * period)
     
     if py5.frame_count % 60*3 == 0:
         print(f'FPS: {py5.get_frame_rate():.1f}')
