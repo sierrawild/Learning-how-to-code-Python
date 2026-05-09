@@ -8,7 +8,7 @@ def settings():
     # py5.full_screen()
     
 def setup():
-    py5.frame_rate((120))
+    py5.frame_rate((60))
     
     py5.background(*p['bg'])
     py5.stroke(*p['colors'][0])
@@ -33,25 +33,26 @@ def draw():
     
     
     
-    a = py5.sin(py5.frame_count * 0.0002) * 2 + 3
-    b = py5.cos(py5.frame_count * 0.00015) * 2 + 5
+    a = round(py5.sin(py5.frame_count * 0.0002) * 2 + 3)
+    b = round(py5.cos(py5.frame_count * 0.00015) * 2 + 5)
     
     
     py5.begin_shape()
     
-    for i in range(period):
-        theta = py5.TAU * (i/period)
+    for i in range(curve_resolution):
+        theta = py5.TAU * (i/curve_resolution)
         ham = 0.2
-        # A = (W*ham)+80 * py5.sin(theta * 0.5)
-        # B = (H*ham)+80 * py5.cos(theta * 0.4 + 1.4)
+        A = (W*ham)+80 * py5.sin(theta * 0.5)
+        B = (H*ham)+80 * py5.cos(theta * 0.4 + 1.4)
         
         
-        x, y = lissajousPoint(theta,W*ham, H*ham, a, b)
+        # x, y = lissajousPoint(theta,W*ham, H*ham, a, b)
+        x, y = lissajousPoint(theta,A, B, a, b)
         py5.vertex(x,y)
         
         
         
-    py5.end_shape()
+    py5.end_shape(py5.CLOSE)
     py5.pop_matrix()
     
     
@@ -66,6 +67,6 @@ def lissajousPoint(t,A,B,a,b):
     
 # Variables
 
-period = 1000
+curve_resolution = 1000
 
 py5.run_sketch()

@@ -1,8 +1,8 @@
 import py5, palette
 #https://bleuje.com/tutorial2/
 
-W = 1000
-H = 1000
+W = 540 
+H = 960
 
 
 
@@ -14,26 +14,35 @@ def setup():
     py5.fill(*p['colors'][0])
     py5.stroke(*p['colors'][2])
     py5.stroke_weight(7)
+    py5.no_stroke()
     
     
 def draw():
-    # circle
-    t = 1 * ((py5.frame_count-1) / 300)
     py5.background(*p['bg'])
     
-    x = W/2 + r * py5.cos(py5.TWO_PI * t)
-    y = H/2 + r * py5.sin(py5.TWO_PI * t)
+    t = 1.0* (py5.frame_count ) / f
+    t = t % 60
     
-    py5.circle(x,y, 10)
-    
-    # palette squares
-    
-    palette.draw_sample_squares(p)
-    
-    
-p = palette.INK
-    
-r = 400
+    for w in range(m):
+        for h in range(m):
+            x = py5.remap(w,0,m-1,0,W)
+            y = py5.remap(h,0,m-1,0,H)
+            radius =  periodic_function(t - offset(x,y))
+            py5.circle(x,y,radius)
+            
+            
+def periodic_function(p):
+    return py5.remap(py5.sin(py5.TWO_PI*p),-1,1,2,8)
+
+
+def offset(x,y):
+    return 0.01 * py5.dist(x,y, W/2, H/2)
+  
+f = py5.get_frame_rate()  
+m = 40  
+p = palette.random_palette()
+print(f"Palette in use: {p["name"]}")
+
 
 
 
