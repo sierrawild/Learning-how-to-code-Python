@@ -4,7 +4,9 @@ import py5, palette
 
 W, H = 1000, 1000
 p = palette.INK
-x = 0
+x_old, y_old = 0, 0
+x, y = 0, 0
+travel = 20
 choices = ['right','up','left','down']
 
 def settings():
@@ -12,23 +14,44 @@ def settings():
     # py5.full_screen()
     
 def setup():
-    py5.frame_rate((60))
+    py5.frame_rate((10))
     
     py5.background(*p['bg'])
     py5.stroke(*p['colors'][0])
-    py5.fill(*p['colors'][1])
     py5.stroke_weight(5)
     py5.no_fill()
     
     
 def draw():
-    global x
-    ghost_trails(p['bg'],5) 
+    global x,y,x_old,y_old
+    ghost_trails(p['bg'],10) 
 
-    x += 1
     py5.translate(W/2,H/2)
     py5.stroke(*p['colors'][0])
-    py5.circle(x,0, 50)
+    
+    # TODO pop a choice if near edge  
+    # TODO travel by adding 1 until it == travel
+    # TODO turn this into a function
+    next = py5.random_choice(choices)
+    if next == 'right':
+        x_old = x
+        y_old = y
+        x += travel
+    elif next == 'left':
+        x_old = x
+        y_old = y
+        x -= travel
+    elif next == 'up':
+        x_old = x
+        y_old = y
+        y += travel
+    elif next == 'down':
+        x_old = x
+        y_old = y
+        y -= travel
+    
+    py5.circle(x,y, 10)
+    py5.line(x_old,y_old,x,y)
     
 def ghost_trails(color, alpha):  
     py5.push_style()
