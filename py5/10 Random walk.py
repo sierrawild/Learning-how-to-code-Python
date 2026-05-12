@@ -1,9 +1,11 @@
 import py5, palette
 
 # Variables
+
 W, H = 1000, 1000
 p = palette.INK
-
+x = 0
+choices = ['right','up','left','down']
 
 def settings():
     py5.size(W,H)
@@ -16,18 +18,17 @@ def setup():
     py5.stroke(*p['colors'][0])
     py5.fill(*p['colors'][1])
     py5.stroke_weight(5)
+    py5.no_fill()
     
-    # py5.no_fill()
-    # py5.no_stroke()
     
 def draw():
-    ghost_trails(*p['bg'],10) 
-    
-    
-    
-    
-    # END OF DRAW
-    
+    global x
+    ghost_trails(p['bg'],5) 
+
+    x += 1
+    py5.translate(W/2,H/2)
+    py5.stroke(*p['colors'][0])
+    py5.circle(x,0, 50)
     
 def ghost_trails(color, alpha):  
     py5.push_style()
@@ -36,9 +37,6 @@ def ghost_trails(color, alpha):
     py5.no_stroke()
     py5.rect(0,0,py5.width,py5.height)
     py5.pop_style()
-
-    
-    
 
     
 

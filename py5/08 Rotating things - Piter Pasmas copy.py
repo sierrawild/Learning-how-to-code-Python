@@ -1,9 +1,10 @@
 # https://piterpasma.nl/articles/rotating
 
-import py5, palette
+import py5, palette, image_save_for_py5
 
-W, H = 1000, 1000
+W, H = 540, 960
 pallet = palette.INK
+pallet = palette.random_palette()
 
 def settings():
     py5.size(W,H)
@@ -21,20 +22,32 @@ def setup():
     # py5.no_stroke()
     
 def draw():
-    py5.background(*pallet['bg'])
+    py5.fill(*pallet['bg'],10)
+    # py5.rect_mode(py5.CENTER)
+    py5.rect(0,0,W,H)
     
     py5.push_matrix()
     py5.translate(W/2,H/2)
     for i in range(100):
-        f = py5.frame_count / 60
+        f = py5.frame_count / 600
         p = i / 100
+        s = 1+ i/1000
         
-        pos = rotating_thing(f,p, 100, 1)
+
         
-        py5.circle(pos['x'], pos['y'], 5) 
+        pos1 = rotating_thing(f*4,p, 100, s)
+        pos2 = rotating_thing(f*1,p, 100, s*2)
+
+        pos = vec2_add(pos1,pos2)
+        
+        py5.circle(pos['x'], pos['y'], 3) 
+        
     
     
     py5.pop_matrix()
+    
+    # IMAGE SAVING 
+    image_save_for_py5.save_img(5,10000, 1)
 
 def rotating_circle(phi, r):
     return vec2(r * py5.cos(phi), r * py5.sin(phi))
