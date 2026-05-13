@@ -268,7 +268,9 @@ def draw_sample_squares(pallet):
 
 def random_palette():
     """Return a random palette from all available palettes."""
-    return random.choice(ALL_PALETTES)
+    palette = random.choice(ALL_PALETTES)
+    print(f"Random palette. Pallet chosen:\n{palette['name']}")
+    return palette
 
 
 def random_color_from_palette(palette):
