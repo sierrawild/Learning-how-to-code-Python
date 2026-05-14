@@ -4,7 +4,7 @@ import palette
 
 # Variables
 
-W, H = 300, 300
+W, H = 1000, 1000
 p = palette.INK
 x_old, y_old = 0, 0
 x, y = 0, 0
@@ -32,7 +32,6 @@ def draw():
     py5.stroke(*p['colors'][0],10)
     
     
-    # TODO pop a choice if near edge  
     # TODO travel by adding 1 until it == travel to make it travel
     stay_in_the_canvas()
     next_move = py5.random_choice(list(choices))
@@ -41,8 +40,13 @@ def draw():
     
     
     
-    py5.circle(x,y, 10)
     py5.line(x_old,y_old,x,y)
+    
+    py5.triangle(x,y,x_old,y_old,0,0)
+    
+    py5.circle(x,y, 6)
+    
+    
 
     if not inside_of_bounds():
         print("Out of bounds")
