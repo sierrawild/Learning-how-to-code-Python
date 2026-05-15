@@ -6,16 +6,8 @@ p = palette.INK
 
 samples = 500
 
-
-gaussian_py5 = []
-gaussian_random = []
-
-mu = 100
-sigma = 200
-
-for i in range(samples):
-    gaussian_py5.append(py5.random_gaussian(mu, sigma))
-    gaussian_random.append(random.gauss(mu, sigma))
+mu = 0
+sigma = 400
     
 # gaussian_py5.sort()
 # gaussian_random.sort()
@@ -26,7 +18,7 @@ def settings():
     # py5.full_screen()
     
 def setup():
-    py5.frame_rate((60))
+    py5.frame_rate((20))
     
     py5.background(*p['bg'])
     py5.fill(*p['colors'][1])
@@ -35,8 +27,15 @@ def setup():
     # py5.no_stroke()
     
 def draw():
-    ghost_trails(p['bg'],10) 
+    ghost_trails(p['bg'],20) 
     center_coordinates()
+    
+    # randomness
+    gaussian_py5 = []
+    gaussian_random = []
+    for i in range(samples):
+        gaussian_py5.append(py5.random_gaussian(mu, sigma))
+        gaussian_random.append(random.gauss(mu, sigma))
     
     # lines
     py5.stroke(*p['colors'][4])
@@ -45,14 +44,15 @@ def draw():
     py5.push_matrix()
     py5.scale(1,-1)
     py5.text_size(18)
+    py5.text_align(py5.CENTER)
     
     # horizontal lines
     for i in range(int(H/50)):
         y = i*50-H/2
         py5.line(-W,y,W,y)
         py5.text(int(y*-1),-W/2 +20, y)
-        py5.text("py5_gaussian",-50, 0)
-        py5.text("random_gaussian",-50, 250)
+        py5.text("py5_gaussian",0, -5)
+        py5.text("random_gaussian",0, 245)
     # py5.pop_matrix()
 
     # vertical lines
@@ -63,16 +63,18 @@ def draw():
     py5.pop_matrix()
     
     py5.stroke_weight(4)
+    
+    
     # py5 bell curve
     py5.stroke(*p['colors'][0])
     for i in gaussian_py5:
-        height = 150 * py5.exp(-0.5 * (i/50)**2)
+        height = 200 * py5.exp(-0.3 * ((i-mu)/80)**2)
         py5.point(i, height)
     
     # py5 random curve
     py5.stroke(*p['colors'][1])
     for i in gaussian_random:
-        height = 150 * py5.exp(-0.5 * (i/50)**2)
+        height = 200 * py5.exp(-0.3 * ((i-mu)/80)**2)
         py5.point(i, height - 250)
         
     
