@@ -5,7 +5,7 @@ import palette
 # Variables
 
 W, H = 1000, 1000
-p = palette.INK
+p = palette.random_palette()
 x_old, y_old = 0, 0
 x, y = 0, 0
 travel = 20

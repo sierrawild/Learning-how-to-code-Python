@@ -21,7 +21,7 @@ def setup():
     # py5.no_stroke()
     
 def draw():
-    ghost_trails(*p['bg'],10) 
+    ghost_trails(p['bg'],10) 
     center_coordinates()
     
     
