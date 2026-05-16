@@ -8,6 +8,25 @@ p = palette.NOIR
 
 cell_size = 50
 
+cols = 10
+rows = 10
+
+grid = []
+
+for y in range(rows):
+    row = []
+
+    for x in range(cols):
+        row.append(0)
+
+    grid.append(row)
+    
+print(grid)
+
+
+
+
+
 def settings():
     py5.size(W,H)
     # py5.full_screen()
@@ -26,7 +45,7 @@ def setup():
     # py5.no_stroke()
     
     grid_size = int(W / cell_size)
-    for x in range(grid_size):
+    for x in range(H//grid_size):
         for y in range(grid_size):
             py5.square(x *cell_size,y * cell_size, cell_size)
 def draw():
