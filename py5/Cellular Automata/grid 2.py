@@ -8,8 +8,8 @@ p = palette.NOIR
 
 cell_size = 50
 
-cols = 10
-rows = 10
+cols = W // cell_size
+rows = H // cell_size
 
 grid = []
 
@@ -21,7 +21,9 @@ for y in range(rows):
 
     grid.append(row)
     
-print(grid)
+grid[5][5] = 1
+grid[5][6] = 1
+grid[5][7] = 1
 
 
 
@@ -44,14 +46,16 @@ def setup():
     # py5.no_fill()
     # py5.no_stroke()
     
-    grid_size = int(W / cell_size)
-    for x in range(H//grid_size):
-        for y in range(grid_size):
-            py5.square(x *cell_size,y * cell_size, cell_size)
 def draw():
     # ghost_trails(p['bg'],10) 
     # center_coordinates()
-    pass
+    for x in range(rows):
+        for y in range(cols):
+            if grid[x][y] == 0:
+                py5.fill(*p['colors'][1])
+            else:
+                py5.fill(*p['colors'][2])
+            py5.square(x *cell_size,y * cell_size, cell_size)
 
         
     
