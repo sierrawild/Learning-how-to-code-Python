@@ -34,7 +34,7 @@ def settings():
     # py5.full_screen()
     
 def setup():
-    py5.frame_rate((60))
+    py5.frame_rate(10)
     
     py5.background(*p['bg'])
     py5.stroke(*p['bg'])
@@ -58,8 +58,11 @@ def draw():
 
         
     
-
+def mouse_pressed():
+    x = py5.mouse_x // cell_size
+    y = py5.mouse_y // cell_size
     
+    grid[x][y] = 1 - grid[x][y]
     
 
     
