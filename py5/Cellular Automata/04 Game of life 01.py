@@ -12,6 +12,7 @@ cols = W // cell_size
 rows = H // cell_size
 
 grid = []
+alive = []
 
 for y in range(rows):
     row = []
@@ -21,9 +22,6 @@ for y in range(rows):
 
     grid.append(row)
     
-grid[5][5] = 1
-grid[5][6] = 1
-grid[5][7] = 1
 
 
 
@@ -73,6 +71,11 @@ def mouse_pressed():
     y = py5.mouse_y // cell_size
     
     grid[x][y] = 1 - grid[x][y]
+    if grid[x][y] == 1:
+        alive.append((x,y))
+    else:
+        alive.remove((x,y))
+    print(alive)
     
 def key_pressed():
     global is_paused
