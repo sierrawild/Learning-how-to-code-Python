@@ -26,7 +26,7 @@ for y in range(rows):
 
 
 
-speed = 10
+speed = 3
 is_paused = False
 
 def settings():
@@ -46,6 +46,7 @@ def setup():
     # py5.no_stroke()
     
 def draw():
+    display_cycle_count()
    
     for x in range(rows):
         for y in range(cols):
@@ -55,10 +56,39 @@ def draw():
                 py5.fill(*p['colors'][2])
             py5.square(x *cell_size,y * cell_size, cell_size)
 
-        
-    display_frame_count()
+    new_alive, checked_cells = check_alive_neighbors()
+    
+    
 
-def display_frame_count():
+
+def check_alive_neighbors():
+    checked_cells = []
+    new_alive = []
+    if len(alive)>0:
+        for i in alive:
+            count_alive_neighbors = 0
+            checked_cells.append(i)
+            neighbors = [
+                (i[0] - 1, i[1] -1), 
+                (i[0], i[1] -1), 
+                (i[0] + 1, i[1] -1),
+                
+                (i[0] -1 , i[1] ), 
+                (i[0] +1, i[1] ), 
+                
+                (i[0] - 1, i[1] +1), 
+                (i[0], i[1] +1), 
+                (i[0] + 1, i[1] +1),
+                ]
+            for j in neighbors:
+                checked_cells.append(j)
+                if j in alive:
+                    count_alive_neighbors +=1
+            if count_alive_neighbors == 2 or count_alive_neighbors == 3:
+                new_alive.append(i)
+    return new_alive, checked_cells
+
+def display_cycle_count():
     py5.push_style()
     py5.fill("#FFFFFF")
     py5.text_align(py5.CENTER)
