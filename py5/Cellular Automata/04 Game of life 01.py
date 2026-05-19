@@ -12,22 +12,24 @@ cols = W // cell_size
 rows = H // cell_size
 
 grid = []
-alive = []
+alive = [(10,9),(10,10), (10,11)]
 
-for y in range(rows):
-    row = []
-
-    for x in range(cols):
-        row.append(0)
-
-    grid.append(row)
     
 
+# for y in range(rows):
+#     row = []
+
+#     for x in range(cols):
+#         row.append(0)
+
+#     grid.append(row)
 
 
 
-speed = 3
+speed = 10
 is_paused = False
+
+generation = 0
 
 def settings():
     py5.size(W,H)
@@ -46,8 +48,45 @@ def setup():
     # py5.no_stroke()
     
 def draw():
+    global alive, grid
+    
+    
+    if not is_paused:
+        for y in range(rows):
+            row = []
+
+            for x in range(cols):
+                row.append(0)
+
+            grid.append(row)
+        
+        new_alive = []
+        checked_cells = []
+        if len(alive)>0:
+            new_alive, checked_cells = check_alive_neighbors()
+            
+            # turn on alive cells in the grid
+            for i in alive:
+                grid[i[0]][i[1]] = 1 
+        
+        # check dead cells if they reproduce
+        reproduce = []
+        if len(checked_cells) > 0:
+            for i in checked_cells:
+                if i in alive:
+                    continue
+                x = check_if_reproduce(checked_cells)
+                print(x)
+            
+        alive = new_alive + reproduce
+    
+    draw_the_grid()
     display_cycle_count()
-   
+    
+
+############################### END of draw() ###############################
+
+def draw_the_grid():
     for x in range(rows):
         for y in range(cols):
             if grid[x][y] == 0:
@@ -56,36 +95,55 @@ def draw():
                 py5.fill(*p['colors'][2])
             py5.square(x *cell_size,y * cell_size, cell_size)
 
-    new_alive, checked_cells = check_alive_neighbors()
+def check_if_reproduce(cells):
+    reproduce = []
     
-    
-
+    for i in cells:
+        count_alive_neighbors = 0
+        neighbors = [
+            (i[0] - 1, i[1] -1), 
+            (i[0], i[1] -1), 
+            (i[0] + 1, i[1] -1),
+            
+            (i[0] -1 , i[1] ), 
+            (i[0] +1, i[1] ), 
+            
+            (i[0] - 1, i[1] +1), 
+            (i[0], i[1] +1), 
+            (i[0] + 1, i[1] +1),
+            ]
+        for j in neighbors:
+            if j in alive:
+                count_alive_neighbors +=1
+        if count_alive_neighbors == 3:
+            reproduce.append(i)
+    return reproduce
 
 def check_alive_neighbors():
     checked_cells = []
     new_alive = []
-    if len(alive)>0:
-        for i in alive:
-            count_alive_neighbors = 0
-            checked_cells.append(i)
-            neighbors = [
-                (i[0] - 1, i[1] -1), 
-                (i[0], i[1] -1), 
-                (i[0] + 1, i[1] -1),
-                
-                (i[0] -1 , i[1] ), 
-                (i[0] +1, i[1] ), 
-                
-                (i[0] - 1, i[1] +1), 
-                (i[0], i[1] +1), 
-                (i[0] + 1, i[1] +1),
-                ]
-            for j in neighbors:
-                checked_cells.append(j)
-                if j in alive:
-                    count_alive_neighbors +=1
-            if count_alive_neighbors == 2 or count_alive_neighbors == 3:
-                new_alive.append(i)
+    
+    for i in alive:
+        count_alive_neighbors = 0
+        checked_cells.append(i)
+        neighbors = [
+            (i[0] - 1, i[1] -1), 
+            (i[0], i[1] -1), 
+            (i[0] + 1, i[1] -1),
+            
+            (i[0] -1 , i[1] ), 
+            (i[0] +1, i[1] ), 
+            
+            (i[0] - 1, i[1] +1), 
+            (i[0], i[1] +1), 
+            (i[0] + 1, i[1] +1),
+            ]
+        for j in neighbors:
+            checked_cells.append(j)
+            if j in alive:
+                count_alive_neighbors +=1
+        if count_alive_neighbors == 2 or count_alive_neighbors == 3:
+            new_alive.append(i)
     return new_alive, checked_cells
 
 def display_cycle_count():
@@ -93,7 +151,7 @@ def display_cycle_count():
     py5.fill("#FFFFFF")
     py5.text_align(py5.CENTER)
     py5.text_size(18)
-    py5.text(py5.frame_count, 20, 20)
+    py5.text(generation, 20, 20)
     py5.pop_style()
     
 def mouse_pressed():
@@ -105,7 +163,6 @@ def mouse_pressed():
         alive.append((x,y))
     else:
         alive.remove((x,y))
-    print(alive)
     
 def key_pressed():
     global is_paused
