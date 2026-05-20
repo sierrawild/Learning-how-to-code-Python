@@ -30,7 +30,7 @@ def draw():
     py5.translate(W/2,H/2)
     py5.stroke(*p['colors'][0],100)
     
-    angle = py5.random(0,py5.TWO_PI)
+    angle = py5.random(-0.6,0.6)
     
     dx = py5.cos(angle)
     dy = py5.sin(angle)
@@ -51,7 +51,7 @@ def draw():
     
 
 def inside_of_bounds():
-    if x < W/2 and x > -W/2 and y < H/2 and y > -H/2:
+    if -W/2 < x < W/2 and -H/2 < y < H/2:
         return True 
 
 py5.run_sketch()
