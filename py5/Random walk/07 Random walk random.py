@@ -1,0 +1,95 @@
+import py5, sys
+sys.path.append(r'C:\Users\Pawel\Desktop\Learning how to code Python\py5')
+import palette
+
+# Variables
+
+W, H = 1000, 1000
+p = palette.INK
+x_old, y_old = 0, 0
+x, y = 0, 0
+travel = 20
+choices = {'right','up','left','down'}
+
+def settings():
+    py5.size(W,H)
+    # py5.full_screen()
+    
+def setup():
+    py5.frame_rate((60))
+    
+    py5.background(*p['bg'])
+    py5.stroke(*p['colors'][0])
+    py5.stroke_weight(5)
+    py5.no_fill()
+    
+    
+def draw():
+    global x,y,x_old,y_old, next_move
+
+    py5.translate(W/2,H/2)
+    py5.stroke(*p['colors'][0],10)
+    
+    stay_in_the_canvas()
+    next_move = py5.random_choice(list(choices))
+    move(next_move)
+    
+    
+    
+    py5.circle(x,y, 6)
+    py5.line(x_old,y_old,x,y)
+
+    if not inside_of_bounds():
+        print("Out of bounds")
+    
+    
+def stay_in_the_canvas():
+    global choices
+    margin = travel + 10
+    if x < -W/2 + margin :
+        choices.discard('left')
+    elif x > -W/2 + margin :
+        choices.add('left')
+
+    if x > W/2 + margin:
+        choices.discard('right')
+    
+    elif x < W/2 + margin:
+        choices.add('right')
+
+    if y < -H/2 + margin:
+        choices.discard('up')
+    if y > -H/2 + margin:
+        choices.add('up')
+
+    if y > H/2 + margin:
+        choices.discard('down')
+    if y < H/2 + margin:
+        choices.add('down')
+
+        
+def move(next):
+    global x,y,x_old,y_old
+    if next == 'right':
+        x_old = x
+        y_old = y
+        x += travel
+    elif next == 'left':
+        x_old = x
+        y_old = y
+        x -= travel
+    elif next == 'up':
+        x_old = x
+        y_old = y
+        y -= travel
+    elif next == 'down':
+        x_old = x
+        y_old = y
+        y += travel
+    
+
+def inside_of_bounds():
+    if x < W/2 and x > -W/2 and y < H/2 and y > -H/2:
+        return True 
+
+py5.run_sketch()
