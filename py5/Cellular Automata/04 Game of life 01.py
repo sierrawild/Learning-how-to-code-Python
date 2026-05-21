@@ -12,7 +12,7 @@ cols = W // cell_size
 rows = H // cell_size
 
 grid = []
-alive = [(10,9),(10,10), (10,11)]
+alive = ((10,9),(10,10), (10,11))
 
     
 
