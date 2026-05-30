@@ -15,7 +15,6 @@ def setup():
     py5.frame_rate((60))
     
     py5.background(*p['bg'])
-    py5.fill(*p['colors'][1])
     
     py5.no_fill()
     # py5.no_stroke()
@@ -26,75 +25,55 @@ def draw():
     ghost_trails(p['bg'],100) 
     center_coordinates()
     
-    angle = 0.08 * py5.frame_count % 360
+    angle = 0.05 * py5.frame_count 
     r = 100
     
+    # layer 1
+    py5.fill(*p['colors'][1])
+    py5.stroke(*p['colors'][1])
+    py5.stroke_weight(3)
+    x1 = py5.cos(angle) * r
+    y1 = py5.sin(angle) * r
+    py5.line(0,0,x1,y1)
+    py5.circle(x1,y1,10)
     
-    # first pendulum
-    py5.push_matrix()
-    
-    xy1 = 100
-    speed = 0.15
-    x1 = py5.cos(angle * speed) * xy1
-    y1 = py5.sin(angle * speed) * xy1
-    py5.translate(x1, y1)
-    x = py5.cos(angle) * r
-    y = py5.sin(angle) * r
-    # Pendulum
-    py5.stroke(*p['colors'][0])
-    py5.stroke_weight(5)
-    py5.line(0,0,x,y)
-    py5.circle(0,0,10)
-    # End of pendulum ball
-    py5.stroke(*p['colors'][2])
-    py5.circle(x,y,10)
-    
-    py5.pop_matrix()
-    
-    
-    # second pendulum
-    py5.push_matrix()
-    xy2 = 80
-    speed2 = 0.1
-    x2 = py5.cos(angle * speed2) * xy2
-    y2 = py5.sin(angle * speed2) * xy2
-    py5.translate(x2,y2)
-    
-    
-    # Pendulum 2
-    py5.stroke(*p['colors'][3])
-    py5.stroke_weight(5)
-    py5.line(0,0,x2,y2)
-    py5.circle(0,0,10)
-    # End of pendulum ball 2
-    py5.stroke(*p['colors'][3])
-    py5.circle(x2,y2,10)
-    py5.pop_matrix()
-    
-    
-    # inside circle
-    py5.stroke(*p['colors'][0])
-    py5.stroke_weight(2)
-    py5.circle(0,0,xy1*2)
-    
-    # Line
-    line.append((float(x)+x1,float(y)+y1))
+    # layer 2
+    py5.fill(*p['colors'][2])
     py5.stroke(*p['colors'][2])
     py5.stroke_weight(3)
+    angle = angle * 1.5 
+    r = r * 0.8
+    x2 = (py5.cos(angle) * r) + x1
+    y2 = (py5.sin(angle) * r) + y1
+    py5.line(x1,y1, x2, y2)
+    py5.circle(x2,y2,10)
+    
+    # layer 3
+    py5.fill(*p['colors'][3])
+    py5.stroke(*p['colors'][3])
+    py5.stroke_weight(3)
+    angle = angle * 1.5 * -1
+    r = r * 0.8
+    x3 = (py5.cos(angle) * r) + x2
+    y3 = (py5.sin(angle) * r) + y2
+    py5.line(x2, y2, x3, y3)
+    py5.circle(x3,y3,10)
+    
+    # line 3 setup
+    line_3_point = (x3,y3)
+    if line_3_point not in line_3:
+        line_3.append(line_3_point)
+        
+    # line 3 draw
+    py5.no_fill()
     py5.begin_shape()
-    for i in range(len(line)):
-        py5.vertex(*line[i])
+    py5.stroke_weight(1)
+    for i in line_3:
+        py5.vertex(i)
     py5.end_shape()
     
-    #remove from line
-    if len(line) > 3000:
-        line.pop(0)
-    
-    
-    
-    # END OF DRAW
-line = []
-line2 = [] # add another pendulum
+line_3 = []
+
     
 def center_coordinates():
     py5.translate(py5.width/2,py5.height/2)
