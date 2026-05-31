@@ -41,7 +41,7 @@ def draw():
     py5.fill(*p['colors'][2])
     py5.stroke(*p['colors'][2])
     py5.stroke_weight(3)
-    angle = angle * 1.5 
+    angle = angle * 1.8 * -1
     r = r * 0.8
     x2 = (py5.cos(angle) * r) + x1
     y2 = (py5.sin(angle) * r) + y1
