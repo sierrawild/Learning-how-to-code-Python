@@ -1,8 +1,8 @@
 import py5, palette
 #https://bleuje.com/tutorial2/
 
-W = 540 
-H = 960
+W = 1920 
+H = 1080
 
 
 
@@ -28,7 +28,13 @@ def draw():
             x = py5.remap(w,0,m-1,0,W)
             y = py5.remap(h,0,m-1,0,H)
             radius =  periodic_function(t - offset(x,y))
-            py5.circle(x,y,radius)
+
+            # py5.circle(x,y,radius) # using circles            
+
+            
+            # using squares
+            py5.rect_mode(py5.CENTER)
+            py5.square(x,y,radius * 2) 
             
             
 def periodic_function(p):
@@ -41,7 +47,7 @@ def offset(x,y):
 f = py5.get_frame_rate()  
 m = 40  
 p = palette.random_palette()
-print(f"Palette in use: {p["name"]}")
+# p = palette.NOIR
 
 
 
