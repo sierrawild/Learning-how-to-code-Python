@@ -1,9 +1,12 @@
-import py5, palette
+import py5, sys
+sys.path.append(r'C:\Users\Pawel\Desktop\Learning how to code Python\py5')
+import palette
 
 # Variables
 W, H = 1000, 1000
 p = palette.INK
 
+yoff = 0
 
 def settings():
     py5.size(W,H)
@@ -17,20 +20,20 @@ def setup():
     py5.fill(*p['colors'][1])
     py5.stroke_weight(5)
     
-    py5.no_fill()
+    # py5.no_fill()
     # py5.no_stroke()
     
 def draw():
+    global yoff
     ghost_trails(p['bg'],25) 
-    py5.begin_shape()
+    center_coordinates()
     
-    for x in range(W):
-        y = py5.noise(x * 0.01)
-        y = py5.noise(y + py5.frame_count / 1000)
-        
-        py5.vertex(x,y * H)
+    x = 0
+    y = py5.noise(yoff) * 100
+
+    py5.circle(x,y,10)
     
-    py5.end_shape()
+    yoff += 0.01
     
     # END OF DRAW
     

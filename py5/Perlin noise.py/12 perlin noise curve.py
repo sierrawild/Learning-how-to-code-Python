@@ -1,4 +1,6 @@
-import py5, palette
+import py5, sys
+sys.path.append(r'C:\Users\Pawel\Desktop\Learning how to code Python\py5')
+import palette
 
 # Variables
 W, H = 1000, 1000
@@ -22,17 +24,15 @@ def setup():
     
 def draw():
     ghost_trails(p['bg'],25) 
+    py5.begin_shape()
     
     for x in range(W):
-        for y in range(H):
-            
-            n = py5.noise(x * 0.01, y * 0.01)
-            
-            c = int(n * 255)
-            
-            py5.stroke(c)
-            
-            py5.point(x,y)
+        y = py5.noise(x * 0.01)
+        y = py5.noise(y + py5.frame_count / 1000)
+        
+        py5.vertex(x,y * H)
+    
+    py5.end_shape()
     
     # END OF DRAW
     

@@ -1,8 +1,10 @@
-import py5, palette
+import py5, sys
+sys.path.append(r'C:\Users\Pawel\Desktop\Learning how to code Python\py5')
+import palette
 
 # Variables
 W, H = 1000, 1000
-p = palette.INK
+p = palette.random_palette()
 
 
 def settings():
@@ -22,13 +24,19 @@ def setup():
     
 def draw():
     ghost_trails(p['bg'],25) 
+    # center_coordinates()
     
-    t = py5.frame_count * 0.01
+    spam = py5.frame_count * 0.01
+    x = py5.noise(spam) * W
+    y = py5.noise(spam + 1000) * H
     
-    x = py5.noise(t) * W
-    y = py5.noise(t + 100) * H
+    py5.circle(x,y, 5)
     
-    py5.circle(x,y, 10)
+    spam = py5.frame_count * 0.01
+    spam = spam * - 1
+    x = py5.noise(spam) * W
+    y = py5.noise(spam + 1000) * H
+    py5.circle(x,y, 5)
     
     # END OF DRAW
     

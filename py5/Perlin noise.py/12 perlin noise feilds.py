@@ -1,4 +1,6 @@
-import py5, palette
+import py5, sys
+sys.path.append(r'C:\Users\Pawel\Desktop\Learning how to code Python\py5')
+import palette
 
 # Variables
 W, H = 1000, 1000
