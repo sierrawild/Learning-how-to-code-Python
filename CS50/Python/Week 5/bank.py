@@ -1,5 +1,5 @@
 def main():
-    x = input("Greeting: ")
+    x = input("Greeting: ").lower().strip()
     spam = value(x)
     print(spam)
 
