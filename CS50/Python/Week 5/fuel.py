@@ -14,11 +14,12 @@ def convert(fraction):
     # change to ints
     x, y = int(x), int(y)
     
+    if y == 0:
+        
+        raise ZeroDivisionError("Can't divide by 0")
     if x > y:
         raise ValueError('x is greater than y')
     
-    if y == 0:
-        raise ZeroDivisionError("Can't divide by 0")
     
     return round((x/y)*100)
 
