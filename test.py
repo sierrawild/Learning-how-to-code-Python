@@ -1,3 +1,4 @@
-for i in range(0,19,2):
-    print(i)
-    print(f"and  {i+1}")
+x = r"http://youtube.com/embed/xvFZjo5PgG0"
+
+y = x.split("/")
+print(y[-1])
