@@ -1,4 +1,3 @@
-x = r"http://youtube.com/embed/xvFZjo5PgG0"
+x = "12345"
 
-y = x.split("/")
-print(y[-1])
+print(x[:-2])
