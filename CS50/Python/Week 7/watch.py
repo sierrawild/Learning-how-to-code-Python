@@ -7,10 +7,14 @@ def main():
 
 
 def parse(s):
-    regex = r"\"https?\://www.youtube.com/embed/[\w]+\""
-    if match := re.search(regex,s):
-        code =  match.group(0).split("/")
-        return r"https://youtu.be/" + code[-1][:-1]
+    regex1 = r"<iframe.+</iframe>"
+    regex2 = r"\"https?\://(www\.)?youtube\.com/embed/[\w]+\""
+    if match1 := re.search(regex1,s):
+        if match := re.search(regex2,match1.group(0)):
+            code =  match.group(0).split("/")
+            return r"https://youtu.be/" + code[-1][:-1]
+        else:
+            return None
     else:
         return None
 
