@@ -8,7 +8,8 @@ def main():
 
 
 def convert(s):
-    regex = r"^([01]?[0-9]\:?[0-5]?\d? [AP]M) to ([01]?[0-9]\:?[0-5]?\d? [AP]M)"
+    # regex = r"^([01]?[0-9]\:?[0-5]?\d? [AP]M) to ([01]?[0-9]\:?[0-5]?\d? [AP]M)"
+    regex = r"(^(1[0-2]|0?[1-9])(:([0-5][0-9]))? (AM|PM) to (1[0-2]|0?[1-9])(:([0-5][0-9]))? (AM|PM))$"
     regex1 = r"^[01]?\d [AP]M"
     if match := re.search(regex,s):
         one, two = match.group(0).strip().split(" to ")
