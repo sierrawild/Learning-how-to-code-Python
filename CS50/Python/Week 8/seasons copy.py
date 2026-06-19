@@ -1,7 +1,7 @@
 from datetime import date
 import inflect, sys
 p = inflect.engine()
-today = date.today()
+# today = date.today()
 # today = "2003-01-01"
 
 def main():
