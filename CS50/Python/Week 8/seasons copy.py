@@ -2,11 +2,11 @@ from datetime import date
 import inflect, sys
 p = inflect.engine()
 # today = date.today()
-today = "2003-01-32"
+# today = "2003-01-01"
 
 def main():
-    # dob = input("When wore you born (format: YYYY-MM-DD): ")
-    dob = "2001-01-01"
+    dob = input("When wore you born (format: YYYY-MM-DD): ")
+    # dob = "2001-01-01"
     
     try:
         print(process(dob, today))
@@ -18,9 +18,9 @@ def process(x, today=None):
         today = date.today()
     
     if type(today) == str:
+        today = today.strip().split("-")
         try:
-            today = date.fromisoformat(today)
-            # today = date(year=int(today[0]),month=int(today[1]),day=int(today[2]))
+            today = date(year=int(today[0]),month=int(today[1]),day=int(today[2]))
         except ValueError:
             raise ValueError('Invalid date')
 
