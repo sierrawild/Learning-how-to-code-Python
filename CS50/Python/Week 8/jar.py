@@ -20,7 +20,7 @@ class Jar:
 
     @property
     def capacity(self):
-        return self.capacity
+        return self._capacity
     
     @capacity.setter
     def capacity(self, capacity):
@@ -36,10 +36,12 @@ class Jar:
         return self.cookies
         
 jar = Jar()
-jar.deposit(3)
-print(jar)
-jar.withdraw(3)
-jar.deposit(1)
-print(jar)
-print(jar.size)
-jar.withdraw(2)
+jar.deposit(2)
+print(str(jar))
+
+# jar.deposit(3)
+# print(jar)
+# jar.withdraw(3)
+# jar.deposit(1)
+# print(jar)
+# print(jar.size)
