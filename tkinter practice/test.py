@@ -1,5 +1,10 @@
 import tkinter as tk
 
 root = tk.Tk()
-# let's start 
+root.title("Lets start")
+
+
+
+
+
 root.mainloop()
