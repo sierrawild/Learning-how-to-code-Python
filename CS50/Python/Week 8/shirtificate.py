@@ -1,3 +1,13 @@
-numbers = {1,3,4,1,5,60}
+import os
+os.chdir(r"C:\Users\Pawel\Desktop\Learning how to code Python\CS50\Python\Week 8")
 
-print(*numbers)
+from fpdf import FPDF
+
+cs50 = "CS50 Shirtificate"
+
+
+class PDF(FPDF):
+    def img(self):
+        # img
+        self.image("sirtificate.png", )
+    
