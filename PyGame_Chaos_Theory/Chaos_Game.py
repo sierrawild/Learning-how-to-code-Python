@@ -96,8 +96,8 @@ def hue_range(corners, target):
     return random.uniform(target_index * step, (target_index + 1) * step)
 
 # Polygon settings
-SIDES = 8
-RATIO = 0.7
+SIDES = 3
+RATIO = 0.5
 RADIUS = min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.4
 dots_per_frame = 100 # how many dots are being drawn per frame
 saved_speed = dots_per_frame
