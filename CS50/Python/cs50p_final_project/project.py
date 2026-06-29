@@ -22,7 +22,8 @@ def main():
     fractal_surface = pygame.Surface((screen_width, screen_height))# surface where dots are being drawn
     fractal_surface.fill(palette["bg"]) # its being filled once before the loop as I dont want it to wipe out the dots
     
-    current_position = [screen_width/2,screen_height/2] # starting point, can be any
+    center_point = [screen_width /2, screen_height /2]
+    current_position = center_point # starting point, can be any
     skip_first_iterations = 500
     iteration = -skip_first_iterations
     
@@ -44,7 +45,9 @@ def main():
             fractal_surface.fill(palette["bg"])
             screen.fill(palette["bg"])
             iteration = -skip_first_iterations
-        radius = min(screen_width, screen_height) * 0.4
+            current_position = center_point
+            
+        radius = min(screen_width, screen_height) * 0.45
         corners = main_polygon(sides, radius, screen_width // 2, screen_height // 2)
         screen.fill(palette["bg"]) # fill the screen with a color to wipe away anything from last frame
 
@@ -57,7 +60,9 @@ def main():
             
             iteration += 1
             if iteration > 0:
-                pygame.draw.circle(fractal_surface, palette["colors"][1], current_position, radius=1)
+                dot_color = pygame.Color(palette["colors"][corners.index(target)%len(palette["colors"])])
+                # dot_color.hsva = (hue, 80, 80)
+                pygame.draw.circle(fractal_surface, dot_color, current_position, radius=1)
         
         screen.blit(fractal_surface, (0,0))
         # main polygon
@@ -69,6 +74,8 @@ def main():
         clock.tick(60)  # limits FPS to 60
 
     pygame.quit()
+
+
 
 def lerp2d(current_point,chosen_vertex,distance_traveled):
     """Linear interpolation for 2d point. Expects 2 tuples of 2 coordinates, x and y. Returns new point based on distance traveled"""
