@@ -5,7 +5,7 @@ import pygame, random, math, palettes
 
 sides = 3
 ratio = 0.48
-dots_per_frame = 50 # how many dots are being drawn per frame
+dots_per_frame = 5 # how many dots are being drawn per frame
 
 
 
@@ -103,19 +103,13 @@ def main():
         
         ### Text and UI ###
         
-        
-        
-        
-        x, y = 20, 20
+        # panel 1        
+        x1, y1 = 20, 20
         padding = 20
-        padding2 = padding * 2
         line_spacing = font_size
         
         
-        pygame.draw.rect(screen, palette["colors"][0], (x,y, backdrop_w + padding2, backdrop_h + padding), width=5, border_radius= 20) # backdrop
-        suffix = 'k'
-        if iteration >= 1000000:
-            suffix = 'm'
+        pygame.draw.rect(screen, palette["colors"][0], (x1,y1, backdrop_w + padding * 2, backdrop_h + padding), width=5, border_radius= 20) # backdrop
         
         shape = get_polygon_name(sides)
         text = ['CHAOS GAME',
@@ -125,20 +119,53 @@ def main():
                 f'',
                 shape,
                 f'No of sides: {sides}',
-                f'Dots drawn: {int((iteration / 1000)):,} {suffix}']
+                f'Dots drawn: {number_formatting(iteration)}']
         
         for line in text:
             text_surface = font.render(line, antialias=True, color=palette["colors"][0])
             text_rect = text_surface.get_rect()
-            text_rect. topleft = (x + padding, y + padding)
+            text_rect.topleft = (x1 + padding, y1 + padding)
             screen.blit(text_surface, text_rect)
-            y += line_spacing
+            y1 += line_spacing
             # backdrop
             text_width, _ = text_surface.get_size()
             if backdrop_w < text_width:
                 backdrop_w = text_width
         
-        backdrop_h = y
+        backdrop_h = y1
+        
+        # panel 2
+        
+        x2, y2 = x1, y1 + padding * 3
+        pygame.draw.rect(screen, palette["colors"][0], (x2,y2, backdrop_w + padding * 2, backdrop_h + padding), width=5, border_radius= 20) # backdrop
+        
+        text2 = ['CONTROLS',
+                'UP:','+1 side',
+                'Down:','-1 side',
+                'Left:','speed -',
+                'Right:','speed +',
+                'P:','palette',
+                'R:','reset',
+                'Space:','pause',]
+
+        for line in enumerate(text2):
+            text_surface2 = font.render(line[1], antialias=True, color=palette["colors"][0])
+            text2_rec = text_surface2.get_rect()
+            if line[0] == 0:
+                text2_rec.topleft = (x2 + padding, y2 + padding)
+                y2 += line_spacing
+            elif line[0] % 2 != 0:
+                text2_rec.topleft = (x2 + padding, y2 + padding)
+            else:
+                text2_rec.topleft = (x2 + 80, y2 + padding)
+                y2 += line_spacing
+                
+            screen.blit(text_surface2, text2_rec)
+            # backdrop
+            text_width, _ = text_surface2.get_size()
+            if backdrop_w < text_width:
+                backdrop_w = text_width
+        
         
         ###################################################################################
         
@@ -147,7 +174,23 @@ def main():
         clock.tick(30)  # limits FPS to 60
 
     pygame.quit()
-
+    
+def number_formatting(number):
+    if number < -400:
+        return '.'
+    elif number < -300:
+        return '..'
+    elif number < -200:
+        return '...'
+    elif number < 0:
+        return '....'
+    elif number >= 1_000_000:
+        return f'{number / 1_000_000:.2f} m'
+    elif number >= 1_000:
+        return f'{number / 1000:.1f} k'
+    elif number >= 0:
+        return number
+    
 def get_polygon_name(sides):
     shapeNames = {
     "3": "Sierpiński triangle",
