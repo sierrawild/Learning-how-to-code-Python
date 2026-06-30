@@ -1,13 +1,11 @@
 import pygame, random, math, palettes
 
-# TODO UI
 # TODO Keyboard input
-# TODO saturation based on distance
 
 
 sides = 3
-ratio = 0.5
-dots_per_frame = 100 # how many dots are being drawn per frame
+ratio = 0.48
+dots_per_frame = 50 # how many dots are being drawn per frame
 
 
 
@@ -21,6 +19,10 @@ def main():
     # palette = palettes.w_b # debugging 
     print(f"Palette used: {palette['name']}")
     
+    # font
+    font_size = 24
+    font = pygame.font.Font(None, font_size)
+    backdrop_w, backdrop_h = 0, 0
     
     ### screen setup ###
     screen = pygame.display.set_mode((1280, 720), pygame.RESIZABLE) # Main surface where the main polygon is being drawn
@@ -28,12 +30,13 @@ def main():
     fractal_surface = pygame.Surface((screen_width, screen_height))# surface where dots are being drawn
     fractal_surface.fill(pygame.Color(palette["bg"])) # its being filled once before the loop as I dont want it to wipe out the dots
     
+    
     center_point = [screen_width /2, screen_height /2]
     current_position = center_point # starting point, can be any
     skip_first_iterations = 500
     iteration = -skip_first_iterations
     
-    # game loop
+    ### main loop ###
     running = True
     while running:
         for event in pygame.event.get(): # pygame.QUIT event means the user clicked X to close your window
@@ -61,6 +64,7 @@ def main():
 
         # RENDER HERE
         ###################################################################################
+        # Drawing dots
         for _ in range(dots_per_frame):
             # calculating point
             target = random.choice(corners)
@@ -92,15 +96,84 @@ def main():
                 pygame.draw.circle(fractal_surface, dot_color, current_position, radius=1)
 
         screen.blit(fractal_surface, (0,0))
+        
         # main polygon
         pygame.draw.polygon(screen, pygame.Color(palette["colors"][0]),corners, width=5)
+        
+        
+        ### Text and UI ###
+        
+        
+        
+        
+        x, y = 20, 20
+        padding = 20
+        padding2 = padding * 2
+        line_spacing = font_size
+        
+        
+        pygame.draw.rect(screen, palette["colors"][0], (x,y, backdrop_w + padding2, backdrop_h + padding), width=5, border_radius= 20) # backdrop
+        suffix = 'k'
+        if iteration >= 1000000:
+            suffix = 'm'
+        
+        shape = get_polygon_name(sides)
+        text = ['CHAOS GAME',
+                'Fractal creation',
+                f'',
+                f"Palette used: {palette['name']}",
+                f'',
+                shape,
+                f'No of sides: {sides}',
+                f'Dots drawn: {int((iteration / 1000)):,} {suffix}']
+        
+        for line in text:
+            text_surface = font.render(line, antialias=True, color=palette["colors"][0])
+            text_rect = text_surface.get_rect()
+            text_rect. topleft = (x + padding, y + padding)
+            screen.blit(text_surface, text_rect)
+            y += line_spacing
+            # backdrop
+            text_width, _ = text_surface.get_size()
+            if backdrop_w < text_width:
+                backdrop_w = text_width
+        
+        backdrop_h = y
+        
         ###################################################################################
         
         pygame.display.flip() # flip() the display to put your work on screen
 
-        clock.tick(60)  # limits FPS to 60
+        clock.tick(30)  # limits FPS to 60
 
     pygame.quit()
+
+def get_polygon_name(sides):
+    shapeNames = {
+    "3": "Sierpiński triangle",
+    "4": "Square",
+    "5": "Pentagon",
+    "6": "Hexagon",
+    "7": "Heptagon",
+    "8": "Octagon",
+    "9": "Nonagon",
+    "10": "Decagon",
+    "11": "Hendecagon",
+    "12": "Dodecagon",
+    "13": "Tridecagon",
+    "14": "Tetradecagon",
+    "15": "Pentadecagon",
+    "16": "Hexadecagon",
+    "17": "Heptadecagon",
+    "18": "Octadecagon",
+    "19": "Enneadecagon",
+    "20": "Icosagon",
+    "n-gon": "n-gon",
+    }
+    if sides > 20:
+        return shapeNames['n-gon']
+    else:
+        return shapeNames[str(sides)]
 
 def clamp(value, min_v, max_v):
     return max(min_v, min(max_v, value))
