@@ -1,0 +1,19 @@
+# Chaos game theory fractals
+#### Video Demo:  <URL HERE>
+#### Description:
+I feel quite strongly about this project.
+Partly because this was the first programming idea I ever came across where I thought: I bet I can make that.
+I was watching YouTube videos, and on one mathematical channel they explained the concept of the chaos game. When I saw it, I decided to try making it myself without looking up a solution.
+I spent many days trying to figure out how to make it. At first, I made it in Turtle, and I did manage to get it working. I later looked back at my old files to see the design choices I made. After more practice and education, some of those choices are what I can only call questionable. But I am still proud of that first version.
+One thing I remember clearly is trying to calculate the distance between two points, and then how to plot a new point between them based on a ratio. I thought about it for a long time, and at the time I used Pythagoras’ theorem. Later on, I discovered linear interpolation, and that is what I used in this project.
+In this project, I use linear interpolation not just for one value, but for a 2D point. My lerp2d function calculates both the x and y coordinates at the same time and returns them as a tuple.
+I have included one extra file: palettes.py. I separated the palettes from the main project because this file can be as short or as long as I want, and I can edit the colours without changing the main program.
+The palettes are stored as simple dictionaries. Each palette has the same structure: a name, a background colour, and a list of colours. This means that no matter which palette is chosen, the main program can use it in the same way.
+The colour list can contain any number of colours. The code checks how many colours are in the list and loops back to the start if it reaches the end. So if a palette has five colours but the polygon has six vertices, the first colour will be reused.
+One of the backbone functions of the project is the function that calculates the main polygon. It uses maths, including sine and cosine, to divide a circle evenly based on the number of sides. This gives me regular polygons that are centred in the middle of the screen.
+Another useful feature is the random palette selection. A random palette is chosen every time the program runs, so the project looks a little different each time. I like this because it encourages the user to play around with the program.
+Another small function I am proud of is clamp. I learned how to clamp numbers while normalising values for colour adjustment. I use normalised distance from the centre of the polygon to adjust saturation and brightness. I do not expect the value to go outside the range from 0 to 1, but clamping protects the program from edge cases. If a point somehow lands outside the expected area, the program will not crash because of an invalid colour value.
+I also added a function that gets the polygon name. The program can display names from triangle up to icosagon, and for shapes with more than 20 sides it displays n-gon. This is shown in the side panel, along with the number of sides, so the user can see what polygon they are looking at.
+I implemented number formatting as well. The panel displays how many dots have been drawn, but this number becomes very large very quickly. Instead of always showing the full number, the program shows small numbers normally, then switches to thousands using k, and then to millions using m.
+At the beginning, the display shows dots instead of a number. This is because I start the iteration count below zero. The program uses those first hidden iterations to let the chaos game stabilise. Without this, the first few points can appear in places that do not belong to the final fractal pattern, making the image less clean.
+

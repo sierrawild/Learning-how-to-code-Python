@@ -5,7 +5,7 @@ import pygame, random, math, palettes
 
 sides = 3
 ratio = 0.48
-dots_per_frame = 5 # how many dots are being drawn per frame
+dots_per_frame = 25 # how many dots are being drawn per frame
 
 
 
@@ -137,7 +137,7 @@ def main():
         # panel 2
         
         x2, y2 = x1, y1 + padding * 3
-        pygame.draw.rect(screen, palette["colors"][0], (x2,y2, backdrop_w + padding * 2, backdrop_h + padding), width=5, border_radius= 20) # backdrop
+        pygame.draw.rect(screen, palette["colors"][0], (x2,y2, backdrop_w + padding * 2, backdrop_h + padding * 2), width=5, border_radius= 20) # backdrop
         
         text2 = ['CONTROLS',
                 'UP:','+1 side',
@@ -146,6 +146,7 @@ def main():
                 'Right:','speed +',
                 'P:','palette',
                 'R:','reset',
+                'B','border',
                 'Space:','pause',]
 
         for line in enumerate(text2):
