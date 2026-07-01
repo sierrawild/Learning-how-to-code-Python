@@ -1,6 +1,13 @@
 # Chaos game theory fractals
 #### Video Demo:  <URL HERE>
 #### Description:
+what the project does
+how to install/run it
+controls
+files
+design notes
+testing
+what you learned
 I feel quite strongly about this project.
 Partly because this was the first programming idea I ever came across where I thought: I bet I can make that.
 I was watching YouTube videos, and on one mathematical channel they explained the concept of the chaos game. When I saw it, I decided to try making it myself without looking up a solution.
