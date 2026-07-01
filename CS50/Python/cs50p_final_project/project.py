@@ -1,11 +1,5 @@
 import pygame, random, math, palettes
 
-# TODO Keyboard input
-
-
-
-
-
 def main():
     ### variables
     paused = False
@@ -13,15 +7,15 @@ def main():
     sides = 3
     ratio = 0.5
     dots_per_frame = 30 # how many dots are being drawn per frame
+    skip_first_iterations = 500 # helps stabilize the pattern before its drawn 
+    iteration = -skip_first_iterations
     
     ### pygame setup ###
     pygame.init()
     clock = pygame.time.Clock()
     
-    # import random palette and print the name to the console 
+    ### import random palette
     palette = random_palette()
-    ### palette = palettes.w_b # debugging  ###
-    print(f"Palette used: {palette['name']}")
     
     ### font ###
     font_size = 24
@@ -34,11 +28,8 @@ def main():
     fractal_surface = pygame.Surface((screen_width, screen_height))# surface where dots are being drawn
     fractal_surface.fill(pygame.Color(palette["bg"])) # its being filled once before the loop as I dont want it to wipe out the dots
     
-    
     center_point = [screen_width /2, screen_height /2]
     current_position = center_point # starting point, can be any
-    skip_first_iterations = 500
-    iteration = -skip_first_iterations
     
     ### main loop ###
     running = True
@@ -52,16 +43,13 @@ def main():
             iteration = reset_fractal(fractal_surface, palette, skip_first_iterations)
             center_point = [screen_width /2, screen_height /2]
             current_position = center_point
-        ### 
-        
+            
+        # variables inside the loop to update after screen resize
         radius = min(screen_width, screen_height) * 0.45
         corners = main_polygon(sides, radius, screen_width // 2, screen_height // 2)
-        screen.fill(pygame.Color(palette["bg"])) # fill the screen with a color to wipe away anything from last frame
+        ### 
         
-
-        # Rendering
-        ###################################################################################
-        # Drawing dots
+        ### Drawing dots
         if not paused:
             for _ in range(dots_per_frame):
                 # calculating point
@@ -73,9 +61,8 @@ def main():
                 distance_from_0 = distance(center_point, current_position)
                 normalized_distance = distance_from_0 / radius
                 normalized_distance = clamp(normalized_distance, 0.0, 1.0) # clamping the value between 0 and 1
-                # print(normalized_distance)
                 
-                #drawing
+                # drawing
                 iteration += 1
                 if iteration > 0: # this skips some iterations so the pattern can stabilize before its being drawn
                     dot_color = pygame.Color(palette["colors"][corners.index(target)%len(palette["colors"])])
@@ -106,7 +93,6 @@ def main():
         x1, y1 = 20, 20
         padding = 20
         line_spacing = font_size
-        
         
         pygame.draw.rect(screen, palette["colors"][0], (x1,y1, backdrop_w + padding * 2, backdrop_h + padding), width=5, border_radius= 20) # backdrop
         
@@ -171,7 +157,6 @@ def main():
         
         
         pygame.display.flip() # flip() the display to put your work on screen
-        ###################################################################################
         
         ### Event handling ###
         for event in pygame.event.get(): # pygame.QUIT event means the user clicked X to close your window
@@ -239,11 +224,12 @@ def main():
     pygame.quit()
     
 def reset_fractal(fractal_surface, palette, skip_first_iterations):
-    
+    '''Redraws a surface, returns skipped iterations so iterations can be reset as well'''
     fractal_surface.fill(pygame.Color(palette["bg"]))
     return -skip_first_iterations
     
 def number_formatting(number):
+    '''Formats larger numbers as the number of dots on the screen will become very large very quickly'''
     if number < -400:
         return '.'
     elif number < -300:
@@ -257,10 +243,12 @@ def number_formatting(number):
     elif number >= 1_000:
         return f'{number / 1000:.1f} k'
     elif number >= 0:
-        return number
+        return str(number)
     
 def get_polygon_name(sides):
-    shapeNames = {
+    '''Gets the name of the polygon based on the number of its sides'''
+
+    shape_names = {
     "3": "Sierpiński triangle",
     "4": "Square",
     "5": "Pentagon",
@@ -282,18 +270,21 @@ def get_polygon_name(sides):
     "n-gon": "n-gon",
     }
     if sides > 20:
-        return shapeNames['n-gon']
+        return shape_names['n-gon']
     else:
-        return shapeNames[str(sides)]
+        return shape_names[str(sides)]
 
 def clamp(value, min_v, max_v):
+    '''Clamping given value between min and max value'''
     return max(min_v, min(max_v, value))
   
 def color_value_adjustment(min_v, max_v, normalized_distance):
+    '''Sets min and max value for the color channel'''
     value_range = max_v - min_v
     return min_v + normalized_distance * value_range
 
 def distance(center_point, current_position):
+    '''Calculates distance between two points'''
     x = center_point[0] - current_position[0]
     y = center_point[1] - current_position[1]
     return math.sqrt(x**2+y**2)
@@ -303,9 +294,6 @@ def lerp2d(current_point,chosen_vertex,distance_traveled):
     a = (current_point[0]+(chosen_vertex[0]-current_point[0]) * distance_traveled)
     b = (current_point[1]+(chosen_vertex[1]-current_point[1]) * distance_traveled)
     return (a, b)
-    
-def lerp(current_point,chosen_vertex,distance_traveled):
-    return (current_point[0]+(chosen_vertex[0]-current_point[0]) * distance_traveled)
     
 def random_palette():
     '''Return a random palette from list of palettes in a file of the same name'''

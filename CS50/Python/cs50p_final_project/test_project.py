@@ -17,9 +17,20 @@ def test_lerp2d():
     
 def test_random_palette():
     random.seed(1)
-    assert project.random_palette() == {'name': 'Vaporwave', 'bg': (1, 0, 30), 'colors': [(255, 113, 206), (179, 97, 255), (94, 181, 255), (1, 247, 161), (255, 204, 170)]}
+    assert project.random_palette() == {'name': 'White on Black', 'bg': '#000000', 'colors': ['#FFFFFF']}
     random.seed(99)
-    assert project.random_palette() == {'name': 'Terracotta', 'bg': (245, 240, 230), 'colors': [(204, 102, 68), (187, 134, 100), (153, 153, 119), (221, 204, 170), (102, 85, 68)]}
+    assert project.random_palette() == {'name': 'Forest', 'bg': '#101A13', 'colors': ['#D8F3DC', '#95D5B2', '#52B788', '#40916C', '#B7A57A']}
     random.seed(42)
-    assert project.random_palette() == {'name': 'Cherry Blossom', 'bg': (245, 240, 235), 'colors': [(255, 183, 197), (255, 138, 172), (218, 112, 148), (140, 93, 113), (93, 79, 84)]}
+    assert project.random_palette() == {'name': 'Cyberpunk', 'bg': '#090A1A', 'colors': ['#00F0FF', '#FF2A6D', '#D300C5', '#F9F871', '#05FFA1']}
     
+def test_number_formatting():
+    assert project.number_formatting(-500) == "."
+    assert project.number_formatting(-350) == ".."
+    assert project.number_formatting(-250) == "..."
+    assert project.number_formatting(-150) == "...."
+
+    assert project.number_formatting(42) == "42"
+    assert project.number_formatting(1_001) == "1.0 k"
+    assert project.number_formatting(1_101) == "1.1 k"
+    assert project.number_formatting(1_100_000) == "1.10 m"
+    assert project.number_formatting(1_150_000) == "1.15 m"
