@@ -1,6 +1,6 @@
-# Chaos game theory fractals
+# Chaos game - Fractal creation
 
-### Video Demo:
+### Video Demo: https://youtu.be/kV8x-fR8O-U
 
 ### Description:
 
