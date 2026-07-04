@@ -1,14 +1,17 @@
+import asyncio
 import pygame, random, math, palettes
 
-def main():
+async def main():
     ### variables
     paused = False
     border = True
     sides = 3
     ratio = 0.5
-    dots_per_frame = 30 # how many dots are being drawn per frame
+    dots_per_frame = 50 # how many dots are being drawn per frame
+    speed_adjustment = int(dots_per_frame / 2) # how much speed is added/subtracted using arrows
     skip_first_iterations = 500 # helps stabilize the pattern before its drawn 
     iteration = -skip_first_iterations
+    frames = 30
     
     ### pygame setup ###
     pygame.init()
@@ -20,10 +23,11 @@ def main():
     ### font ###
     font_size = 24
     font = pygame.font.Font(None, font_size)
+    font_paused = pygame.font.Font(None, 50)
     backdrop_w, backdrop_h = 0, 0
     
     ### screen setup ###
-    screen = pygame.display.set_mode((1280, 720), pygame.RESIZABLE) # Main surface where the main polygon is being drawn
+    screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE) # Main surface where the main polygon is being drawn
     screen_width, screen_height = screen.get_size()
     fractal_surface = pygame.Surface((screen_width, screen_height))# surface where dots are being drawn
     fractal_surface.fill(pygame.Color(palette["bg"])) # its being filled once before the loop as I dont want it to wipe out the dots
@@ -49,11 +53,70 @@ def main():
         corners = main_polygon(sides, radius, screen_width // 2, screen_height // 2)
         ### 
         
+        ### Event handling ###
+        for event in pygame.event.get(): # pygame.QUIT event means the user clicked X to close your window
+            if event.type == pygame.QUIT:
+                running = False
+            
+            ### Key binding ###
+            elif event.type == pygame.KEYDOWN:
+                
+                # Close the window by pressing ESCAPE
+                if event.key == pygame.K_ESCAPE: 
+                    running = False
+
+                # reset
+                elif event.key == pygame.K_r:
+                    iteration = reset_fractal(fractal_surface, palette, skip_first_iterations)
+                
+                # palette
+                elif event.key == pygame.K_p:
+                    palette = random_palette()
+                    iteration = reset_fractal(fractal_surface, palette, skip_first_iterations)
+                    
+                # pause
+                elif event.key == pygame.K_SPACE:
+                    paused = not paused
+                
+                # border
+                elif event.key == pygame.K_b:
+                    border = not border
+                    
+                # number of sides
+                elif event.key == pygame.K_UP:
+                    sides = clamp(sides + 1, 3, 42)
+                    
+                elif event.key == pygame.K_DOWN:
+                    sides = clamp(sides - 1, 3, 42)
+                    
+                # speed
+                
+                elif event.key == pygame.K_LEFT:
+                    dots_per_frame = clamp(dots_per_frame - speed_adjustment, 1, 100000)
+                    
+                elif event.key == pygame.K_RIGHT:
+                    dots_per_frame = clamp(dots_per_frame + speed_adjustment, 1, 100000)
+                    
+                # ratio
+                elif event.key == pygame.K_EQUALS:
+                    ratio = clamp(ratio + 0.01, 0, 10)
+                    
+                elif event.key == pygame.K_MINUS:
+                    ratio = clamp(ratio - 0.01, 0, 10)
+                    
+                elif event.key == pygame.K_RIGHTBRACKET:
+                    ratio = clamp(ratio + 0.1, 0, 10)
+                    
+                elif event.key == pygame.K_LEFTBRACKET:
+                    ratio = clamp(ratio - 0.1, 0, 10)
+            ###
+        ###
         ### Drawing dots
         if not paused:
             for _ in range(dots_per_frame):
                 # calculating point
-                target = random.choice(corners)
+                target_index = random.randrange(len(corners))
+                target = corners[target_index]
                 new_position = lerp2d(current_position, target, ratio)
                 current_position = new_position
                 
@@ -65,7 +128,7 @@ def main():
                 # drawing
                 iteration += 1
                 if iteration > 0: # this skips some iterations so the pattern can stabilize before its being drawn
-                    dot_color = pygame.Color(palette["colors"][corners.index(target)%len(palette["colors"])])
+                    dot_color = pygame.Color(palette["colors"][target_index % len(palette["colors"])])
                 
                     h,s,v,a = dot_color.hsva
                     
@@ -79,8 +142,15 @@ def main():
                     
                     dot_color.hsva = (h,new_s,new_v,a)
                     pygame.draw.circle(fractal_surface, dot_color, current_position, radius=1)
-
         screen.blit(fractal_surface, (0,0))
+
+        if paused:
+            pause_surface = font_paused.render("Paused", antialias=True, color=palette["colors"][0])
+            paused_rect = pause_surface.get_rect()
+            paused_rect.center = (screen_width/2, screen_height * 0.9) 
+
+            screen.blit(pause_surface, paused_rect)
+                
         
         # main polygon
         if border:
@@ -105,6 +175,7 @@ def main():
                 f'Ratio: {ratio:.2f}',
                 f'No of sides: {sides}',
                 f'Dots drawn: {number_formatting(iteration)}',
+                f'Dots per frame: {number_formatting(dots_per_frame)}',
                 f"Palette used: {palette['name']}",]
         
         for line in text:
@@ -156,72 +227,12 @@ def main():
                 backdrop_w = text_width
         
         
-        pygame.display.flip() # flip() the display to put your work on screen
+        pygame.display.flip()
+        await asyncio.sleep(0)
         
-        ### Event handling ###
-        for event in pygame.event.get(): # pygame.QUIT event means the user clicked X to close your window
-            if event.type == pygame.QUIT:
-                running = False
-            
-            ### Key binding ###
-            elif event.type == pygame.KEYDOWN:
-                
-                # Close the window by pressing ESCAPE
-                if event.key == pygame.K_ESCAPE: 
-                    running = False
 
-                # reset
-                elif event.key == pygame.K_r:
-                    iteration = reset_fractal(fractal_surface, palette, skip_first_iterations)
-                
-                # palette
-                elif event.key == pygame.K_p:
-                    palette = random_palette()
-                    iteration = reset_fractal(fractal_surface, palette, skip_first_iterations)
-                    
-                # pause
-                elif event.key == pygame.K_SPACE:
-                    paused = not paused
-                    print('Paused = ', paused)
-                
-                # border
-                elif event.key == pygame.K_b:
-                    border = not border
-                    
-                # number of sides
-                elif event.key == pygame.K_UP:
-                    sides = clamp(sides + 1, 3, 42)
-                    
-                elif event.key == pygame.K_DOWN:
-                    sides = clamp(sides - 1, 3, 42)
-                    
-                # speed
-                elif event.key == pygame.K_LEFT:
-                    dots_per_frame = clamp(dots_per_frame - 10, 0, 100000)
-                    print(f'There are {dots_per_frame} drawn each frame')
-                    
-                elif event.key == pygame.K_RIGHT:
-                    dots_per_frame = clamp(dots_per_frame + 10, 0, 100000)
-                    print(f'There are {dots_per_frame} drawn each frame')
-                    
-                # ratio
-                elif event.key == pygame.K_EQUALS:
-                    ratio = clamp(ratio + 0.01, 0, 10)
-                    
-                elif event.key == pygame.K_MINUS:
-                    ratio = clamp(ratio - 0.01, 0, 10)
-                    
-                elif event.key == pygame.K_RIGHTBRACKET:
-                    ratio = clamp(ratio + 0.1, 0, 10)
-                    
-                elif event.key == pygame.K_LEFTBRACKET:
-                    ratio = clamp(ratio - 0.1, 0, 10)
-            ###
-        ###
+        clock.tick(frames)  # limits FPS 
 
-        clock.tick(30)  # limits FPS to 30
-
-    pygame.quit()
     
 def reset_fractal(fractal_surface, palette, skip_first_iterations):
     '''Redraws a surface, returns skipped iterations so iterations can be reset as well'''
@@ -249,7 +260,7 @@ def get_polygon_name(sides):
     '''Gets the name of the polygon based on the number of its sides'''
 
     shape_names = {
-    "3": "Sierpiński triangle",
+    "3": "Sierpinski triangle",
     "4": "Square",
     "5": "Pentagon",
     "6": "Hexagon",
@@ -321,4 +332,4 @@ def main_polygon(sides, radius, center_x, center_y):
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

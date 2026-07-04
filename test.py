@@ -1,3 +1,8 @@
-x = "12345"
+def factorio(n):
+    if n == 1:
+        return 1
+    else:
+        return n * factorio(n -1)
+    
 
-print(x[:-2])
+print(factorio(4))
