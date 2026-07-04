@@ -5,6 +5,7 @@ async def main():
     ### variables
     paused = False
     border = True
+    hide = False
     sides = 3
     ratio = 0.5
     dots_per_frame = 50 # how many dots are being drawn per frame
@@ -15,6 +16,7 @@ async def main():
     
     ### pygame setup ###
     pygame.init()
+    pygame.display.set_caption("Chaos Game Fractal Generator")
     clock = pygame.time.Clock()
     
     ### import random palette
@@ -27,7 +29,7 @@ async def main():
     backdrop_w, backdrop_h = 0, 0
     
     ### screen setup ###
-    screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE) # Main surface where the main polygon is being drawn
+    screen = pygame.display.set_mode((1600, 900)) # Main surface where the main polygon is being drawn
     screen_width, screen_height = screen.get_size()
     fractal_surface = pygame.Surface((screen_width, screen_height))# surface where dots are being drawn
     fractal_surface.fill(pygame.Color(palette["bg"])) # its being filled once before the loop as I dont want it to wipe out the dots
@@ -38,15 +40,6 @@ async def main():
     ### main loop ###
     running = True
     while running:
-        ### resizing the window ###
-        old_width, old_height = screen_width, screen_height
-        screen_width, screen_height = screen.get_size() # keep inside the loop to keep updated
-        if old_width != screen_width or old_height != screen_height: # checks if the screen was resized
-            
-            fractal_surface = pygame.Surface((screen_width, screen_height))# surface where dots are being drawn
-            iteration = reset_fractal(fractal_surface, palette, skip_first_iterations)
-            center_point = [screen_width /2, screen_height /2]
-            current_position = center_point
             
         # variables inside the loop to update after screen resize
         radius = min(screen_width, screen_height) * 0.45
@@ -81,6 +74,10 @@ async def main():
                 # border
                 elif event.key == pygame.K_b:
                     border = not border
+                    
+                # hide
+                elif event.key == pygame.K_h:
+                    hide = not hide
                     
                 # number of sides
                 elif event.key == pygame.K_UP:
@@ -156,75 +153,76 @@ async def main():
         if border:
             pygame.draw.polygon(screen, pygame.Color(palette["colors"][0]),corners, width=5)
         
-        
-        ### Text and UI ###
-        
-        # panel 1        
-        x1, y1 = 20, 20
-        padding = 20
-        line_spacing = font_size
-        
-        pygame.draw.rect(screen, palette["colors"][0], (x1,y1, backdrop_w + padding * 2, backdrop_h + padding), width=5, border_radius= 20) # backdrop
-        
-        shape = get_polygon_name(sides)
-        text = ['CHAOS GAME',
-                'Fractal creation',
-                f'',
-                shape,
-                f'',
-                f'Ratio: {ratio:.2f}',
-                f'No of sides: {sides}',
-                f'Dots drawn: {number_formatting(iteration)}',
-                f'Dots per frame: {number_formatting(dots_per_frame)}',
-                f"Palette used: {palette['name']}",]
-        
-        for line in text:
-            text_surface = font.render(line, antialias=True, color=palette["colors"][0])
-            text_rect = text_surface.get_rect()
-            text_rect.topleft = (x1 + padding, y1 + padding)
-            screen.blit(text_surface, text_rect)
-            y1 += line_spacing
-            # backdrop
-            text_width, _ = text_surface.get_size()
-            if backdrop_w < text_width:
-                backdrop_w = text_width
-        
-        backdrop_h = y1
-        
-        # panel 2
-        
-        x2, y2 = x1, y1 + padding * 3
-        pygame.draw.rect(screen, palette["colors"][0], (x2,y2, backdrop_w + padding * 2, backdrop_h + padding * 4), width=5, border_radius= 20) # backdrop
-        
-        text2 = ['CONTROLS',
-                'UP:','+1 side',
-                'Down:','-1 side',
-                'Left:','speed -',
-                'Right:','speed +',
-                ']','ratio up',
-                '[','ratio down',
-                'P:','palette',
-                'R:','reset',
-                'B','border',
-                'Space:','pause',]
+        if not hide:
+            ### Text and UI ###
+            
+            # panel 1        
+            x1, y1 = 20, 20
+            padding = 20
+            line_spacing = font_size
+            
+            pygame.draw.rect(screen, palette["colors"][0], (x1,y1, backdrop_w + padding * 2, backdrop_h + padding), width=5, border_radius= 20) # backdrop
+            
+            shape = get_polygon_name(sides)
+            text = ['CHAOS GAME',
+                    'Fractal Generator',
+                    f'',
+                    shape,
+                    f'',
+                    f'Ratio: {ratio:.2f}',
+                    f'No of sides: {sides}',
+                    f'Dots drawn: {number_formatting(iteration)}',
+                    f'Dots per frame: {number_formatting(dots_per_frame)}',
+                    f"Palette used: {palette['name']}",]
+            
+            for line in text:
+                text_surface = font.render(line, antialias=True, color=palette["colors"][0])
+                text_rect = text_surface.get_rect()
+                text_rect.topleft = (x1 + padding, y1 + padding)
+                screen.blit(text_surface, text_rect)
+                y1 += line_spacing
+                # backdrop
+                text_width, _ = text_surface.get_size()
+                if backdrop_w < text_width:
+                    backdrop_w = text_width
+            
+            backdrop_h = y1
+            
+            # panel 2
+            
+            x2, y2 = x1, y1 + padding * 3
+            pygame.draw.rect(screen, palette["colors"][0], (x2,y2, backdrop_w + padding * 2, backdrop_h + padding * 4), width=5, border_radius= 20) # backdrop
+            
+            text2 = ['CONTROLS',
+                    'UP:','+1 side',
+                    'Down:','-1 side',
+                    'Left:','speed -',
+                    'Right:','speed +',
+                    ']','ratio up',
+                    '[','ratio down',
+                    'P:','palette',
+                    'R:','reset',
+                    'B','border',
+                    'H','hide UI',
+                    'Space:','pause',]
 
-        for line in enumerate(text2):
-            text_surface2 = font.render(line[1], antialias=True, color=palette["colors"][0])
-            text2_rec = text_surface2.get_rect()
-            if line[0] == 0:
-                text2_rec.topleft = (x2 + padding, y2 + padding)
-                y2 += line_spacing
-            elif line[0] % 2 != 0:
-                text2_rec.topleft = (x2 + padding, y2 + padding)
-            else:
-                text2_rec.topleft = (x2 + 80, y2 + padding)
-                y2 += line_spacing
-                
-            screen.blit(text_surface2, text2_rec)
-            # backdrop
-            text_width, _ = text_surface2.get_size()
-            if backdrop_w < text_width:
-                backdrop_w = text_width
+            for line in enumerate(text2):
+                text_surface2 = font.render(line[1], antialias=True, color=palette["colors"][0])
+                text2_rec = text_surface2.get_rect()
+                if line[0] == 0:
+                    text2_rec.topleft = (x2 + padding, y2 + padding)
+                    y2 += line_spacing
+                elif line[0] % 2 != 0:
+                    text2_rec.topleft = (x2 + padding, y2 + padding)
+                else:
+                    text2_rec.topleft = (x2 + 80, y2 + padding)
+                    y2 += line_spacing
+                    
+                screen.blit(text_surface2, text2_rec)
+                # backdrop
+                text_width, _ = text_surface2.get_size()
+                if backdrop_w < text_width:
+                    backdrop_w = text_width
         
         
         pygame.display.flip()
