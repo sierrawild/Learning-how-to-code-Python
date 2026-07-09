@@ -1,0 +1,100 @@
+sort1 uses: Bubble Sort
+
+How do you know?: Sorted list is fastest as the algorithm does one pass. 
+time ./sort1 reversed10000.txt
+real    0m0.002s
+user    0m0.001s
+sys     0m0.000s
+
+time ./sort1 reversed50000.txt
+real    0m4.920s
+user    0m3.533s
+sys     0m0.087s
+
+time ./sort1 random5000.txt
+real    0m0.048s
+user    0m0.033s
+sys     0m0.009s
+
+time ./sort1 random50000.txt
+real    0m7.939s
+user    0m6.115s
+sys     0m0.104s
+
+time ./sort1 sorted5000.txt
+real    0m0.014s
+user    0m0.003s
+sys     0m0.006s
+
+time ./sort1 sorted50000.txt
+real    0m2.765s
+user    0m0.014s
+sys     0m0.075s
+
+sort2 uses: Merge Sort
+
+How do you know?: 
+It's the fastest and the difference between different types of data doesn't matter that much. Time only increases with the size of the problem but is similar regardless of the order the array is in.
+
+time ./sort2 reversed10000.txt
+real    0m0.094s
+user    0m0.003s
+sys     0m0.015s
+
+time ./sort2 reversed50000.txt
+real    0m0.838s
+user    0m0.022s
+sys     0m0.073s
+
+time ./sort2 random5000.txt
+real    0m0.011s
+user    0m0.002s
+sys     0m0.009s
+
+time ./sort2 random50000.txt
+real    0m1.148s
+user    0m0.026s
+sys     0m0.073s
+
+time ./sort2 sorted5000.txt
+real    0m0.015s
+user    0m0.002s
+sys     0m0.007s
+
+time ./sort2 sorted50000.txt
+real    0m1.060s
+user    0m0.026s
+sys     0m0.066s
+
+sort3 uses: Selection Sort
+
+How do you know?: All times are the same. It doesn't matter if the list is sorted or not. The algorithm has to step through all the numbers anyway. It grows with the size of the problem
+time ./sort3 reversed10000.txt
+real    0m0.118s
+user    0m0.084s
+sys     0m0.019s
+
+time ./sort3 reversed50000.txt
+real    0m3.293s
+user    0m1.635s
+sys     0m0.082s
+
+time ./sort3 random5000.txt
+real    0m0.033s
+user    0m0.023s
+sys     0m0.009s
+
+time ./sort3 random50000.txt
+real    0m3.890s
+user    0m1.979s
+sys     0m0.091s
+
+time ./sort3 sorted5000.txt
+real    0m0.029s
+user    0m0.019s
+sys     0m0.009s
+
+time ./sort3 sorted50000.txt
+real    0m3.161s
+user    0m1.594s
+sys     0m0.077s
