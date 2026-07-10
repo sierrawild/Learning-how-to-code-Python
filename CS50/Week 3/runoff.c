@@ -153,7 +153,7 @@ void tabulate(void)
             }
         }
     }
-    
+
     return;
 }
 
@@ -162,9 +162,9 @@ bool print_winner(void)
 {
     for (int i = 0; i < candidate_count; i++)
     {
-        if (voter_count < candidates[i].votes / 2)
+        if (voter_count / 2 < candidates[i].votes )
         {
-            printf("Winner is: %s\n", candidates[i].name);
+            printf("%s\n", candidates[i].name);
             return true;
         }
     }
@@ -182,7 +182,7 @@ int find_min(void)
             smallest = candidates[i].votes;
         }
     }
-    
+
     return smallest;
 }
 
