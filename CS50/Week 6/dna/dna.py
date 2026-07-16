@@ -3,14 +3,25 @@ import sys
 
 def main():
 
-    # TODO: Check for command-line usage
+    # Check for command-line usage
     if len(sys.argv) != 3:
         print('Provide 2 command line arguments')
         sys.exit(1)
-    # TODO: Read database file into a variable
+        
+    # Read database file into a variable
     try:
         file1 = open(f"{sys.argv[1]}", "r")
-        db = file1.read()
+        # db = file1.read()
+        db = csv.DictReader(file1)
+        reader = csv.reader(file1)
+        
+        # get dna subsequences names
+        db_keys = []
+        for i in reader:
+            db_keys = i
+            break
+        db_keys.remove("name")
+        
     except OSError:
         print("Can't read the database")
         sys.exit(2)
@@ -18,7 +29,7 @@ def main():
         print("Can't find the database")
         sys.exit(3)
     
-    # TODO: Read DNA sequence file into a variable
+    # Read DNA sequence file into a variable
     try:
         file2 = open(f'{sys.argv[2]}')
         dna = file2.read()
@@ -30,10 +41,20 @@ def main():
         sys.exit(3)
         
         
-    print(f'{db=} {dna=}')
-    # TODO: Find longest match of each STR in DNA sequence
+    # Find longest match of each STR in DNA sequence
+    sequence_matches = []
+    
+    for i in db_keys:
+        sequence_matches.append(str(longest_match(dna, i)))
 
-    # TODO: Check database for matching profiles
+    # Check database for matching profiles
+    
+    for i in reader:
+        if i[1:] == sequence_matches:
+            print(i[0])
+            sys.exit(0)
+    else:
+        print('No match')
     
     # close files
     file1.close()
@@ -78,5 +99,5 @@ def longest_match(sequence, subsequence):
     # After checking for runs at each character in sequence, return longest run found
     return longest_run
 
-
-main()
+if __name__ == "__main__":
+    main()
