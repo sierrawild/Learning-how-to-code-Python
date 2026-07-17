@@ -1,0 +1,6 @@
+select avg(energy), avg(danceability), avg(valence) from songs;
+Music of 2018 was bit energetic, danceable but fairly melancholic.
+
+Since we are measuring averages, we cant really tell what they are into as some songs can be more energetic and some slow. 
+This would give us a value in the middle. It's only top 100 songs, not all the songs they listen to.
+Plus some of the songs could be just a ear warm, popular at the time or just on their playlist and not necessary the one that they resonate with the most.
