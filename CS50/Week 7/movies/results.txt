@@ -1,0 +1,13 @@
+
+
+:( 4.sql produces correct result
+    expected: "2"
+    actual:   "Happy Times\nKirklet"
+:( 9.sql produces correct result
+    Query should return exactly two columns
+:( 10.sql produces correct result
+    expected: "Christopher Nolan\nFrank Darabo..."
+    actual:   "Frank Darabont\nYimou Zhang"
+:( 12.sql produces correct result
+    expected: "...inings Playbook"
+    actual:   "...inings Playbook\nX-Men: First C..."
