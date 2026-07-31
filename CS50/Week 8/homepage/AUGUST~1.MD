@@ -1,4 +1,4 @@
-# August Agbola O'Browne — Research Brief for YouTube Video
+# August Agbola O'Browne
 
 *Also spelled: Agboola Browne, Agbola O'Brown, Augustus/Augustine Browne. Nickname/code name in the Warsaw Uprising: "Ali."*
 
