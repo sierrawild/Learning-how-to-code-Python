@@ -1,3 +1,0 @@
-Find the IDs of movies released in 2004
-Find the IDs of people who starred in those movies
-Find the IDs and names of people with those people IDs

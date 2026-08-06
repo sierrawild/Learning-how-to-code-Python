@@ -2,5 +2,8 @@
     "cSpell.words": [
         "blit"
     ],
-    "python-envs.defaultEnvManager": "ms-python.python:system"
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "Lua.diagnostics.disable": [
+        "lowercase-global"
+    ]
 }
