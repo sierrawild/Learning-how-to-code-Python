@@ -4,7 +4,7 @@ import py5, palette
 W, H = 1000, 1000
 p = palette.INK
 
-position = (0,100)
+position = (0,0)
 
 def settings():
     py5.size(W,H)
