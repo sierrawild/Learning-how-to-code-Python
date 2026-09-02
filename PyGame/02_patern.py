@@ -2,11 +2,14 @@ import pygame
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+width, height = 1280, 720
+screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 
-x,y = 100,100
-size = 100
+size = 500
+size_s = size * 0.3
+x = (width - size) * 0.5
+y = (height - size) * 0.5
 border_width = 5
 
 running = True
@@ -24,7 +27,28 @@ while running:
     screen.fill("#AEF1AA")
 
     # RENDER YOUR GAME HERE
-    pygame.draw.rect(screen,"#FFFFFF", (x,y,100,100), 5)
+    
+    
+    # corners
+    pygame.draw.rect(screen,"#FFFFFF", (x,y,size_s,size_s), border_width) # left top
+    pygame.draw.rect(screen,"#FFFFFF", (x + size - size_s,y,size_s,size_s), border_width) # right top
+    pygame.draw.rect(screen,"#FFFFFF", (x,y + size - size_s,size_s,size_s), border_width) # left bottom
+    pygame.draw.rect(screen,"#FFFFFF", (x + size - size_s,y + size - size_s,size_s,size_s), border_width) # right bottom
+
+    # corner leafs 
+    radius = 50
+    offset = size_s * 0.5
+    pygame.draw.rect(screen,"#FFFFFF", (x + offset,y + offset,size_s,size_s), border_width, border_top_right_radius=radius, border_bottom_left_radius=radius) # left top
+    pygame.draw.rect(screen,"#FFFFFF", ((x + size - size_s) - offset,y + offset,size_s,size_s), border_width, border_top_left_radius=radius, border_bottom_right_radius=radius) # right top
+    pygame.draw.rect(screen,"#FFFFFF", (x + offset,y - offset + size - size_s,size_s,size_s), border_width, border_top_left_radius=radius, border_bottom_right_radius=radius) # left bottom
+    pygame.draw.rect(screen,"#FFFFFF", (x - offset + size - size_s,y - offset + size - size_s,size_s,size_s), border_width, border_top_right_radius=radius, border_bottom_left_radius=radius) # right bottom
+    
+     
+    pygame.draw.rect(screen,"#FFFFFF", (x,y,size,size), border_width) # main
+    pygame.draw.rect(screen, "#FFFFFF", ((width - size * 0.9)/2,(height - size * 0.9)/2, size * 0.9, size * 0.9), border_width) # main small
+    pygame.draw.rect(screen, "#FFFFFF", ((width - size_s)/2,(height - size_s)/2, size_s, size_s), border_width) # middle
+    
+    
     # flip() the display to put your work on screen
     pygame.display.flip()
 
