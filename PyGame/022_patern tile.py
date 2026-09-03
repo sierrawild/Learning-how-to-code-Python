@@ -6,10 +6,7 @@ width, height = 1280, 720
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 
-size = 500
 
-x = (width - size) * 0.5
-y = (height - size) * 0.5
 
 
 def dr_K_patter(color,x,y,size):
@@ -35,8 +32,21 @@ def dr_K_patter(color,x,y,size):
     ss = size * 0.05
     pygame.draw.rect(screen, color, (x+ss,y+ss, s, s), border_width) # main small
     pygame.draw.rect(screen, color, (x + size/2 - size_s/2,y + size/2 - size_s/2, size_s, size_s), border_width) # middle
-    
-    
+
+
+def lerp(a,b,t):
+    return a + (b-a) * t 
+
+
+counter = 0
+up = True
+
+min_size = 100
+max_size = 200
+
+current_size = min_size
+target = max_size
+
 running = True
 while running:
     # pygame.QUIT event means the user clicked X to close your window
@@ -52,9 +62,28 @@ while running:
     screen.fill("#AEF1AA")
 
     # RENDER YOUR GAME HERE
-    dr_K_patter('#ffffff',x,y,size)
-    dr_K_patter('#ffffff',0,0,200)
     
+    if up:
+        target = max_size
+    else:
+        target = min_size
+        
+    current_size = lerp(current_size, target, 0.1)
+    
+    off = 50
+    for i in range(6):
+        for j in range(3):
+            dr_K_patter('#ffffff',off + (200 * i),off + (200 * j),current_size)
+    
+    if up:
+        counter += 1
+    else:
+        counter -=1
+        
+    if counter > 100:
+        up = False
+    elif counter < 0:
+        up = True
     
     # flip() the display to put your work on screen
     pygame.display.flip()
