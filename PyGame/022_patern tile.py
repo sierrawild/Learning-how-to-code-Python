@@ -59,7 +59,7 @@ while running:
                 running = False
 
     # fill the screen with a color to wipe away anything from last frame
-    screen.fill("#AEF1AA")
+    screen.fill("black")
 
     # RENDER YOUR GAME HERE
     
