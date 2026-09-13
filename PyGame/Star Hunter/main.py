@@ -12,6 +12,7 @@ dt = 0
 
 player_pos = pygame.Vector2(width/2,height/2)
 player_speed = 300
+player_size = 25
 
 running = True
 while running:
@@ -22,7 +23,7 @@ while running:
     screen.fill(palette['bg'])
     
     # player
-    pygame.draw.circle(screen, palette['1'], player_pos, 40)
+    pygame.draw.rect(screen, palette['1'], (player_pos.x, player_pos.y, player_size, player_size))
 
     # key handling
     keys = pygame.key.get_pressed()
