@@ -29,6 +29,8 @@ def key_input(dt, player_pos, player_speed):
 def edge_wrap(WIDTH, HEIGHT, player_pos):
     player_pos.x %= WIDTH
     player_pos.y %= HEIGHT
+    
+    # add peaking from the other side here 
 
 while running:
     for event in pygame.event.get():
