@@ -14,7 +14,8 @@ screen = pygame.display.set_mode((WIDTH,HEIGHT))
 clock = pygame.time.Clock()
 dt = 0
 
-
+speed = 1
+speed_up = {5: 1.1, 15: 1.2, 30: 1.3, 50:1.4, 100:1.5}
 # player data
 player_pos = pygame.Vector2(WIDTH/2,HEIGHT/2)
 player_speed = 300
@@ -35,13 +36,13 @@ star_pos = random_teleport(WIDTH,HEIGHT, player_size)
 def key_input(dt, player_pos, player_speed):
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w] or keys[pygame.K_UP]:
-        player_pos.y -= player_speed * dt
+        player_pos.y -= player_speed * dt * speed
     if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-        player_pos.y += player_speed * dt
+        player_pos.y += player_speed * dt * speed
     if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-        player_pos.x -= player_speed * dt
+        player_pos.x -= player_speed * dt * speed
     if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-        player_pos.x += player_speed * dt
+        player_pos.x += player_speed * dt * speed
 
 
 def edge_wrap(WIDTH, HEIGHT, player_pos):
@@ -68,7 +69,12 @@ while running:
 
     # star related update
     star_rec = pygame.Rect(star_pos.x, star_pos.y, int(player_size * 0.7), int(player_size * 0.7))
-
+    
+    # speed up logic
+    for i in speed_up:
+        if points == i:
+            speed = speed_up[i]
+            
     # collision
     if player_rec.colliderect(star_rec):
         points += 1
