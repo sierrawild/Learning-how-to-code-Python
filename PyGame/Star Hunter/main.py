@@ -2,9 +2,10 @@ import pygame, random
 
 WIDTH, HEIGHT = 1280, 720
 palette = {'bg': "#75E7F2",
-           'player': "#FF8484",
+           'player': "#F2A875",
+           'enemy': "#F275A0",
            'star': "#FFF835",
-           'text': "#F5A237"
+           'text': "#0D2B33"
            }
 running = True
 
@@ -16,12 +17,16 @@ dt = 0
 
 speed = 1
 speed_up = {5: 1.1, 15: 1.2, 30: 1.3, 50:1.4, 100:1.5}
+points = 0
+
 # player data
 player_pos = pygame.Vector2(WIDTH/2,HEIGHT/2)
 player_speed = 300
 player_size = 25
 
-points = 0
+# enemies
+enemies_size = 30
+enemies_speed = 230
 
 # font
 font = pygame.font.Font(None, 36)
