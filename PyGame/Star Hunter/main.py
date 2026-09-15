@@ -25,10 +25,12 @@ player_speed = 300
 player_size = 25
 
 # enemies
+active_enemies = []
 enemies_size = 30
 enemies_speed = 230
 
-enemy_oscillate = pygame.Vector2(0, HEIGHT*0.9)
+enemy_oscillate_pos = pygame.Vector2(-100, HEIGHT*0.9)
+enemy_oscillate = pygame.Rect(enemy_oscillate_pos.x, enemy_oscillate_pos.y, enemies_size,enemies_size)
 
 # font
 font = pygame.font.Font(None, 36)
@@ -91,8 +93,10 @@ while running:
             speed = speed_up[i]
     
     # enemies update
-    enemy_oscillate.x = oscillate(0,WIDTH - enemies_size, pygame.time.get_ticks() / 1000)
-    enemy_oscillate_rect = pygame.Rect(enemy_oscillate.x, enemy_oscillate.y, enemies_size,enemies_size)
+    if points == 3 and len(active_enemies) == 0:
+        active_enemies.append(enemy_oscillate)
+    if enemy_oscillate in active_enemies:
+        enemy_oscillate.x = oscillate(0,WIDTH - enemies_size, pygame.time.get_ticks() / 1000)
     
     # collision
     if player_rec.colliderect(star_rec):
@@ -106,8 +110,8 @@ while running:
     screen.blit(text_surf, (10, 10))
     
     # enemies
-    pygame.draw.rect(screen, palette['enemy'], enemy_oscillate_rect)
-    
+    for enemy in active_enemies:
+        pygame.draw.rect(screen, palette['enemy'], enemy)
     pygame.display.flip()
 
     dt = clock.tick(60) / 1000
