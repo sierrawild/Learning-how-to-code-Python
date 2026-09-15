@@ -1,4 +1,4 @@
-import pygame, random
+import pygame, random, math
 
 WIDTH, HEIGHT = 1280, 720
 palette = {'bg': "#75E7F2",
@@ -28,9 +28,19 @@ player_size = 25
 enemies_size = 30
 enemies_speed = 230
 
+enemy_oscillate = pygame.Vector2(0, HEIGHT*0.9)
+
 # font
 font = pygame.font.Font(None, 36)
 text_surf = font.render(str(points), True, palette['text'])
+
+def lerp(a,b,t):
+    return a + (b-a) * t
+
+def oscillate(start, finish, time, speed = 1):
+    t = 0.5 + 0.5 * math.sin(time * speed)
+    return lerp(start, finish, t)
+    
 
 def random_teleport(WIDTH,HEIGHT, size):
     return pygame.Vector2(random.randint(0 + size,WIDTH - size), random.randint(0 + size,HEIGHT - size))
@@ -79,7 +89,11 @@ while running:
     for i in speed_up:
         if points == i:
             speed = speed_up[i]
-            
+    
+    # enemies update
+    enemy_oscillate.x = oscillate(0,WIDTH - enemies_size, pygame.time.get_ticks() / 1000)
+    enemy_oscillate_rect = pygame.Rect(enemy_oscillate.x, enemy_oscillate.y, enemies_size,enemies_size)
+    
     # collision
     if player_rec.colliderect(star_rec):
         points += 1
@@ -90,6 +104,9 @@ while running:
     pygame.draw.rect(screen, palette['star'], star_rec) # star
     pygame.draw.rect(screen, palette['player'], player_rec ) # player
     screen.blit(text_surf, (10, 10))
+    
+    # enemies
+    pygame.draw.rect(screen, palette['enemy'], enemy_oscillate_rect)
     
     pygame.display.flip()
 
