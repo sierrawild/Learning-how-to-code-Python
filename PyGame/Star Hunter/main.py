@@ -7,8 +7,9 @@ palette = {'bg': "#75E7F2",
            'star': "#FFF835",
            'text': "#0D2B33"
            }
-running = True
 
+running = True
+game_over = False
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH,HEIGHT))
@@ -16,7 +17,7 @@ clock = pygame.time.Clock()
 dt = 0
 
 speed = 1
-speed_up = {5: 1.1, 15: 1.2, 30: 1.3, 50:1.4, 100:1.5}
+speed_up = {5:1.1, 15:1.2, 30:1.3, 50:1.4, 100:1.5, 200:1.6, 300:1.7}
 points = 0
 
 # player data
@@ -27,21 +28,28 @@ player_size = 25
 # enemies
 active_enemies = []
 enemies_size = 30
-enemies_speed = 230
+enemies_speed = 150
 
-enemy_oscillate_pos = pygame.Vector2(-100, HEIGHT*0.9)
-enemy_oscillate = pygame.Rect(enemy_oscillate_pos.x, enemy_oscillate_pos.y, enemies_size,enemies_size)
+enemy_oscillate = pygame.Rect(0, HEIGHT*0.9, enemies_size,enemies_size)
+enemy_chaser = pygame.Rect(WIDTH//2, HEIGHT +10, enemies_size, enemies_size)
 
 # font
 font = pygame.font.Font(None, 36)
-text_surf = font.render(str(points), True, palette['text'])
+game_over_font = pygame.font.Font(None, 76)
+points_text_surf = font.render(str(points), True, palette['text'])
+game_over_font_surf = game_over_font.render('GAME OVER', True, palette['text'])
+game_over_rect = game_over_font_surf.get_rect(center=(WIDTH//2, HEIGHT//2))
+game_over_font_surf2 = font.render('press SPACE to play again', True, palette['text'])
+game_over_rect2 = game_over_font_surf2.get_rect(center=(WIDTH//2, HEIGHT * 0.6))
+
+
 
 def lerp(a,b,t):
     return a + (b-a) * t
 
 def oscillate(start, finish, time, speed = 1):
     t = 0.5 + 0.5 * math.sin(time * speed)
-    return lerp(start, finish, t)
+    return lerp(start, finish, t) 
     
 
 def random_teleport(WIDTH,HEIGHT, size):
@@ -52,15 +60,19 @@ star_pos = random_teleport(WIDTH,HEIGHT, player_size)
 
 def key_input(dt, player_pos, player_speed):
     keys = pygame.key.get_pressed()
+    move = pygame.Vector2(0,0)
     if keys[pygame.K_w] or keys[pygame.K_UP]:
-        player_pos.y -= player_speed * dt * speed
+        move.y -= 1
     if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-        player_pos.y += player_speed * dt * speed
+        move.y += 1
     if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-        player_pos.x -= player_speed * dt * speed
+        move.x -=1
     if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-        player_pos.x += player_speed * dt * speed
+        move.x += 1
 
+    if move.length() > 0:
+        move = move.normalize()
+        player_pos += move * player_speed * dt * speed
 
 def edge_wrap(WIDTH, HEIGHT, player_pos):
     player_pos.x %= WIDTH
@@ -79,9 +91,10 @@ while running:
     screen.fill(palette['bg'])
     ### Update ###
     # player related update
-    player_rec = pygame.Rect(player_pos.x, player_pos.y, player_size, player_size)
-    key_input(dt, player_pos, player_speed)
+    if not game_over:
+        key_input(dt, player_pos, player_speed)
     edge_wrap(WIDTH, HEIGHT, player_pos)
+    player_rec = pygame.Rect(player_pos.x, player_pos.y, player_size, player_size)
     
 
     # star related update
@@ -93,27 +106,57 @@ while running:
             speed = speed_up[i]
     
     # enemies update
-    if points == 3 and len(active_enemies) == 0:
+    if points == 0 and len(active_enemies) == 0:
         active_enemies.append(enemy_oscillate)
     if enemy_oscillate in active_enemies:
-        enemy_oscillate.x = oscillate(0,WIDTH - enemies_size, pygame.time.get_ticks() / 1000)
+        enemy_oscillate.x = oscillate(0,WIDTH - enemies_size, pygame.time.get_ticks() / 1000, speed)
+    
+    if points == 1 and len(active_enemies) == 1:
+        active_enemies.append(enemy_chaser)
+    if enemy_chaser in active_enemies:
+        direction = player_pos - pygame.Vector2(enemy_chaser.center)
+        if direction.length() > 0:
+            direction = direction.normalize()
+            step = enemies_speed * dt * speed
+            enemy_chaser.x += direction.x * step
+            enemy_chaser.y += direction.y * step
     
     # collision
     if player_rec.colliderect(star_rec):
         points += 1
         star_pos = random_teleport(WIDTH,HEIGHT, player_size)
-        text_surf = font.render(str(points), True, palette['text'])
+        points_text_surf = font.render(str(points), True, palette['text'])
+    for enemy in active_enemies:
+        if player_rec.colliderect(enemy):
+            game_over = True
+            break
+            
     
     ### Draw ###
     pygame.draw.rect(screen, palette['star'], star_rec) # star
     pygame.draw.rect(screen, palette['player'], player_rec ) # player
-    screen.blit(text_surf, (10, 10))
+    screen.blit(points_text_surf, (10, 10))
     
     # enemies
     for enemy in active_enemies:
         pygame.draw.rect(screen, palette['enemy'], enemy)
-    pygame.display.flip()
 
+    
+    # game over screen
+    if game_over:
+        screen.blit(game_over_font_surf, game_over_rect)
+        screen.blit(game_over_font_surf2, game_over_rect2)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            game_over = False
+            active_enemies = []
+            points = 0
+            speed = 1
+            points_text_surf = font.render(str(points), True, palette['text'])
+            screen.blit(points_text_surf, (10, 10))
+            
+            
+    pygame.display.flip()
     dt = clock.tick(60) / 1000
     
 pygame.quit()
