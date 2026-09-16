@@ -1,7 +1,5 @@
 import pygame, random, math
 
-# TODO add glider as an enemy
-# TODO rebalance when enemies show up
 # TODO sound
 
 
@@ -27,7 +25,7 @@ points = 0
 
 # player data
 player_pos = pygame.Vector2(WIDTH/2,HEIGHT/2)
-player_speed = 300
+player_speed = 320
 player_size = 25
 
 # enemies
@@ -114,11 +112,11 @@ while running:
             speed = speed_up[i]
     
     # enemies update
-    # if points == 0 and len(active_enemies) == 0:
-    #     active_enemies.append(enemy_oscillate)
-    # if points == 1 and len(active_enemies) == 1:
-    #     active_enemies.append(enemy_chaser)
-    if points == 1 and len(active_enemies) == 0:
+    if points == 2 and len(active_enemies) == 0:
+        active_enemies.append(enemy_oscillate)
+    if points == 4 and len(active_enemies) == 1:
+        active_enemies.append(enemy_chaser)
+    if points == 10 and len(active_enemies) == 2:
         active_enemies.append(enemy_glider)
     
     if enemy_oscillate in active_enemies:
@@ -133,15 +131,15 @@ while running:
             enemy_chaser.y += direction.y * step
             
     if enemy_glider in active_enemies:
-        t = 1.5
+        overshoot = 1.4
         frames_passed += 1
         
-        if frames_passed % 120 == 0:
-            target.x = lerp(enemy_glider.x, player_pos.x, t)
-            target.y = lerp(enemy_glider.y, player_pos.y, t)
+        if frames_passed % 150 == 0:
+            target.x = lerp(enemy_glider.x, player_pos.x, overshoot)
+            target.y = lerp(enemy_glider.y, player_pos.y, overshoot)
         
-        enemy_glider.x = lerp(enemy_glider.x, target.x, 0.1)
-        enemy_glider.y = lerp(enemy_glider.y, target.y, 0.1)
+        enemy_glider.x = lerp(enemy_glider.x, target.x, 0.05)
+        enemy_glider.y = lerp(enemy_glider.y, target.y, 0.05)
             
     
     # collision
