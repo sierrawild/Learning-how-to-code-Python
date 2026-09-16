@@ -1,5 +1,10 @@
 import pygame, random, math
 
+# TODO add glider as an enemy
+# TODO rebalance when enemies show up
+# TODO sound
+
+
 WIDTH, HEIGHT = 1280, 720
 palette = {'bg': "#75E7F2",
            'player': "#F2A875",
@@ -28,10 +33,12 @@ player_size = 25
 # enemies
 active_enemies = []
 enemies_size = 30
-enemies_speed = 150
+enemies_speed = 180
 
-enemy_oscillate = pygame.Rect(0, HEIGHT*0.9, enemies_size,enemies_size)
-enemy_chaser = pygame.Rect(WIDTH//2, HEIGHT +10, enemies_size, enemies_size)
+enemy_oscillate = pygame.Rect(0, HEIGHT*0.9, enemies_size *1.5,enemies_size)
+enemy_chaser = pygame.Rect(WIDTH//2, HEIGHT +200, enemies_size, enemies_size * 1.3)
+enemy_glider = pygame.Rect(WIDTH//2, -100, enemies_size, enemies_size)
+target = player_pos
 
 # font
 font = pygame.font.Font(None, 36)
@@ -108,11 +115,14 @@ while running:
     # enemies update
     if points == 0 and len(active_enemies) == 0:
         active_enemies.append(enemy_oscillate)
-    if enemy_oscillate in active_enemies:
-        enemy_oscillate.x = oscillate(0,WIDTH - enemies_size, pygame.time.get_ticks() / 1000, speed)
-    
     if points == 1 and len(active_enemies) == 1:
         active_enemies.append(enemy_chaser)
+    if points == 2 and len(active_enemies) == 2:
+        active_enemies.append(enemy_glider)
+    
+    if enemy_oscillate in active_enemies:
+        enemy_oscillate.x = oscillate(0,WIDTH - enemies_size, pygame.time.get_ticks() / 1000, speed)
+        
     if enemy_chaser in active_enemies:
         direction = player_pos - pygame.Vector2(enemy_chaser.center)
         if direction.length() > 0:
@@ -120,6 +130,21 @@ while running:
             step = enemies_speed * dt * speed
             enemy_chaser.x += direction.x * step
             enemy_chaser.y += direction.y * step
+            
+    if enemy_glider in active_enemies:
+        
+        t = 1.5
+        wait = 100
+        
+        if wait >= 1000:
+            target.x = lerp(enemy_glider.x, player_pos.x, t)
+            target.y = lerp(enemy_glider.y, player_pos.y, t)
+            wait = 0
+        
+        enemy_glider.x = lerp(enemy_glider.x, target.x, 0.1)
+        enemy_glider.y = lerp(enemy_glider.y, target.y, 0.1)
+        wait += 1
+            
     
     # collision
     if player_rec.colliderect(star_rec):
