@@ -38,7 +38,8 @@ enemies_speed = 180
 enemy_oscillate = pygame.Rect(0, HEIGHT*0.9, enemies_size *1.5,enemies_size)
 enemy_chaser = pygame.Rect(WIDTH//2, HEIGHT +200, enemies_size, enemies_size * 1.3)
 enemy_glider = pygame.Rect(WIDTH//2, -100, enemies_size, enemies_size)
-target = player_pos
+target = pygame.Vector2(500, 500)
+frames_passed = 0
 
 # font
 font = pygame.font.Font(None, 36)
@@ -113,11 +114,11 @@ while running:
             speed = speed_up[i]
     
     # enemies update
-    if points == 0 and len(active_enemies) == 0:
-        active_enemies.append(enemy_oscillate)
-    if points == 1 and len(active_enemies) == 1:
-        active_enemies.append(enemy_chaser)
-    if points == 2 and len(active_enemies) == 2:
+    # if points == 0 and len(active_enemies) == 0:
+    #     active_enemies.append(enemy_oscillate)
+    # if points == 1 and len(active_enemies) == 1:
+    #     active_enemies.append(enemy_chaser)
+    if points == 1 and len(active_enemies) == 0:
         active_enemies.append(enemy_glider)
     
     if enemy_oscillate in active_enemies:
@@ -132,18 +133,15 @@ while running:
             enemy_chaser.y += direction.y * step
             
     if enemy_glider in active_enemies:
-        
         t = 1.5
-        wait = 100
+        frames_passed += 1
         
-        if wait >= 1000:
+        if frames_passed % 120 == 0:
             target.x = lerp(enemy_glider.x, player_pos.x, t)
             target.y = lerp(enemy_glider.y, player_pos.y, t)
-            wait = 0
         
         enemy_glider.x = lerp(enemy_glider.x, target.x, 0.1)
         enemy_glider.y = lerp(enemy_glider.y, target.y, 0.1)
-        wait += 1
             
     
     # collision
