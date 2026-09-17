@@ -1,4 +1,5 @@
 import pygame, random, math
+from pathlib import Path
 
 # TODO sound
 
@@ -14,13 +15,14 @@ palette = {'bg': "#75E7F2",
 running = True
 game_over = False
 
+pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=512)
 pygame.init()
 screen = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption('Star Hunter')
 clock = pygame.time.Clock()
 dt = 0
 
-speed = 1
+global_speed = 1
 speed_up = {5:1.1, 15:1.2, 30:1.3, 50:1.4, 100:1.5, 200:1.6, 300:1.7}
 points = 0
 
@@ -49,7 +51,17 @@ game_over_rect = game_over_font_surf.get_rect(center=(WIDTH//2, HEIGHT//2))
 game_over_font_surf2 = font.render('press SPACE to play again', True, palette['text'])
 game_over_rect2 = game_over_font_surf2.get_rect(center=(WIDTH//2, HEIGHT * 0.6))
 
+# sound
+BASE = Path(__file__).parent
+sfx_pickup = pygame.mixer.Sound(BASE / 'pickup.mp3')
+sfx_end = pygame.mixer.Sound(BASE / 'end.mp3')
+sfx_end_played = False
+sfx_start = pygame.mixer.Sound(BASE / 'start.mp3')
+sfx_start.play()
 
+# music
+pygame.mixer.music.load(BASE/ 'music.mp3')
+pygame.mixer.music.play(-1)
 
 def lerp(a,b,t):
     return a + (b-a) * t
@@ -79,7 +91,7 @@ def key_input(dt, player_pos, player_speed):
 
     if move.length() > 0:
         move = move.normalize()
-        player_pos += move * player_speed * dt * speed
+        player_pos += move * player_speed * dt * global_speed
 
 def edge_wrap(WIDTH, HEIGHT, player_pos):
     player_pos.x %= WIDTH
@@ -96,6 +108,7 @@ while running:
                 running = False
             
     screen.fill(palette['bg'])
+
     ### Update ###
     # player related update
     if not game_over:
@@ -110,7 +123,7 @@ while running:
     # speed up logic
     for i in speed_up:
         if points == i:
-            speed = speed_up[i]
+            global_speed = speed_up[i]
     
     # enemies update
     if points == 2 and len(active_enemies) == 0:
@@ -121,13 +134,13 @@ while running:
         active_enemies.append(enemy_glider)
     
     if enemy_oscillate in active_enemies:
-        enemy_oscillate.x = oscillate(0,WIDTH - enemies_size, pygame.time.get_ticks() / 1000, speed)
+        enemy_oscillate.x = oscillate(0,WIDTH - enemies_size, pygame.time.get_ticks() / 1000, global_speed)
         
     if enemy_chaser in active_enemies:
         direction = player_pos - pygame.Vector2(enemy_chaser.center)
         if direction.length() > 0:
             direction = direction.normalize()
-            step = enemies_speed * dt * speed
+            step = enemies_speed * dt * global_speed
             enemy_chaser.x += direction.x * step
             enemy_chaser.y += direction.y * step
             
@@ -148,6 +161,7 @@ while running:
         points += 1
         star_pos = random_teleport(WIDTH,HEIGHT, player_size)
         points_text_surf = font.render(str(points), True, palette['text'])
+        sfx_pickup.play()
     for enemy in active_enemies:
         if player_rec.colliderect(enemy):
             game_over = True
@@ -168,14 +182,28 @@ while running:
     if game_over:
         screen.blit(game_over_font_surf, game_over_rect)
         screen.blit(game_over_font_surf2, game_over_rect2)
+        # sounds
+        if sfx_end_played == False:
+            sfx_end.play()
+            sfx_end_played = True
+            pygame.mixer.music.pause()
+            
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             game_over = False
+            sfx_start.play()
+            sfx_end_played = False
+            pygame.mixer.music.unpause()
             active_enemies = []
             points = 0
-            speed = 1
+            global_speed = 1
             points_text_surf = font.render(str(points), True, palette['text'])
             screen.blit(points_text_surf, (10, 10))
+            
+            # reset enemies
+            enemy_oscillate = pygame.Rect(0, HEIGHT*0.9, enemies_size *1.5,enemies_size)
+            enemy_chaser = pygame.Rect(WIDTH//2, HEIGHT +200, enemies_size, enemies_size * 1.3)
+            enemy_glider = pygame.Rect(WIDTH//2, -100, enemies_size, enemies_size)
             
             
     pygame.display.flip()
