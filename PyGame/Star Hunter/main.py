@@ -1,9 +1,6 @@
 import pygame, random, math
 from pathlib import Path
 
-# TODO sound
-
-
 WIDTH, HEIGHT = 1280, 720
 palette = {'bg': "#75E7F2",
            'player': "#F2A875",
@@ -149,11 +146,11 @@ while running:
         frames_passed += 1
         
         if frames_passed % 150 == 0:
-            target.x = lerp(enemy_glider.x, player_pos.x, overshoot)
             target.y = lerp(enemy_glider.y, player_pos.y, overshoot)
+            target.x = lerp(enemy_glider.x, player_pos.x, overshoot)
         
-        enemy_glider.x = lerp(enemy_glider.x, target.x, 0.05)
-        enemy_glider.y = lerp(enemy_glider.y, target.y, 0.05)
+        enemy_glider.x = lerp(enemy_glider.x, target.x, 0.2 * 0.2)
+        enemy_glider.y = lerp(enemy_glider.y, target.y, 0.2 * 0.2)
             
     
     # collision
