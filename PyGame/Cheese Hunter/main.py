@@ -1,4 +1,5 @@
 import pygame
+from helpers import *
 
 # CONSTANTS
 WIDTH, HEIGHT = 1280, 720
@@ -6,6 +7,14 @@ WIDTH, HEIGHT = 1280, 720
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
+pygame.display.set_caption('Cheese Hunter')
+dt = 0
+
+# player
+player_pos = pygame.Vector2(WIDTH/2,HEIGHT/2)
+player_speed = 620
+player_size = 25
+
 
 running = True
 while running:
@@ -21,11 +30,15 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("#AEF1AA")
 
-    # RENDER YOUR GAME HERE
-    pygame.draw.circle(screen, "red", (640, 360), 50)
+    ### UPDATE ###
+    # player update
+    key_input(dt, player_pos, player_speed)
+    ### DRAW ###
+    pygame.draw.circle(screen, "red", (player_pos.x, player_pos.y), 50)
 
     # flip() the display to put your work on screen
     pygame.display.flip()
+    dt = clock.tick(60) / 1000
 
     clock.tick(60)  # limits FPS to 60
 
