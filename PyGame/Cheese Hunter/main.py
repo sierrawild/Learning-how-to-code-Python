@@ -28,13 +28,13 @@ while running:
                 running = False
 
     # fill the screen with a color to wipe away anything from last frame
-    screen.fill("#AEF1AA")
+    screen.fill(palette['bg'])
 
     ### UPDATE ###
     # player update
     key_input(dt, player_pos, player_speed)
     ### DRAW ###
-    pygame.draw.circle(screen, "red", (player_pos.x, player_pos.y), 50)
+    pygame.draw.circle(screen, palette['player'], (player_pos.x, player_pos.y), 50)
 
     # flip() the display to put your work on screen
     pygame.display.flip()
