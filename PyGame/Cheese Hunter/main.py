@@ -33,9 +33,10 @@ while running:
     ### UPDATE ###
     # player update
     key_input(dt, player_pos, player_speed)
-    ### DRAW ###
-    pygame.draw.circle(screen, palette['player'], (player_pos.x, player_pos.y), 50)
 
+    player_rect = pygame.Rect(player_pos.x, player_pos.y, player_size, player_size)
+    ### DRAW ###
+    pygame.draw.rect(screen, palette['player'], player_rect)
     # flip() the display to put your work on screen
     pygame.display.flip()
     dt = clock.tick(60) / 1000

@@ -26,6 +26,7 @@ def key_input(dt, player_pos, player_speed):
         move = move.normalize()
         player_pos += (move * player_speed * dt)
         
+        
 def edge_wrap(WIDTH, HEIGHT, player_pos):
     player_pos.x %= WIDTH
     player_pos.y %= HEIGHT
