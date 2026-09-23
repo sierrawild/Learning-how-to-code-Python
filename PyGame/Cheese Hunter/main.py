@@ -15,6 +15,12 @@ player_pos = pygame.Vector2(WIDTH/2,HEIGHT/2)
 player_speed = 620
 player_size = 25
 
+# walls
+wall_thickness = 30
+vertical_wall_coordinates = [(0,0,HEIGHT), (WIDTH-wall_thickness,0,HEIGHT)]
+vertical_walls = []
+for wall in vertical_wall_coordinates:
+    vertical_walls.append(pygame.Rect(wall[0], wall[1], wall_thickness, wall[2]))
 
 running = True
 while running:
@@ -36,7 +42,14 @@ while running:
 
     player_rect = pygame.Rect(player_pos.x, player_pos.y, player_size, player_size)
     ### DRAW ###
+    # player
     pygame.draw.rect(screen, palette['player'], player_rect)
+
+    # walls
+    for wall in vertical_walls:
+        pygame.draw.rect(screen,palette['wall'], wall)
+    
+    
     # flip() the display to put your work on screen
     pygame.display.flip()
     dt = clock.tick(60) / 1000

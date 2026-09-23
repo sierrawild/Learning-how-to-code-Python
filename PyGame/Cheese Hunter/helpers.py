@@ -5,7 +5,8 @@ palette = {'name': 'default',
             'player': "#F2A875",
             'enemy': "#F275A0",
             'star': "#FFF835",
-            'text': "#0D2B33"
+            'text': "#0D2B33",
+            'wall': "#0D2B33",
            }
 
 
