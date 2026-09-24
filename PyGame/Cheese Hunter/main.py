@@ -46,9 +46,12 @@ while running:
 
     ### UPDATE ###
     # player update
-    key_input(dt, player_pos, player_speed)
 
+    key_input(dt, player_pos, player_speed)
     player_rect = pygame.Rect(player_pos.x, player_pos.y, player_size, player_size)
+
+    # collision with walls
+    
     ### DRAW ###
     # player
     pygame.draw.rect(screen, palette['player'], player_rect)
