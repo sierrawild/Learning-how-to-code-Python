@@ -30,6 +30,8 @@ for wall in horizontal_wall_coordinates:
     
 
 running = True
+
+
 while running:
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
@@ -47,11 +49,7 @@ while running:
     # player update
 
     movement = key_input(dt, player_pos, player_speed)
-    if movement != None:
-        player_pos.x += movement.x
-    # get the horizontal collision and stick it to the wall if collided. 
-    player_rect = pygame.Rect(player_pos.x, player_pos.y, player_size, player_size)
-
+    player_rect = player_collisions(player_pos, player_size, walls, movement)
 
     
     ### DRAW ###
