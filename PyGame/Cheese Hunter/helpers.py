@@ -25,7 +25,7 @@ def key_input(dt, player_pos, player_speed):
     # normalizing diagonal movement 
     if move.length() > 0:
         move = move.normalize()
-        player_pos += (move * player_speed * dt)
+        return (move * player_speed * dt)
         
         
 def edge_wrap(WIDTH, HEIGHT, player_pos):
