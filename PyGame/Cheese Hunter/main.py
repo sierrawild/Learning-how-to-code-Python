@@ -15,19 +15,17 @@ player_pos = pygame.Vector2(WIDTH/2,HEIGHT/2)
 player_speed = 620
 player_size = 25
 
+# cheese
+cheese_pos = random_teleport(WIDTH,HEIGHT, player_size)
+score = 0
+
 # walls
-wall_thickness = 30
-vertical_wall_coordinates = [(0,0,HEIGHT), (WIDTH-wall_thickness,0,HEIGHT), 
-                             (200,200, 600), (600,0, 400), (820, 400, 200), (980, 180, 450)]
-horizontal_wall_coordinates = [(0,0,WIDTH), (0,HEIGHT-wall_thickness, WIDTH), 
-                               (200, 200, 150), (300, 300, 150), (400, 500, 300), (600, 120, 150), (980, 220, 100), 
-                               (1100, 320, 100), (1100, 520, 200)]
-walls = []
-for wall in vertical_wall_coordinates:
-    walls.append(pygame.Rect(wall[0], wall[1], wall_thickness, wall[2]))
-for wall in horizontal_wall_coordinates:
-    walls.append(pygame.Rect(wall[0], wall[1], wall[2], wall_thickness))
+walls = walls(WIDTH, HEIGHT)
     
+# font
+score_font = pygame.font.Font(None, 40)
+score_surf = score_font.render(str(score), True, palette['text'])
+
 
 running = True
 
@@ -47,15 +45,27 @@ while running:
 
     ### UPDATE ###
     # player update
-
     movement = key_input(dt, player_pos, player_speed)
     player_rect = player_collisions(player_pos, player_size, walls, movement)
-
     
+    # cheese
+    cheese = pygame.Rect(cheese_pos.x, cheese_pos.y, int(player_size * 0.7), int(player_size * 0.7))
+    if cheese.collidelist(walls) != -1:
+        cheese_pos = random_teleport(WIDTH,HEIGHT, player_size)
+    # score
+    if cheese.colliderect(player_rect):
+        score += 1
+        score_surf = score_font.render(str(score), True, palette['text'])
+        cheese_pos = random_teleport(WIDTH,HEIGHT, player_size)
+    cheese = pygame.Rect(cheese_pos.x, cheese_pos.y, int(player_size * 0.7), int(player_size * 0.7))
+        
     ### DRAW ###
     # player
     pygame.draw.rect(screen, palette['player'], player_rect)
 
+    # cheese
+    pygame.draw.rect(screen, palette['cheese'], cheese)
+    
     # walls
     for wall in walls:
         pygame.draw.rect(screen,palette['wall'], wall)
@@ -63,7 +73,10 @@ while running:
     
     
     # flip() the display to put your work on screen
+    screen.blit(score_surf, (50,50))
     pygame.display.flip()
+
+
     dt = clock.tick(60) / 1000
 
 

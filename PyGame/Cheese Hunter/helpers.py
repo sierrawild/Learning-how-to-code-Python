@@ -1,10 +1,10 @@
-import pygame
+import pygame, random
 
 palette = {'name': 'default',
             'bg': "#75E7F2",
             'player': "#F2A875",
             'enemy': "#F275A0",
-            'star': "#FFF835",
+            'cheese': "#FFF835",
             'text': "#0D2B33",
             'wall': "#0D2B33",
            }
@@ -59,3 +59,21 @@ def edge_wrap(WIDTH, HEIGHT, player_pos):
     
 def lerp(a,b,t):
     return a + (b-a) * t
+
+def walls(WIDTH, HEIGHT):
+    wall_thickness = 30
+    vertical_wall_coordinates = [(0,0,HEIGHT), (WIDTH-wall_thickness,0,HEIGHT), 
+                             (200,200, 600), (600,0, 400), (820, 400, 200), (980, 180, 450)]
+    horizontal_wall_coordinates = [(0,0,WIDTH), (0,HEIGHT-wall_thickness, WIDTH), 
+                               (200, 200, 150), (300, 300, 150), (400, 500, 300), (600, 120, 150), (980, 220, 100), 
+                               (1100, 320, 100), (1100, 520, 200)]
+    walls = []
+    for wall in vertical_wall_coordinates:
+        walls.append(pygame.Rect(wall[0], wall[1], wall_thickness, wall[2]))
+    for wall in horizontal_wall_coordinates:
+        walls.append(pygame.Rect(wall[0], wall[1], wall[2], wall_thickness))
+    return walls
+
+
+def random_teleport(WIDTH,HEIGHT, size):
+    return pygame.Vector2(random.randint(0 + size,WIDTH - size), random.randint(0 + size,HEIGHT - size))
