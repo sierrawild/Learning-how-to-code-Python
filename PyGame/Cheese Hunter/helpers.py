@@ -4,8 +4,10 @@ palette = {'name': 'default',
             'bg': "#75E7F2",
             'player': "#F2A875",
             'enemy': "#F275A0",
+            'ghost': "#4E727C",
             'cheese': "#FFF835",
             'text': "#0D2B33",
+            'game_over': "#FFFFFF",
             'wall': "#0D2B33",
            }
 
