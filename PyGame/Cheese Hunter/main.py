@@ -53,13 +53,13 @@ class Enemy(pygame.Rect):
     
     def move(self, dt):
         if self.direction == 'N':
-            self.velocity.y -= 1
+            self.velocity.y = -1
         elif self.direction == 'S':
-            self.velocity.y += 1
+            self.velocity.y = 1
         elif self.direction == 'W':
-            self.velocity.x -= 1
+            self.velocity.x = -1
         elif self.direction == 'E':
-            self.velocity.x += 1
+            self.velocity.x = 1
         
         if self.velocity.length() > 0:
             self.velocity.normalize()
@@ -70,8 +70,8 @@ class Enemy(pygame.Rect):
     def change_direction(self):
         right_to = {'N':'E', 'E':'S', 'S':'W','W':'N'}
         left_to = {'N':'W','W':'S','S':'E','E':'N'}
-        chose = random.choice([right_to,left_to])
-        
+        new_direction = random.choice([right_to,left_to])
+        self.direction = new_direction[self.direction] 
     
     def draw(self, surf):
         pygame.draw.rect(surf,self.color, (self.x, self.y, self.height, self.height))
@@ -79,7 +79,7 @@ class Enemy(pygame.Rect):
 enemies = []
 for i in range(3):
     random_pos = random_teleport(WIDTH,HEIGHT, enemy_size*2)
-    enemies.append(Enemy(random_pos[0], random_pos[1], enemy_size, enemy_size, enemy_speed * random.uniform(0.2, 0.5), palette['enemy']))
+    enemies.append(Enemy(random_pos[0], random_pos[1], enemy_size, enemy_size, enemy_speed * random.uniform(0.4, 1.0), palette['enemy']))
 
     
 running = True
@@ -132,6 +132,7 @@ while running:
     
     for enemy in enemies:
         enemy.move(dt)
+
     
     # enemies collisions with player
     if ghost.colliderect(player_rect):
