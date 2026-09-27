@@ -1,5 +1,6 @@
-import pygame, random
+import pygame
 from helpers import *
+from Enemy_class import *
 
 # CONSTANTS
 WIDTH, HEIGHT = 1280, 720
@@ -40,48 +41,13 @@ enemy_speed = 100
 ghost_visible = False
 ghost = pygame.Rect(0,0, enemy_size * 2, enemy_size * 2)
 
-
-class Enemy(pygame.Rect):
-    def __init__(self, x, y, width, height, speed, color):
-        super().__init__(x, y, width, height)
-        self.speed = speed
-        self.directions = ['N', 'E', 'W', 'S']
-        self.direction = random.choice(self.directions)
-        self.color = color
-        self.velocity = pygame.Vector2(0,0)
-        self.move_by = pygame.Vector2(0,0)
-    
-    def move(self, dt):
-        if self.direction == 'N':
-            self.velocity.y = -1
-        elif self.direction == 'S':
-            self.velocity.y = 1
-        elif self.direction == 'W':
-            self.velocity.x = -1
-        elif self.direction == 'E':
-            self.velocity.x = 1
-        
-        if self.velocity.length() > 0:
-            self.velocity.normalize()
-        self.move_by = self.velocity * self.speed * dt
-        self.x += self.move_by.x
-        self.y += self.move_by.y
-        
-    def change_direction(self):
-        right_to = {'N':'E', 'E':'S', 'S':'W','W':'N'}
-        left_to = {'N':'W','W':'S','S':'E','E':'N'}
-        new_direction = random.choice([right_to,left_to])
-        self.direction = new_direction[self.direction] 
-    
-    def draw(self, surf):
-        pygame.draw.rect(surf,self.color, (self.x, self.y, self.height, self.height))
     
 enemies = []
-for i in range(3):
+for i in range(10):
     random_pos = random_teleport(WIDTH,HEIGHT, enemy_size*2)
     enemies.append(Enemy(random_pos[0], random_pos[1], enemy_size, enemy_size, enemy_speed * random.uniform(0.4, 1.0), palette['enemy']))
 
-    
+
 running = True
 while running:
     # pygame.QUIT event means the user clicked X to close your window
@@ -133,6 +99,17 @@ while running:
     for enemy in enemies:
         enemy.move(dt)
 
+    # enemies collisions with walls
+    for enemy in enemies:
+        if enemy.collidelist(walls) != -1:
+            enemy.bounce_back(2)
+            enemy.change_direction()
+    # enemies collisions with other enemies
+    for enemy in enemies:
+        hit = enemy.collidelist(enemies)
+        if hit != -1 and hit != enemies.index(enemy):
+            enemy.bounce_back(1)
+            enemy.change_direction()
     
     # enemies collisions with player
     if ghost.colliderect(player_rect):
