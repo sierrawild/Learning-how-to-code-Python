@@ -1,4 +1,4 @@
-import random
+import random, func
 
 hands = ['paper', 'rock', 'scissors']
 pc_choice = ''
