@@ -1,4 +1,4 @@
-import random, func
+import random
 
 hands = ['paper', 'rock', 'scissors']
 pc_choice = ''
@@ -40,7 +40,7 @@ def print_choices(pc_choice, player_choice):
 running = True
 while running:
     pc_choice = random.choice(hands)
-    player_choice = input('rock, paper or scissors:\n').lower()
+    player_choice = input('rock, paper or scissors:\n').lower().strip()
     
     who_won = evaluate_game(player_choice, pc_choice, hands)
     
