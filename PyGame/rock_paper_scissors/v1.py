@@ -1,13 +1,21 @@
-import pygame
+import pygame, random
 
 # CONSTANTS
 WIDTH, HEIGHT = 1280, 720
+HANDS = ['rock', 'paper', 'scissors']
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Name of the game')
 clock = pygame.time.Clock()
 dt = 0
+
+class AI:
+    def __init__(self):
+        self.hand = ''
+        
+    def choose_random_hand(self, hands):
+        self.hand = random.choice(hands)
 
 running = True
 while running:
