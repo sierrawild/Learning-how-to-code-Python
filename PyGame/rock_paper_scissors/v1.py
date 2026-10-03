@@ -3,6 +3,13 @@ import pygame, random
 # CONSTANTS
 WIDTH, HEIGHT = 1280, 720
 HANDS = ['rock', 'paper', 'scissors']
+
+palette = {'name': 'default',
+           'rock': "#63F5FF",
+           'paper': "#FFF9D2",
+           'scissors': "#FF6A50",
+           'bg': "#D7FFD6",
+           }
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -10,12 +17,20 @@ pygame.display.set_caption('Name of the game')
 clock = pygame.time.Clock()
 dt = 0
 
+# functions
+def draw_rock(x,y, size):
+    pass
+
+# classes
 class AI:
     def __init__(self):
-        self.hand = ''
+        self.hand = None
         
     def choose_random_hand(self, hands):
         self.hand = random.choice(hands)
+
+game_ai = AI()
+
 
 running = True
 while running:
@@ -27,12 +42,11 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
-    screen.fill("#AEF1AA") # fill the screen with a color to wipe away anything from last frame
+    screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
 
     
 
     ### UPDATE ###
-    
     
     
     ### DRAW ###
