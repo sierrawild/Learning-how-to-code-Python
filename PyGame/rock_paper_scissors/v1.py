@@ -20,8 +20,8 @@ dt = 0
 
 # classes
 class Player:
-    def __init__(self, size, palette):
-        self.hand = None
+    def __init__(self, size, palette, hand):
+        self.hand = hand
         self.size = size
         self.palette = palette
         self.shape_rect = None
@@ -40,11 +40,22 @@ class Player:
             points = [(x - self.size/2, y + self.size/2), (x, y - self.size/2), (x + self.size/2, y+self.size/2)]
             pygame.draw.polygon(surface, palette['scissors'], points)
 
-game_ai = Player(250, palette)
+icon_size = 200
 
+# init Player class creating shapes
+game_ai = Player(icon_size, palette, None)
 
+rock = Player(icon_size, palette, 'rock')
+paper = Player(icon_size, palette, 'paper')
+scissors = Player(icon_size, palette, 'scissors')
 
+player_options = [rock, paper, scissors]
 
+# choices variables 
+player_choice = None
+ai_choice = random.choice(HANDS)
+
+game_ai.hand = ai_choice
 
 running = True
 while running:
@@ -58,26 +69,20 @@ while running:
                 running = False
         # mouse clicks
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            if game_ai.shape_rect.collidepoint(event.pos):
-                print('hi')
+            for shape in player_options:
+                if shape.shape_rect.collidepoint(event.pos):
+                    print(shape.hand)
         
-                
-                
-    screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
-
-    
-
     ### UPDATE ###
     
     
     ### DRAW ###
+    screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
+    shape_starting_point = WIDTH / 4
+    for i, shape in enumerate(player_options):
+        shape.draw_shape(shape_starting_point * (i +1) , 500, screen)
 
-    game_ai.hand = 'rock'
-    game_ai.draw_shape(200,500, screen)
-    game_ai.hand = 'paper'
-    game_ai.draw_shape(600,500, screen)
-    game_ai.hand = 'scissors'
-    game_ai.draw_shape(900,500, screen)
+    game_ai.draw_shape(WIDTH/2, 200, screen)
     
     # flip() the display to put your work on screen
     pygame.display.flip()
