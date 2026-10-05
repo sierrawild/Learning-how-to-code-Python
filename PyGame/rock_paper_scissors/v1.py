@@ -17,27 +17,30 @@ pygame.display.set_caption('Name of the game')
 clock = pygame.time.Clock()
 dt = 0
 
-# functions
-def draw_shape(x,y, size, shape, palette, surface):
-    shape_rect = pygame.Rect(x,y,size,size)
-    shape_rect.center = (x,y)
-    if shape == 'rock':
-        pygame.draw.aacircle(surface, palette['rock'], (x,y), size/2)
-    elif shape == 'paper':
-        pygame.draw.rect(surface, palette['paper'], shape_rect)
-    elif shape == 'scissors':
-        points = [(x - size/2, y + size/2), (x, y - size/2), (x + size/2, y+size/2)]
-        pygame.draw.polygon(surface, palette['scissors'], points)
 
 # classes
 class Player:
-    def __init__(self):
+    def __init__(self, size, palette):
         self.hand = None
+        self.size = size
+        self.palette = palette
+        self.shape_rect = None
         
     def choose_random_hand(self, hands):
         self.hand = random.choice(hands)
+        
+    def draw_shape(self,x,y, surface):
+        self.shape_rect = pygame.Rect(x,y,self.size,self.size)
+        self.shape_rect.center = (x,y)
+        if self.hand == 'rock':
+            pygame.draw.aacircle(surface, palette['rock'], (x,y), self.size/2)
+        elif self.hand == 'paper':
+            pygame.draw.rect(surface, palette['paper'], self.shape_rect)
+        elif self.hand == 'scissors':
+            points = [(x - self.size/2, y + self.size/2), (x, y - self.size/2), (x + self.size/2, y+self.size/2)]
+            pygame.draw.polygon(surface, palette['scissors'], points)
 
-game_ai = Player()
+game_ai = Player(250, palette)
 
 
 
@@ -53,6 +56,13 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
+        # mouse clicks
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if game_ai.shape_rect.collidepoint(event.pos):
+                print('hi')
+        
+                
+                
     screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
 
     
@@ -61,14 +71,13 @@ while running:
     
     
     ### DRAW ###
-    pygame.draw.circle(screen, "red", (100, 100), 50)
 
     game_ai.hand = 'rock'
-    draw_shape(500,500, 300, game_ai.hand, palette, screen)
+    game_ai.draw_shape(200,500, screen)
     game_ai.hand = 'paper'
-    draw_shape(500,500, 250, game_ai.hand, palette, screen)
+    game_ai.draw_shape(600,500, screen)
     game_ai.hand = 'scissors'
-    draw_shape(500,500, 250, game_ai.hand, palette, screen)
+    game_ai.draw_shape(900,500, screen)
     
     # flip() the display to put your work on screen
     pygame.display.flip()
