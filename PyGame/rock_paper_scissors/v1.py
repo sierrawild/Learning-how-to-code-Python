@@ -4,12 +4,14 @@ import pygame, random
 WIDTH, HEIGHT = 1280, 720
 HANDS = ['rock', 'paper', 'scissors']
 
+# colors
 palette = {'name': 'default',
            'rock': "#63F5FF",
            'paper': "#FFF9D2",
            'scissors': "#FF6A50",
            'bg': "#D7FFD6",
            }
+
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -17,6 +19,23 @@ pygame.display.set_caption('Name of the game')
 clock = pygame.time.Clock()
 dt = 0
 
+# wining hands
+wining_hands = {'rock': 'scissors', 'paper': 'rock', 'scissors': 'paper'}
+
+# functions
+def win_check(p1,p2,conditions):
+    if p1 == p2:
+        print('draw')
+        return 'draw'
+    elif conditions[p1] == p2:
+        print('Player1 wins')
+        return 'p1'
+    elif conditions[p2] == p1:
+        print('Player2 wins')
+        return 'p2'
+    else:
+        print('error')
+        return -1
 
 # classes
 class Player:
@@ -72,6 +91,8 @@ while running:
             for shape in player_options:
                 if shape.shape_rect.collidepoint(event.pos):
                     print(shape.hand)
+                    player_choice = shape.hand
+                    win_check(player_choice, game_ai.hand, wining_hands)
         
     ### UPDATE ###
     
