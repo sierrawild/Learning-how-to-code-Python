@@ -37,6 +37,7 @@ def win_check(p1,p2,conditions):
         print('error')
         return -1
 
+
 # classes
 class Player:
     def __init__(self, size, palette, hand):
@@ -59,6 +60,19 @@ class Player:
             points = [(x - self.size/2, y + self.size/2), (x, y - self.size/2), (x + self.size/2, y+self.size/2)]
             pygame.draw.polygon(surface, palette['scissors'], points)
 
+class Timer:
+    def __init__(self, time):
+        self.default_time = time
+        self.time = time
+        
+    def count(self, dt):
+        self.time -= dt
+        if self.time <= 0:
+            self.time = self.default_time
+            return True
+        else:
+            return False
+timer_1s = Timer(1)
 icon_size = 200
 
 # init Player class creating shapes
@@ -95,7 +109,7 @@ while running:
                     win_check(player_choice, game_ai.hand, wining_hands)
         
     ### UPDATE ###
-    
+    print(timer_1s.count(dt))
     
     ### DRAW ###
     screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
