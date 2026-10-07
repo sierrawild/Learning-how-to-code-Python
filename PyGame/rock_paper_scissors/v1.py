@@ -109,7 +109,8 @@ while running:
                     win_check(player_choice, game_ai.hand, wining_hands)
         
     ### UPDATE ###
-    print(timer_1s.count(dt))
+    if timer_1s.count(dt):
+        print('1s')
     
     ### DRAW ###
     screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
