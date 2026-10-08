@@ -1,16 +1,11 @@
-import pygame, random
+import pygame, random, player_class, palettes
 
 # CONSTANTS
 WIDTH, HEIGHT = 1280, 720
 HANDS = ['rock', 'paper', 'scissors']
 
 # colors
-palette = {'name': 'default',
-           'rock': "#63F5FF",
-           'paper': "#FFF9D2",
-           'scissors': "#FF6A50",
-           'bg': "#D7FFD6",
-           }
+palette = palettes.default
 
 # pygame setup
 pygame.init()
@@ -39,26 +34,7 @@ def win_check(p1,p2,conditions):
 
 
 # classes
-class Player:
-    def __init__(self, size, palette, hand):
-        self.hand = hand
-        self.size = size
-        self.palette = palette
-        self.shape_rect = None
-        
-    def choose_random_hand(self, hands):
-        self.hand = random.choice(hands)
-        
-    def draw_shape(self,x,y, surface):
-        self.shape_rect = pygame.Rect(x,y,self.size,self.size)
-        self.shape_rect.center = (x,y)
-        if self.hand == 'rock':
-            pygame.draw.aacircle(surface, palette['rock'], (x,y), self.size/2)
-        elif self.hand == 'paper':
-            pygame.draw.rect(surface, palette['paper'], self.shape_rect)
-        elif self.hand == 'scissors':
-            points = [(x - self.size/2, y + self.size/2), (x, y - self.size/2), (x + self.size/2, y+self.size/2)]
-            pygame.draw.polygon(surface, palette['scissors'], points)
+
 
 class Timer:
     def __init__(self, time):
@@ -76,11 +52,11 @@ timer_1s = Timer(1)
 icon_size = 200
 
 # init Player class creating shapes
-game_ai = Player(icon_size, palette, None)
+game_ai = player_class.Player(icon_size, palette, None)
 
-rock = Player(icon_size, palette, 'rock')
-paper = Player(icon_size, palette, 'paper')
-scissors = Player(icon_size, palette, 'scissors')
+rock = player_class.Player(icon_size, palette, 'rock')
+paper = player_class.Player(icon_size, palette, 'paper')
+scissors = player_class.Player(icon_size, palette, 'scissors')
 
 player_options = [rock, paper, scissors]
 
@@ -109,16 +85,15 @@ while running:
                     win_check(player_choice, game_ai.hand, wining_hands)
         
     ### UPDATE ###
-    if timer_1s.count(dt):
-        print('1s')
+
     
     ### DRAW ###
     screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
     shape_starting_point = WIDTH / 4
     for i, shape in enumerate(player_options):
-        shape.draw_shape(shape_starting_point * (i +1) , 500, screen)
+        shape.draw_shape(shape_starting_point * (i +1) , 500, screen, palette)
 
-    game_ai.draw_shape(WIDTH/2, 200, screen)
+    game_ai.draw_shape(WIDTH/2, 200, screen, palette)
     
     # flip() the display to put your work on screen
     pygame.display.flip()
