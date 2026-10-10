@@ -3,13 +3,19 @@ import pygame, random, player_class, palettes
 # CONSTANTS
 WIDTH, HEIGHT = 1280, 720
 HANDS = ['rock', 'paper', 'scissors']
+SHAKE_MAX = 25
+SHAKE_TIME = 1
 
 # colors
 palette = palettes.default
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+window = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.Surface((WIDTH, HEIGHT))
+xoff, yoff = 0,0
+shake_timer = 0
+
 pygame.display.set_caption('Name of the game')
 clock = pygame.time.Clock()
 dt = 0
@@ -82,10 +88,19 @@ while running:
                 if shape.shape_rect.collidepoint(event.pos):
                     print(shape.hand)
                     player_choice = shape.hand
-                    win_check(player_choice, game_ai.hand, wining_hands)
-        
+                    result = win_check(player_choice, game_ai.hand, wining_hands)
+                    if result == 'p2':
+                        shake_timer += SHAKE_TIME
     ### UPDATE ###
-
+    # screen shake
+    if shake_timer > 0:
+        shake_timer = max(0, shake_timer - dt)
+        magnitude = SHAKE_MAX * (shake_timer / SHAKE_TIME)
+        xoff = random.uniform(-magnitude, magnitude)
+        yoff = random.uniform(-magnitude, magnitude)
+    else:
+        xoff = yoff = 0
+        
     
     ### DRAW ###
     screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
@@ -96,6 +111,7 @@ while running:
     game_ai.draw_shape(WIDTH/2, 200, screen, palette)
     
     # flip() the display to put your work on screen
+    window.blit(screen, (xoff, yoff))
     pygame.display.flip()
 
     dt = clock.tick(60) / 1000 # limits FPS to 60
