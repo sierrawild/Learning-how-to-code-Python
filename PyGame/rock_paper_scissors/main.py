@@ -1,5 +1,11 @@
 import pygame, random, player_class, palettes
 
+# TODO Sound
+# TODO Square with big ? as a AI choice 
+# TODO Reset game
+# TODO Point in corners
+# TODO Announce the winner
+
 # CONSTANTS
 WIDTH, HEIGHT = 1280, 720
 HANDS = ['rock', 'paper', 'scissors']
@@ -48,7 +54,7 @@ class Timer:
         self.time -= dt
         if self.time <= 0:
             self.time = self.default_time
-            return True
+            return True # return True when timer reaches 0 
         else:
             return False
 timer_1s = Timer(1)
@@ -115,8 +121,8 @@ while running:
     
     # reveal ai hand
     if game_state == 'reveal':
-        count_1s = timer_1s.count(dt)
-        if count_1s:
+        counted_1s = timer_1s.count(dt)
+        if counted_1s:
             print('Counted 1s')
             game_state = 'player_move'
             game_ai.hand = random.choice(HANDS)
@@ -124,8 +130,8 @@ while running:
     # game over
     if player_points == 3 or ai_points == 3:
         game_state = 'end_game'
-        count_3s = timer_3s.count(dt)
-        if count_3s:
+        counted_3s = timer_3s.count(dt)
+        if counted_3s:
             print('Counted 3s')
             # TODO Reset game
         
