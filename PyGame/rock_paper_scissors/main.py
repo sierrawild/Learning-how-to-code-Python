@@ -26,13 +26,10 @@ wining_hands = {'rock': 'scissors', 'paper': 'rock', 'scissors': 'paper'}
 # functions
 def win_check(p1,p2,conditions):
     if p1 == p2:
-        print('draw')
         return 'draw'
     elif conditions[p1] == p2:
-        print('Player1 wins')
         return 'p1'
     elif conditions[p2] == p1:
-        print('Player2 wins')
         return 'p2'
     else:
         print('error')
@@ -55,6 +52,10 @@ class Timer:
         else:
             return False
 timer_1s = Timer(1)
+timer_3s = Timer(3)
+
+
+
 icon_size = 200
 
 # init Player class creating shapes
@@ -72,6 +73,12 @@ ai_choice = random.choice(HANDS)
 
 game_ai.hand = ai_choice
 
+# points
+player_points = 0
+ai_points = 0
+
+# game state ['player_move', 'end_game', 'reveal']
+game_state = 'player_move'
 running = True
 while running:
     # pygame.QUIT event means the user clicked X to close your window
@@ -83,14 +90,18 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 running = False
         # mouse clicks
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        elif game_state == 'player_move' and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             for shape in player_options:
                 if shape.shape_rect.collidepoint(event.pos):
-                    print(shape.hand)
                     player_choice = shape.hand
                     result = win_check(player_choice, game_ai.hand, wining_hands)
                     if result == 'p2':
+                        ai_points +=1
                         shake_timer += SHAKE_TIME
+                    elif result == 'p1':
+                        player_points += 1
+                        
+                    print(f'Player: {player_choice}   AI: {ai_choice}\nPlayer: {player_points}   AI: {ai_points}\n')
     ### UPDATE ###
     # screen shake
     if shake_timer > 0:
@@ -101,7 +112,14 @@ while running:
     else:
         xoff = yoff = 0
         
-    
+    # game over
+    if player_points == 3 or ai_points == 3:
+        game_state = 'end_game'
+        counting = timer_3s.count(dt)
+        if counting:
+            print('Counted 3s')
+            # TODO Reset game
+        
     ### DRAW ###
     screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
     shape_starting_point = WIDTH / 4
@@ -109,6 +127,8 @@ while running:
         shape.draw_shape(shape_starting_point * (i +1) , 500, screen, palette)
 
     game_ai.draw_shape(WIDTH/2, 200, screen, palette)
+    
+    
     
     # flip() the display to put your work on screen
     window.blit(screen, (xoff, yoff))
