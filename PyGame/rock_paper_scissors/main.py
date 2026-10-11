@@ -101,6 +101,7 @@ while running:
                     elif result == 'p1':
                         player_points += 1
                         
+                    game_state = 'reveal'
                     print(f'Player: {player_choice}   AI: {ai_choice}\nPlayer: {player_points}   AI: {ai_points}\n')
     ### UPDATE ###
     # screen shake
@@ -111,12 +112,20 @@ while running:
         yoff = random.uniform(-magnitude, magnitude)
     else:
         xoff = yoff = 0
+    
+    # reveal ai hand
+    if game_state == 'reveal':
+        count_1s = timer_1s.count(dt)
+        if count_1s:
+            print('Counted 1s')
+            game_state = 'player_move'
+            game_ai.hand = random.choice(HANDS)
         
     # game over
     if player_points == 3 or ai_points == 3:
         game_state = 'end_game'
-        counting = timer_3s.count(dt)
-        if counting:
+        count_3s = timer_3s.count(dt)
+        if count_3s:
             print('Counted 3s')
             # TODO Reset game
         
@@ -126,7 +135,8 @@ while running:
     for i, shape in enumerate(player_options):
         shape.draw_shape(shape_starting_point * (i +1) , 500, screen, palette)
 
-    game_ai.draw_shape(WIDTH/2, 200, screen, palette)
+    if game_state == 'reveal' or game_state == 'end_game':
+        game_ai.draw_shape(WIDTH/2, 200, screen, palette)
     
     
     
