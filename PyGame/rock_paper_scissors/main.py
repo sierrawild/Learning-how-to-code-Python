@@ -1,9 +1,8 @@
 import pygame, random, player_class, palettes
+from pathlib import Path
 
 # TODO Sound
-# TODO Square with big ? as a AI choice 
 # TODO Reset game
-# TODO Point in corners
 # TODO Announce the winner
 
 # CONSTANTS
@@ -11,23 +10,34 @@ WIDTH, HEIGHT = 1280, 720
 HANDS = ['rock', 'paper', 'scissors']
 SHAKE_MAX = 25
 SHAKE_TIME = 1
-
-# colors
-palette = palettes.default
-
+WINING_HANDS = {'rock': 'scissors', 'paper': 'rock', 'scissors': 'paper'}
 # pygame setup
 pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
+# screen shake
 screen = pygame.Surface((WIDTH, HEIGHT))
 xoff, yoff = 0,0
 shake_timer = 0
-
-pygame.display.set_caption('Name of the game')
+# screen name
+pygame.display.set_caption('Rock, paper, scissors')
+# clock and dt
 clock = pygame.time.Clock()
 dt = 0
+# colors
+palette = palettes.default
 
-# wining hands
-wining_hands = {'rock': 'scissors', 'paper': 'rock', 'scissors': 'paper'}
+# points
+player_points = 0
+ai_points = 0
+
+# font
+file_dir = Path(__file__).parent/"assets"
+font_file = file_dir/"Minecraft.ttf"
+font_score_p = pygame.font.Font(font_file, 36)
+font_score_ai = pygame.font.Font(font_file, 36)
+font_question = pygame.font.Font(font_file, 100)
+f_question_surf = font_question.render("?", False, palette['text'])
+f_question_rect = f_question_surf.get_rect(center=(WIDTH/2, 200))
 
 # functions
 def win_check(p1,p2,conditions):
@@ -43,8 +53,6 @@ def win_check(p1,p2,conditions):
 
 
 # classes
-
-
 class Timer:
     def __init__(self, time):
         self.default_time = time
@@ -62,26 +70,21 @@ timer_3s = Timer(3)
 
 
 
-icon_size = 200
 
 # init Player class creating shapes
+icon_size = 200
 game_ai = player_class.Player(icon_size, palette, None)
-
 rock = player_class.Player(icon_size, palette, 'rock')
 paper = player_class.Player(icon_size, palette, 'paper')
 scissors = player_class.Player(icon_size, palette, 'scissors')
-
 player_options = [rock, paper, scissors]
 
 # choices variables 
 player_choice = None
 ai_choice = random.choice(HANDS)
-
 game_ai.hand = ai_choice
 
-# points
-player_points = 0
-ai_points = 0
+
 
 # game state ['player_move', 'end_game', 'reveal']
 game_state = 'player_move'
@@ -100,7 +103,7 @@ while running:
             for shape in player_options:
                 if shape.shape_rect.collidepoint(event.pos):
                     player_choice = shape.hand
-                    result = win_check(player_choice, game_ai.hand, wining_hands)
+                    result = win_check(player_choice, game_ai.hand, WINING_HANDS)
                     if result == 'p2':
                         ai_points +=1
                         shake_timer += SHAKE_TIME
@@ -123,7 +126,6 @@ while running:
     if game_state == 'reveal':
         counted_1s = timer_1s.count(dt)
         if counted_1s:
-            print('Counted 1s')
             game_state = 'player_move'
             game_ai.hand = random.choice(HANDS)
         
@@ -134,7 +136,10 @@ while running:
         if counted_3s:
             print('Counted 3s')
             # TODO Reset game
-        
+    # font update
+    f_score_surf_p = font_score_p.render(f'Player: {player_points}', False, palette['text'])
+    f_score_surf_ai = font_score_ai.render(f'AI: {ai_points}', False, palette['text'])
+
     ### DRAW ###
     screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
     shape_starting_point = WIDTH / 4
@@ -144,10 +149,22 @@ while running:
     if game_state == 'reveal' or game_state == 'end_game':
         game_ai.draw_shape(WIDTH/2, 200, screen, palette)
     
+    # draw score
+    p_score_rect = f_score_surf_p.get_rect(center=(200,100))
+    ai_score_rect = f_score_surf_ai.get_rect(center=(WIDTH-200,100))
     
+    # ????
+    if game_state == 'player_move':
+        card_rect = pygame.Rect(0,0,250,250)
+        card_rect.center = f_question_rect.center
+        pygame.draw.rect(screen,palette['scissors'], card_rect,width=0,border_radius=25)
+        screen.blit(f_question_surf, f_question_rect)
     
     # flip() the display to put your work on screen
     window.blit(screen, (xoff, yoff))
+    # blit score after shake so it's not affected
+    window.blit(f_score_surf_ai, ai_score_rect)
+    window.blit(f_score_surf_p, p_score_rect)
     pygame.display.flip()
 
     dt = clock.tick(60) / 1000 # limits FPS to 60
