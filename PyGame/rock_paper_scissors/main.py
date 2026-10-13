@@ -86,7 +86,7 @@ game_ai.hand = ai_choice
 
 
 
-# game state ['player_move', 'end_game', 'reveal']
+# game state ['player_move', 'end_game', 'reveal', 'evaluate_hand']
 game_state = 'player_move'
 running = True
 while running:
@@ -103,15 +103,8 @@ while running:
             for shape in player_options:
                 if shape.shape_rect.collidepoint(event.pos):
                     player_choice = shape.hand
-                    result = win_check(player_choice, game_ai.hand, WINING_HANDS)
-                    if result == 'p2':
-                        ai_points +=1
-                        shake_timer += SHAKE_TIME
-                    elif result == 'p1':
-                        player_points += 1
-                        
-                    game_state = 'reveal'
-                    print(f'Player: {player_choice}   AI: {ai_choice}\nPlayer: {player_points}   AI: {ai_points}\n')
+                    game_state = 'evaluate_hand'
+                    
     ### UPDATE ###
     # screen shake
     if shake_timer > 0:
@@ -122,6 +115,18 @@ while running:
     else:
         xoff = yoff = 0
     
+    # evaluate hand
+    if game_state == 'evaluate_hand':
+        
+        result = win_check(player_choice, game_ai.hand, WINING_HANDS)
+        if result == 'p2':
+            ai_points +=1
+            shake_timer += SHAKE_TIME
+        elif result == 'p1':
+            player_points += 1
+        game_state = 'reveal'  
+        print(f'Player: {player_choice}   AI: {ai_choice}\nPlayer: {player_points}   AI: {ai_points}\n')
+        
     # reveal ai hand
     if game_state == 'reveal':
         counted_1s = timer_1s.count(dt)
