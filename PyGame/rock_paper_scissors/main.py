@@ -25,6 +25,7 @@ clock = pygame.time.Clock()
 dt = 0
 # colors
 palette = palettes.default
+palette = palettes.bw
 
 # points
 player_points = 0

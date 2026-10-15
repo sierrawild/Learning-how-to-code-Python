@@ -6,4 +6,12 @@ default = {'name': 'default',
            'scissors': "#FF6A50",
            }
 
+bw = {'name': 'black and white',
+           'bg': "#252525",
+           'text': "#FFFFFF",
+           'rock': "#FFFFFF",
+           'paper': "#FFFFFF",
+           'scissors': "#FFFFFF",
+           }
+
 palettes = [default]
