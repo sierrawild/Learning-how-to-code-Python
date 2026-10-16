@@ -89,6 +89,7 @@ game_ai.hand = ai_choice
 
 # game state ['player_move', 'end_game', 'reveal', 'evaluate_hand']
 game_state = 'player_move'
+
 running = True
 while running:
     # pygame.QUIT event means the user clicked X to close your window
@@ -173,6 +174,10 @@ while running:
     window.blit(f_score_surf_p, p_score_rect)
     pygame.display.flip()
 
+    # reset hands
+    game_ai.hand = None
+    player_choice = None
+    
     dt = clock.tick(60) / 1000 # limits FPS to 60
     
 pygame.quit()
