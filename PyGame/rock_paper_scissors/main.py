@@ -87,7 +87,7 @@ game_ai.hand = ai_choice
 
 
 
-# game state ['player_move', 'end_game', 'reveal', 'evaluate_hand']
+# game state ['player_move', 'end_game', 'reveal', 'evaluate_hand'ga]
 game_state = 'player_move'
 
 running = True
@@ -108,6 +108,9 @@ while running:
                     game_state = 'evaluate_hand'
                     
     ### UPDATE ###
+    
+    
+    
     # screen shake
     if shake_timer > 0:
         shake_timer = max(0, shake_timer - dt)
@@ -147,14 +150,25 @@ while running:
     f_score_surf_p = font_score_p.render(f'Player: {player_points}', False, palette['text'])
     f_score_surf_ai = font_score_ai.render(f'AI: {ai_points}', False, palette['text'])
 
+    
+    
     ### DRAW ###
     screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
+    
+    # hover
+    if game_state == 'player_move':
+        mouse_pos = pygame.mouse.get_pos()
+        for shape in player_options:
+            if shape.shape_rect.collidepoint(mouse_pos):
+                shape.hover(screen)
+    # draw choices 
     shape_starting_point = WIDTH / 4
     for i, shape in enumerate(player_options):
         shape.draw_shape(shape_starting_point * (i +1) , 500, screen, palette)
 
     if game_state == 'reveal' or game_state == 'end_game':
         game_ai.draw_shape(WIDTH/2, 200, screen, palette)
+        
     
     # draw score
     p_score_rect = f_score_surf_p.get_rect(center=(200,100))
