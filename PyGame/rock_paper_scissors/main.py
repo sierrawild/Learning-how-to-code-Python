@@ -25,7 +25,7 @@ clock = pygame.time.Clock()
 dt = 0
 # colors
 palette = palettes.default
-palette = palettes.bw
+# palette = palettes.bw
 
 # points
 player_points = 0
@@ -174,8 +174,7 @@ while running:
     window.blit(f_score_surf_p, p_score_rect)
     pygame.display.flip()
 
-    # reset hands
-    game_ai.hand = None
+    # reset player hand
     player_choice = None
     
     dt = clock.tick(60) / 1000 # limits FPS to 60
