@@ -4,6 +4,7 @@ from pathlib import Path
 # TODO Sound
 # TODO Reset game
 # TODO Announce the winner
+# TODO add hover to selected shape
 
 # CONSTANTS
 WIDTH, HEIGHT = 1280, 720
@@ -15,7 +16,7 @@ WINING_HANDS = {'rock': 'scissors', 'paper': 'rock', 'scissors': 'paper'}
 pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 # screen shake
-screen = pygame.Surface((WIDTH, HEIGHT))
+screen = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
 xoff, yoff = 0,0
 shake_timer = 0
 # screen name
@@ -24,8 +25,7 @@ pygame.display.set_caption('Rock, paper, scissors')
 clock = pygame.time.Clock()
 dt = 0
 # colors
-palette = palettes.default
-# palette = palettes.bw
+color = palettes.default
 
 # points
 player_points = 0
@@ -37,7 +37,7 @@ font_file = file_dir/"Minecraft.ttf"
 font_score_p = pygame.font.Font(font_file, 36)
 font_score_ai = pygame.font.Font(font_file, 36)
 font_question = pygame.font.Font(font_file, 100)
-f_question_surf = font_question.render("?", False, palette['text'])
+f_question_surf = font_question.render("?", False, color['text'])
 f_question_rect = f_question_surf.get_rect(center=(WIDTH/2, 200))
 
 # functions
@@ -74,10 +74,10 @@ timer_3s = Timer(3)
 
 # init Player class creating shapes
 icon_size = 200
-game_ai = player_class.Player(icon_size, palette, None)
-rock = player_class.Player(icon_size, palette, 'rock')
-paper = player_class.Player(icon_size, palette, 'paper')
-scissors = player_class.Player(icon_size, palette, 'scissors')
+game_ai = player_class.Player(icon_size, color, None)
+rock = player_class.Player(icon_size, color, 'rock')
+paper = player_class.Player(icon_size, color, 'paper')
+scissors = player_class.Player(icon_size, color, 'scissors')
 player_options = [rock, paper, scissors]
 
 # choices variables 
@@ -147,27 +147,27 @@ while running:
             print('Counted 3s')
             # TODO Reset game
     # font update
-    f_score_surf_p = font_score_p.render(f'Player: {player_points}', False, palette['text'])
-    f_score_surf_ai = font_score_ai.render(f'AI: {ai_points}', False, palette['text'])
+    f_score_surf_p = font_score_p.render(f'Player: {player_points}', False, color['text'])
+    f_score_surf_ai = font_score_ai.render(f'AI: {ai_points}', False, color['text'])
 
     
     
     ### DRAW ###
-    screen.fill(palette['bg']) # fill the screen with a color to wipe away anything from last frame
+    screen.fill(color['bg']) # fill the screen with a color to wipe away anything from last frame
     
     # hover
     if game_state == 'player_move':
         mouse_pos = pygame.mouse.get_pos()
         for shape in player_options:
             if shape.shape_rect.collidepoint(mouse_pos):
-                shape.hover(screen)
+                shape.hover(screen, color['highlight'])
     # draw choices 
     shape_starting_point = WIDTH / 4
     for i, shape in enumerate(player_options):
-        shape.draw_shape(shape_starting_point * (i +1) , 500, screen, palette)
+        shape.draw_shape(shape_starting_point * (i +1) , 500, screen, color)
 
     if game_state == 'reveal' or game_state == 'end_game':
-        game_ai.draw_shape(WIDTH/2, 200, screen, palette)
+        game_ai.draw_shape(WIDTH/2, 200, screen, color)
         
     
     # draw score
@@ -178,7 +178,7 @@ while running:
     if game_state == 'player_move':
         card_rect = pygame.Rect(0,0,250,250)
         card_rect.center = f_question_rect.center
-        pygame.draw.rect(screen,palette['scissors'], card_rect,width=0,border_radius=25)
+        pygame.draw.rect(screen,color['q_card'], card_rect,width=0,border_radius=25)
         screen.blit(f_question_surf, f_question_rect)
     
     # flip() the display to put your work on screen

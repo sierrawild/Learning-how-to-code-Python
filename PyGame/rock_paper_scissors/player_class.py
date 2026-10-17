@@ -23,6 +23,7 @@ class Player:
             points = [(x - self.size/2, y + self.size/2), (x, y - self.size/2), (x + self.size/2, y+self.size/2)]
             pygame.draw.polygon(surface, palette['scissors'], points)
     
-    def hover(self, surface):
+    def hover(self, surface, color):
         self.shape_rect.inflate_ip(50,50)
-        pygame.draw.rect(surface, (0,255,0,0), self.shape_rect, 0, 20)
+        pygame.draw.rect(surface, color, self.shape_rect, 0, 30)
+        
