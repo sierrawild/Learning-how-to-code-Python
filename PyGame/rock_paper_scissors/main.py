@@ -13,6 +13,7 @@ SHAKE_MAX = 25
 SHAKE_TIME = 1
 WINING_HANDS = {'rock': 'scissors', 'paper': 'rock', 'scissors': 'paper'}
 # pygame setup
+pygame.mixer.init()
 pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 # screen shake
@@ -36,9 +37,19 @@ file_dir = Path(__file__).parent/"assets"
 font_file = file_dir/"Minecraft.ttf"
 font_score_p = pygame.font.Font(font_file, 36)
 font_score_ai = pygame.font.Font(font_file, 36)
-font_question = pygame.font.Font(font_file, 100)
+font_question = pygame.font.Font(font_file, 200)
 f_question_surf = font_question.render("?", False, color['text'])
 f_question_rect = f_question_surf.get_rect(center=(WIDTH/2, 200))
+
+# sound
+sound_draw = pygame.mixer.Sound(file_dir/'draw.wav')
+sound_hover = pygame.mixer.Sound(file_dir/'hover.wav')
+sound_select = pygame.mixer.Sound(file_dir/'select.wav')
+sound_right = pygame.mixer.Sound(file_dir/'right.wav')
+sound_wrong = pygame.mixer.Sound(file_dir/'wrong.wav')
+sound_lose = pygame.mixer.Sound(file_dir/'lose.wav')
+sound_win = pygame.mixer.Sound(file_dir/'win.wav')
+sound_end_game_played = False
 
 # functions
 def win_check(p1,p2,conditions):
@@ -105,6 +116,7 @@ while running:
             for shape in player_options:
                 if shape.shape_rect.collidepoint(event.pos):
                     player_choice = shape.hand
+                    sound_select.play()
                     game_state = 'evaluate_hand'
                     
     ### UPDATE ###
@@ -127,8 +139,13 @@ while running:
         if result == 'p2':
             ai_points +=1
             shake_timer += SHAKE_TIME
+            sound_wrong.play()
         elif result == 'p1':
             player_points += 1
+            sound_right.play()
+        elif result == 'draw':
+            sound_draw.play()
+
         game_state = 'reveal'  
         print(f'Player: {player_choice}   AI: {ai_choice}\nPlayer: {player_points}   AI: {ai_points}\n')
         
@@ -143,6 +160,14 @@ while running:
     if player_points == 3 or ai_points == 3:
         game_state = 'end_game'
         counted_3s = timer_3s.count(dt)
+        counted_1s = timer_1s.count(dt)
+        if counted_1s and sound_end_game_played == False:
+            if player_points == 3:
+                sound_win.play()
+                sound_end_game_played = True
+            elif ai_points == 3:
+                sound_lose.play()
+                sound_end_game_played = True
         if counted_3s:
             print('Counted 3s')
             # TODO Reset game
@@ -160,7 +185,10 @@ while running:
         mouse_pos = pygame.mouse.get_pos()
         for shape in player_options:
             if shape.shape_rect.collidepoint(mouse_pos):
-                shape.hover(screen, color['highlight'])
+                shape.hover(screen, color['highlight'], sound_hover)
+            else:
+                shape.hover_sound_played = False
+                
     # draw choices 
     shape_starting_point = WIDTH / 4
     for i, shape in enumerate(player_options):
@@ -178,6 +206,8 @@ while running:
     if game_state == 'player_move':
         card_rect = pygame.Rect(0,0,250,250)
         card_rect.center = f_question_rect.center
+        card_rect.x -= 10 # manual adjustment to align with ?
+        card_rect.y -= 30 # manual adjustment to align with ?
         pygame.draw.rect(screen,color['q_card'], card_rect,width=0,border_radius=25)
         screen.blit(f_question_surf, f_question_rect)
     

@@ -6,6 +6,7 @@ class Player:
         self.size = size
         self.palette = palette
         self.shape_rect = pygame.Rect(0,0,0,0)
+        self.hover_sound_played = False
         
     def choose_random_hand(self, hands):
         self.hand = random.choice(hands)
@@ -23,7 +24,10 @@ class Player:
             points = [(x - self.size/2, y + self.size/2), (x, y - self.size/2), (x + self.size/2, y+self.size/2)]
             pygame.draw.polygon(surface, palette['scissors'], points)
     
-    def hover(self, surface, color):
-        self.shape_rect.inflate_ip(50,50)
-        pygame.draw.rect(surface, color, self.shape_rect, 0, 30)
+    def hover(self, surface, color, sound):
+        highlighted_rect = self.shape_rect.inflate(50,50)
+        pygame.draw.rect(surface, color, highlighted_rect, 0, 30)
+        if self.hover_sound_played == False:
+            sound.play()
+            self.hover_sound_played = True
         
