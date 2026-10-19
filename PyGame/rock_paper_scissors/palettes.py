@@ -1,19 +1,11 @@
 default = {'name': 'default',
-           'bg': "#D7FFD6",
-           'text': "#FFFFFF",
-           'rock': "#63F5FF",
+           'bg': "#76F6EF",
+           'text': "#DE8D35",
+           'rock': "#105577",
            'paper': "#FFF198",
            'scissors': "#FF6A50",
-           'highlight': "#AAFFA914",
-           'q_card': "#505CFF",
-           }
-
-bw = {'name': 'black and white',
-           'bg': "#252525",
-           'text': "#FFFFFF",
-           'rock': "#FFFFFF",
-           'paper': "#FFFFFF",
-           'scissors': "#FFFFFF",
+           'highlight': "#C9FFFC13",
+           'q_card': "#465E5D",
            }
 
 palettes = [default]

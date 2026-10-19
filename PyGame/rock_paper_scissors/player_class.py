@@ -19,7 +19,7 @@ class Player:
         if self.hand == 'rock':
             pygame.draw.aacircle(surface, palette['rock'], (x,y), self.size/2)
         elif self.hand == 'paper':
-            pygame.draw.rect(surface, palette['paper'], self.shape_rect)
+            pygame.draw.rect(surface, palette['paper'], self.shape_rect, 0, 15)
         elif self.hand == 'scissors':
             points = [(x - self.size/2, y + self.size/2), (x, y - self.size/2), (x + self.size/2, y+self.size/2)]
             pygame.draw.polygon(surface, palette['scissors'], points)
