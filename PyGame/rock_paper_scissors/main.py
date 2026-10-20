@@ -1,8 +1,6 @@
 import pygame, random, player_class, palettes
 from pathlib import Path
 
-# TODO Reset game
-# TODO Announce the winner
 
 # CONSTANTS
 WIDTH, HEIGHT = 1280, 720
@@ -62,6 +60,14 @@ def win_check(p1,p2,conditions):
     else:
         print('error')
         return -1
+    
+def reset_game():
+    global player_points, ai_points, sound_end_game_played
+    player_points = 0
+    ai_points = 0
+    sound_end_game_played = False
+    return 'player_move'
+    
 
 
 # classes
@@ -170,7 +176,7 @@ while running:
                 sound_end_game_played = True
         if counted_3s:
             print('Counted 3s')
-            # TODO Reset game
+            game_state = reset_game()
     # font update
     f_score_surf_p = font_score_p.render(f'Player: {player_points}', False, COLOR['text'])
     f_score_surf_ai = font_score_ai.render(f'AI: {ai_points}', False, COLOR['text'])
