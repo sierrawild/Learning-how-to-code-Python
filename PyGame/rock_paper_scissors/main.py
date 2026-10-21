@@ -10,8 +10,9 @@ SHAKE_TIME = 1
 WINING_HANDS = {'rock': 'scissors', 'paper': 'rock', 'scissors': 'paper'}
 # colors
 COLOR = palettes.default
-
-
+hands_bg_color = pygame.Color(COLOR['bg'])
+h, s, v, a = hands_bg_color.hsva
+hands_bg_color.hsva = (h, s,v * 0.9 ,a)
 # pygame setup
 pygame.mixer.init()
 pygame.init()
@@ -126,9 +127,7 @@ while running:
                     game_state = 'evaluate_hand'
                     
     ### UPDATE ###
-    
-    
-    
+      
     # screen shake
     if shake_timer > 0:
         shake_timer = max(0, shake_timer - dt)
@@ -153,7 +152,7 @@ while running:
             sound_draw.play()
 
         game_state = 'reveal'  
-        print(f'Player: {player_choice}   AI: {ai_choice}\nPlayer: {player_points}   AI: {ai_points}\n')
+        # print(f'Player: {player_choice}   AI: {ai_choice}\nPlayer: {player_points}   AI: {ai_points}\n') # debug
         
     # reveal ai hand
     if game_state == 'reveal':
@@ -175,7 +174,7 @@ while running:
                 sound_lose.play()
                 sound_end_game_played = True
         if counted_3s:
-            print('Counted 3s')
+            # print('Counted 3s') #debug
             game_state = reset_game()
     # font update
     f_score_surf_p = font_score_p.render(f'Player: {player_points}', False, COLOR['text'])
@@ -185,6 +184,14 @@ while running:
     
     ### DRAW ###
     screen.fill(COLOR['bg']) # fill the screen with a color to wipe away anything from last frame
+    
+    # player choice background
+    hands_bg_rect = pygame.Rect(0, 0, WIDTH - 300, 300)
+    hands_bg_rect.center = paper.shape_rect.center
+    hands_bg_color.hsva = (h, s,v * 0.9 ,a)
+    pygame.draw.rect(screen, hands_bg_color, hands_bg_rect,0,50)
+    hands_bg_color.hsva = (h, s*0.9,v * 0.8 ,a)
+    pygame.draw.rect(screen, hands_bg_color, hands_bg_rect, 10, 50)
     
     # hover
     if game_state == 'player_move':
