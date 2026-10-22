@@ -19,20 +19,17 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
-    screen.fill("#AEF1AA") # fill the screen with a color to wipe away anything from last frame
-
-    
 
     ### UPDATE ###
     
     
     
     ### DRAW ###
+    screen.fill("#AEF1AA") # fill the screen with a color to wipe away anything from last frame
+
     pygame.draw.circle(screen, "red", (640, 360), 50)
 
-    # flip() the display to put your work on screen
-    pygame.display.flip()
-
+    pygame.display.flip()     # put your work on screen
     dt = clock.tick(60) / 1000 # limits FPS to 60
     
 pygame.quit()
