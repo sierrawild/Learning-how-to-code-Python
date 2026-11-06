@@ -32,6 +32,7 @@ while running:
             mouse_pos = event.pos
             if cube_rec.collidepoint(mouse_pos):
                 can_drag = True
+                pygame.mouse.set_visible(False)
                 mouse_offset = pygame.Vector2(cube_rec.center) - pygame.Vector2(mouse_pos) 
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             can_drag = False
@@ -45,7 +46,7 @@ while running:
         mouse_pos = pygame.mouse.get_pos()
         mouse_pos = pygame.Vector2(mouse_pos) + mouse_offset
         cube_rec.center = mouse_pos
-        pygame.mouse.set_visible(False)
+        
         
     ### DRAW ###
     screen.fill("#AEF1AA") # fill the screen with a color to wipe away anything from last frame
