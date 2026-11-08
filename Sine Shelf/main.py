@@ -1139,8 +1139,11 @@ def launch() -> None:
             return evaluate(self.x_expr, t, s), evaluate(self.y_expr, t, s)
 
         def _to_px(self, x: float, y: float, w: int, h: int, pad: int = 28) -> tuple[float, float]:
-            px = pad + ((x + RANGE) / (RANGE * 2)) * (w - pad * 2)
-            py = pad + ((RANGE - y) / (RANGE * 2)) * (h - pad * 2)
+            span = max(1, min(w, h) - pad * 2)
+            ox = (w - span) / 2
+            oy = (h - span) / 2
+            px = ox + ((x + RANGE) / (RANGE * 2)) * span
+            py = oy + ((RANGE - y) / (RANGE * 2)) * span
             return px, py
 
         def _draw(self) -> None:
