@@ -12,41 +12,23 @@ dt = 0
 cube_rec = pygame.Rect(0,0,100,100)
 cube_rec.center = (WIDTH/2, HEIGHT/2)
 
-mouse_pos = (0,0)
 running = True
-can_drag = False
-mouse_offset = (0,0)
-
 while running:
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         # Close the window by pressing ESCAPE
-        if event.type == pygame.KEYDOWN:
+        elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
-                
-        # mouse button handling
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            mouse_pos = event.pos
-            if cube_rec.collidepoint(mouse_pos):
-                can_drag = True
-                pygame.mouse.set_visible(False)
-                mouse_offset = pygame.Vector2(cube_rec.center) - pygame.Vector2(mouse_pos) 
-        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            can_drag = False
-            mouse_offset = (0,0)
-            pygame.mouse.set_visible(True)
-
 
     ### UPDATE ###
+    mouse_pos = pygame.mouse.get_pos()
+    mouse_pressed = pygame.mouse.get_pressed()[0]
     
-    if can_drag:
-        mouse_pos = pygame.mouse.get_pos()
-        mouse_pos = pygame.Vector2(mouse_pos) + mouse_offset
+    if cube_rec.collidepoint(mouse_pos) and mouse_pressed:
         cube_rec.center = mouse_pos
-        
         
     ### DRAW ###
     screen.fill("#AEF1AA") # fill the screen with a color to wipe away anything from last frame
