@@ -6,7 +6,7 @@ WIDTH, HEIGHT = 1280, 720
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Name of the game')
+pygame.display.set_caption('Timer class check')
 clock = pygame.time.Clock()
 dt = 0
 
