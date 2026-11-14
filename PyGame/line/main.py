@@ -1,6 +1,6 @@
 import pygame
+from settings import WIDTH, HEIGHT, palette
 
-WIDTH, HEIGHT = 1280, 720
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -21,7 +21,11 @@ while running:
     # Update
     
     # Draw
+    screen.fill(palette['bg'])
     
+    pygame.draw.aacircle(screen,palette['1'], (500,400), 200)
+    
+    pygame.display.flip()
     dt = clock.tick(60) / 1000
     
 pygame.quit()
