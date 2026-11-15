@@ -20,6 +20,6 @@ h,s,v = colorsys.rgb_to_hsv(r,g,b)
 h_flipped = (h + 0.5) % 1.0
 
 r, g, b = colorsys.hsv_to_rgb(h_flipped, s, v)
-palette['1'] = f"#{int(r*255):02X}{int(g*255):02X}{int(b*255):02X}"
+palette['bg_comp'] = f"#{int(r*255):02X}{int(g*255):02X}{int(b*255):02X}"
 
 print(palette)
