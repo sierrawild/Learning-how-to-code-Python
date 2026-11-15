@@ -1,5 +1,7 @@
-import pygame, os
+import pygame
+from Player import Player
 from settings import WIDTH, HEIGHT, palette
+
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -8,18 +10,7 @@ clock = pygame.time.Clock()
 dt = 0
 pygame.mouse.set_visible(False)
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, pos):
-        super().__init__()
-        path = os.path.dirname(__file__)
-        path = os.path.join(path, 'assets', 'character_round_red.png')
-        self.image = pygame.image.load(path).convert_alpha()
-        self.rect = self.image.get_rect()
-        self.rect.center = pos
-        
-    def update(self):
-        pos = pygame.mouse.get_pos()
-        self.rect.center = pos
+
 
 player = Player((WIDTH/2, HEIGHT/2))
 player_group = pygame.sprite.Group()
