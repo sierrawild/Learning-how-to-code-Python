@@ -7,8 +7,10 @@ class Player(pygame.sprite.Sprite):
         path = os.path.join(path, 'assets', 'character_round_red.png')
         self.image = pygame.image.load(path).convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.center = pos
+        self.pos = pos
+        self.rect.center = self.pos
         
     def update(self):
-        pos = pygame.mouse.get_pos()
-        self.rect.center = pos
+        self.pos = pygame.mouse.get_pos()
+        self.pos = pygame.Vector2(self.pos)
+        self.rect.center = self.pos

@@ -1,5 +1,6 @@
 import pygame
 from Player import Player
+from Entity import Enemy
 from settings import WIDTH, HEIGHT, palette
 
 
@@ -11,10 +12,20 @@ dt = 0
 pygame.mouse.set_visible(False)
 
 
-
+# player 
 player = Player((WIDTH/2, HEIGHT/2))
 player_group = pygame.sprite.Group()
 player_group.add(player)
+
+# enemies
+e = Enemy((WIDTH/2, HEIGHT/2))
+enemy_group = pygame.sprite.Group()
+enemy_group.add(e)
+
+# all sprite group for drawing 
+all_sprites_group = pygame.sprite.Group()
+all_sprites_group.add(e)
+all_sprites_group.add(player)
 
 running = True
 while running:
@@ -28,10 +39,11 @@ while running:
                 
     # Update
     player_group.update()
+    enemy_group.update(player.pos, dt)
     # Draw
     screen.fill(palette['bg'])
     
-    player_group.draw(screen)
+    all_sprites_group.draw(screen)
     
     
     
