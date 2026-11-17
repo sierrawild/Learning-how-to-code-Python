@@ -1,6 +1,7 @@
-import colorsys
+import colorsys, os, pygame
 WIDTH, HEIGHT = 1280, 720
 
+# palette
 palette = {
     'name': 'default',
     'bg': "#73FBBE",
@@ -22,4 +23,9 @@ h_flipped = (h + 0.5) % 1.0
 r, g, b = colorsys.hsv_to_rgb(h_flipped, s, v)
 palette['bg_comp'] = f"#{int(r*255):02X}{int(g*255):02X}{int(b*255):02X}"
 
-print(palette)
+# fonts
+path = os.path.dirname(__file__)
+path = os.path.join(path, 'assets')
+font_file = os.path.join(path, 'Minecraft.ttf')
+
+font_score = pygame.font.Font(font_file, 36)
