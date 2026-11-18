@@ -1,10 +1,12 @@
 import colorsys, os, pygame
 WIDTH, HEIGHT = 1280, 720
 
+pygame.font.init()
+
 # palette
 palette = {
     'name': 'default',
-    'bg': "#73FBBE",
+    'bg': "#B2FFFE",
 }
 
 def hex_to_rgb(color):
