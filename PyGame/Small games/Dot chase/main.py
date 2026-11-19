@@ -48,7 +48,20 @@ while running:
     score_txt = settings.font_score.render(str(score), True, (settings.palette['bg_comp']))
 
     ### Draw ###
+    # bacground
     screen.fill(settings.palette['bg'])
+    checker_color = settings.palette['bg']
+    x = 100
+    for col in range(settings.WIDTH//x + 1):
+        for row in range(settings.HEIGHT//x + 1):
+            if row % 2 == 0 and col % 2 == 0 \
+                or col % 2 != 0 and row % 2 != 0:
+                checker_color = settings.palette['bg2']
+            else:
+                checker_color = settings.palette['bg']
+            pygame.draw.rect(screen, checker_color, 
+                                (col*x, row*x,x,x), 0, 25)
+    print(clock.get_fps())
     
     all_sprites_group.draw(screen)
     # font

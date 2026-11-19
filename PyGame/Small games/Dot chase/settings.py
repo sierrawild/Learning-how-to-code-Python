@@ -16,7 +16,7 @@ def hex_to_rgb(color):
     b = int(hex_color[4:6], 16) /255
     return r, g, b
 
-def add_color(palette, og_color: str, magnitude: float):
+def add_color(palette: dict, og_color: str, magnitude: float):
     r, g, b = hex_to_rgb(palette[og_color])
     h,s,v = colorsys.rgb_to_hsv(r,g,b)
     h_flipped = (h + magnitude) % 1.0
@@ -25,7 +25,8 @@ def add_color(palette, og_color: str, magnitude: float):
 
 # adding complementary color as 'bg_comp' 
 palette['bg_comp'] = add_color(palette, 'bg', 0.5)
-
+# adding other colors
+palette['bg2'] = add_color(palette, 'bg', 0.97)
 
 
 # fonts
