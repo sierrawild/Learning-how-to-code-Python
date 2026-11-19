@@ -1,4 +1,8 @@
 import pygame, math
+from pathlib import Path
+
+path = Path(__file__).parent
+img = path / 'files' / 'cat.png'
 
 pygame.init()
 
@@ -14,7 +18,7 @@ clock = pygame.time.Clock()
 
 # variables 
 rect_1 = pygame.Rect(400, 200, 100, 200)
-cat = pygame.image.load(r"PyGame\files\cat.png").convert_alpha()
+cat = pygame.image.load(img).convert_alpha()
 cat_facing_left = cat
 cat_facing_right = pygame.transform.flip(cat, True, False)
 rect_2 = cat.get_rect()
