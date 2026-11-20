@@ -1,8 +1,7 @@
 import pygame
 from Player import Player
 from Entity import Enemy
-# from settings import WIDTH, HEIGHT, palette
-import settings
+import settings, functions
 
 score = 0
 
@@ -50,17 +49,20 @@ while running:
     ### Draw ###
     # bacground
     screen.fill(settings.palette['bg'])
-    checker_color = settings.palette['bg']
+    
+    # tailed background
     x = 100
     for col in range(settings.WIDTH//x + 1):
         for row in range(settings.HEIGHT//x + 1):
             if row % 2 == 0 and col % 2 == 0 \
                 or col % 2 != 0 and row % 2 != 0:
-                checker_color = settings.palette['bg2']
-            else:
-                checker_color = settings.palette['bg']
-            pygame.draw.rect(screen, checker_color, 
-                                (col*x, row*x,x,x), 0, 25)
+                    # solid square
+                    pygame.draw.rect(screen, settings.palette['bg2'], 
+                                    (col*x, row*x,x,x), 0, 0)
+                    # pattern on top
+                    functions.dr_K_patter(screen, settings.palette['bg3'], 
+                                          col*x, row*x, x)
+                
     print(clock.get_fps())
     
     all_sprites_group.draw(screen)

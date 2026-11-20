@@ -26,7 +26,8 @@ def add_color(palette: dict, og_color: str, magnitude: float):
 # adding complementary color as 'bg_comp' 
 palette['bg_comp'] = add_color(palette, 'bg', 0.5)
 # adding other colors
-palette['bg2'] = add_color(palette, 'bg', 0.97)
+palette['bg2'] = add_color(palette, 'bg', 0.95)
+palette['bg3'] = add_color(palette, 'bg', 0.75)
 
 
 # fonts
