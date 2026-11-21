@@ -67,7 +67,7 @@ while running:
     
     all_sprites_group.draw(screen)
     # font
-    screen.blit(score_txt, (50,50))
+    screen.blit(score_txt, (140,40))
     
     
     pygame.display.flip()
