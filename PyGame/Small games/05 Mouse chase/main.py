@@ -1,4 +1,7 @@
-import pygame
+import pygame, random
+from path import character_sprites
+
+
 
 # constants
 WIDTH, HEIGHT = 0, 0
@@ -24,6 +27,26 @@ bg = '#B2FFFE'
 bg2 = '#B2FFCF'
 bg_comp = '#FFB2B3'
 
+# player
+class Player(pygame.sprite.Sprite):
+    def __init__(self, pos, sprite):
+        super().__init__()
+        self.image = pygame.image.load(sprite).convert_alpha()
+        self.rect = self.image.get_rect()
+        self.pos = pos
+        self.rect.center = self.pos
+        
+    def update(self):
+        self.pos = pygame.mouse.get_pos()
+        self.rect.center = self.pos
+
+        
+player_sprite = random.choice(character_sprites)
+player = Player((W//2,H//2), player_sprite)
+
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player)
+
 running = True
 while running:
     # events
@@ -35,7 +58,7 @@ while running:
                 running = False
                 
     ### Update ###
-                
+    player.update()          
     
     ### Draw ###
     #background
@@ -45,6 +68,8 @@ while running:
             if col % 2 == 0 and row % 2 == 0 \
                 or col % 2 != 0 and row % 2 != 0:
                     pygame.draw.circle(screen,bg2,(col*x, row*x), x*0.6)
+    
+    all_sprites.draw(screen)
     
     window.blit(screen, (xoff, yoff))
     pygame.display.flip()
